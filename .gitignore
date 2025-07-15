@@ -212,3 +212,4 @@ arduino/src/arduino_secrets.h
 *secret*
 .env
 arduino/.pio/
+arduino/compile_commands.json
