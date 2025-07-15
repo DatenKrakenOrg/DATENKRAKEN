@@ -20,7 +20,7 @@ Often, students in classrooms felt that they had difficulty learning.
 2. Developers => Have an interest in project success
 3. Lecturers => Have an interest in room quality to ensure optimal teaching
 4. Study Program Organization Team => Has an interest in improving room quality to enable optimal teaching
-5. Training Company => Has an interest in the best possible education for its students
+5. Partner Company (Student) => Has an interest in the best possible education for its students
 
 ---
 
