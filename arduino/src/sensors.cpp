@@ -108,21 +108,17 @@ float get_humidity()
 }
 
 #include "Adafruit_SGP40.h"
-#include "Adafruit_SHT31.h"
 
 Adafruit_SGP40 sgp;
 
 void setup_co2_sensor()
 {
-    Serial.println("SGP40 test with SHT31 compensation");
-
     if (!sgp.begin()) {
         Serial.println("SGP40 sensor not found :(");
         while (1)
             ;
     }
 
-    Serial.print("Found SHT3x + SGP40 serial #");
     Serial.print(sgp.serialnumber[0], HEX);
     Serial.print(sgp.serialnumber[1], HEX);
     Serial.println(sgp.serialnumber[2], HEX);

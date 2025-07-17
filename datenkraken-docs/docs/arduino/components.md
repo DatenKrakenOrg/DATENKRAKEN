@@ -2,7 +2,7 @@
 - Arduino MKR Wifi 1010
 - Temperature sensor (ADT7410)
 - Humidity sensor (sunfounder Humiture Sensor)
-- CO2 sensor (GY-SGP30)
+- CO2 sensor (GY-SGP40)
 - Noise level sensor (GY-MAX4466)
 
 # Circuit Plan
@@ -38,7 +38,7 @@ The temperature is measured in celcius (°C), the values are floats and can be n
 Unit: °C
 
 **2. Humidity Sensor**  
-The Humidity sensor returns values ranging from 0% to 100%, anything other is a invalid value.  
+The Humidity sensor returns values ranging from 0% to 100%, anything other is an invalid value.  
 Unit: relative Humidity in %
 
 **3. CO2 Sensor**  
