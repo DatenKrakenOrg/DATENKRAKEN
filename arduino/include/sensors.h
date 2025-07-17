@@ -11,4 +11,5 @@ float get_temp_from_sensor();
 float get_humidity();
 void loop_co2_sensor(float t, float h);
 void setup_co2_sensor();
+void get_noise_level();
 #endif

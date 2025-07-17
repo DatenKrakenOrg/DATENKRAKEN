@@ -124,6 +124,7 @@ void loop() {
     previousMillis = currentMillis;
 
     loop_co2_sensor(get_temp_from_sensor(), get_humidity());
+    get_noise_level();
 
     // // send message, the Print interface can be used to set the message contents
     // mqttClient.beginMessage(topic);
@@ -133,7 +134,7 @@ void loop() {
     // mqttClient.println(get_humidity());
     // mqttClient.endMessage();
 
-    Serial.println();
+    //Serial.println();
 
     count++;
   }
