@@ -6,12 +6,12 @@ A healthy and comfortable indoor climate is a crucial foundation for successful 
 
 The temperature in indoor spaces plays a central role in students performance. Studies in European schools have shown that pupils’ cognitive performance improves significantly when room temperature is lowered from 30 °C to 20 °C (Pawel Wargocki, 2012, p. 582). Likewise, very low relative humidity can irritate the respiratory tract and increase the risk of infections.  
 At temperatures between 20 and 22 °C, most people feel comfortable and can concentrate optimally.  
-However, when the temperature rises above 25 °C, productivity noticeably decreases by about 1 to 2 % per additional degree Celsius (Pawel Wargocki, 2012, p. 586). At extreme temperatures above 30 °C, physical complaints such as heat stress, accelerated pulse and rapid fatigue also occur. Children are particularly sensitive to high temperatures, leading to observed fatigue, declining attention and an increased error rate in tasks in overheated classrooms.
+However, when the temperature rises above 25 °C, productivity subconsciously decreases by about 1 to 2 % per additional degree Celsius (Pawel Wargocki, 2012, p. 586). At extreme temperatures above 30 °C, physical complaints such as heat stress, accelerated pulse and rapid fatigue also occur. Children are particularly sensitive to high temperatures, leading to observed fatigue, declining attention and an increased error rate in tasks in overheated classrooms.
 
 ##Relative Humidity and Health
 
 Humidity also significantly influences comfort and health indoors. A range of 40 to 60 % relative humidity is considered ideal (Peder Wolkoff, 2007, p. 854). At humidity levels below 30 %, mucous membranes dry out, leading to irritated eyes, dry throat and increased infection risk. At the same time, the respiratory tract’s ability to defend against pollutants and pathogens is reduced.  
-Conversely, high humidity above 60 % promotes mold growth and increases the risk of respiratory diseases and allergies. High humidity also impairs the body’s temperature regulation, as sweat evaporates less effectively.
+Conversely, high humidity above 60 % promotes mold growth, which in turn increases the risk of respiratory diseases and allergies. High humidity also impairs the body’s temperature regulation, as sweat evaporates less effectively.
 
 ##CO₂ Concentration and Cognitive Performance
 
@@ -35,7 +35,7 @@ In summary, an optimal indoor climate is essential for students’ health, well-
 -	Optimal relative humidity between 40 and 60 %  
 -	Use humidifiers if RH < 40 %  
 -	Ventilate regularly or use dehumidifiers if RH > 60 %  
--	Watch for signs of mold growth at high humidity levels  
+-	Watch for signs of mold growth at high humidity levels to prevent health risks
 
 **CO₂ Reduction through Ventilation**  
 -	CO₂ level should be < 1000 ppm  
