@@ -100,12 +100,14 @@ void setup() {
   while (!Serial) {
     ; // wait for serial port to connect. Needed for native USB port only
   }
-  connect_wifi();
-  connect_mqtt();
+  // connect_wifi();
+  // connect_mqtt();
 
   setup_temp_sensor();
-  setup_humidity_sensor();
+  // setup_humidity_sensor();
+  setup_co2_sensor();
 }
+
 
 void loop() {
   // call poll() regularly to allow the library to send MQTT keep alives which
@@ -125,14 +127,15 @@ void loop() {
     Serial.println(topic);
     Serial.print("hello ");
     Serial.println(count);
+    loop_co2_sensor();
 
-    // send message, the Print interface can be used to set the message contents
-    mqttClient.beginMessage(topic);
-    mqttClient.print("temp: ");
-    mqttClient.println(get_temp_from_sensor());
-    mqttClient.print("humidity: ");
-    mqttClient.println(get_humidity());
-    mqttClient.endMessage();
+    // // send message, the Print interface can be used to set the message contents
+    // mqttClient.beginMessage(topic);
+    // mqttClient.print("temp: ");
+    // mqttClient.println(get_temp_from_sensor());
+    // mqttClient.print("humidity: ");
+    // mqttClient.println(get_humidity());
+    // mqttClient.endMessage();
 
     Serial.println();
 

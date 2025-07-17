@@ -84,7 +84,7 @@ void setup_humidity_sensor() {
 float get_humidity() {
   // Delay between measurements.
   // Get temperature event and print its value.
-  float humidity;
+  float humidity = 0.0f;
   sensors_event_t event;
   dht.humidity().getEvent(&event);
   if (isnan(event.relative_humidity)) {
@@ -98,3 +98,37 @@ float get_humidity() {
     return humidity; 
 }
 
+#include "Adafruit_SGP40.h"
+#include "Adafruit_SHT31.h"
+
+Adafruit_SGP40 sgp;
+
+void setup_co2_sensor() {
+  Serial.println("SGP40 test with SHT31 compensation");
+
+  if (! sgp.begin()){
+    Serial.println("SGP40 sensor not found :(");
+    while (1);
+  }
+
+
+  Serial.print("Found SHT3x + SGP40 serial #");
+  Serial.print(sgp.serialnumber[0], HEX);
+  Serial.print(sgp.serialnumber[1], HEX);
+  Serial.println(sgp.serialnumber[2], HEX);
+}
+
+void loop_co2_sensor() {
+  uint16_t sraw;
+  int32_t voc_index;
+
+  sraw = sgp.measureRaw();
+  Serial.print("Raw measurement: ");
+  Serial.println(sraw);
+
+  voc_index = sgp.measureVocIndex();
+  Serial.print("Voc Index: ");
+  Serial.println(voc_index);
+
+  delay(1000);
+}

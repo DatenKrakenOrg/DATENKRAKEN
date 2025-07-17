@@ -22,14 +22,11 @@
           uv
           pre-commit
           platformio
-          clang_20
-          mkdocs
+          clang_19
         ];
 
         shellHook = ''
-          echo "Started dev shell";
-          export C_INCLUDE_PATH="${pkgs.clang_20}/resource-root/include"
-          export CXX_INCLUDE_PATH="${pkgs.clang_20}/resource-root/include"
+          echo "Started DEVSHELL";
         '';
       };
       formatter.x86_64-linux = treefmt-nix.lib.mkWrapper
