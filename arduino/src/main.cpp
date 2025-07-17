@@ -104,7 +104,7 @@ void setup() {
   // connect_mqtt();
 
   setup_temp_sensor();
-  // setup_humidity_sensor();
+  setup_humidity_sensor();
   setup_co2_sensor();
 }
 
@@ -123,11 +123,7 @@ void loop() {
     // save the last time a message was sent
     previousMillis = currentMillis;
 
-    Serial.print("Sending message to topic: ");
-    Serial.println(topic);
-    Serial.print("hello ");
-    Serial.println(count);
-    loop_co2_sensor();
+    loop_co2_sensor(get_temp_from_sensor(), get_humidity());
 
     // // send message, the Print interface can be used to set the message contents
     // mqttClient.beginMessage(topic);

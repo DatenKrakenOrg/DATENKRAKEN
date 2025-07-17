@@ -90,10 +90,7 @@ float get_humidity() {
   if (isnan(event.relative_humidity)) {
     Serial.println(F("Error reading humidity!"));
   } else {
-    Serial.print(F("Humidity: "));
-    Serial.print(event.relative_humidity);
-    Serial.println(F("%"));
-    humidity = event.relative_humidity;
+    humidity = event.relative_humidity; // unit in %
   }
     return humidity; 
 }
@@ -111,24 +108,28 @@ void setup_co2_sensor() {
     while (1);
   }
 
-
   Serial.print("Found SHT3x + SGP40 serial #");
   Serial.print(sgp.serialnumber[0], HEX);
   Serial.print(sgp.serialnumber[1], HEX);
   Serial.println(sgp.serialnumber[2], HEX);
 }
 
-void loop_co2_sensor() {
+void loop_co2_sensor(float t, float h) {
   uint16_t sraw;
   int32_t voc_index;
 
-  sraw = sgp.measureRaw();
+  Serial.print("Temp: ");
+  Serial.print(t);
+  Serial.print(" Humidity: ");
+  Serial.print(h);
+  Serial.println();
+
+  delay(1000);
+  sraw = sgp.measureRaw(t, h);
   Serial.print("Raw measurement: ");
   Serial.println(sraw);
 
-  voc_index = sgp.measureVocIndex();
+  voc_index = sgp.measureVocIndex(t, h);
   Serial.print("Voc Index: ");
   Serial.println(voc_index);
-
-  delay(1000);
 }
