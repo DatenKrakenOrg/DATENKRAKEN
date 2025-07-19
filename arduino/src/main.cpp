@@ -1,7 +1,10 @@
 #include "arduino_secrets.h"
 #include <ArduinoMqttClient.h>
 #include <WiFiNINA.h>
-#include <sensors.h>
+#include "tempSensor.h"
+#include "humiditySensor.h"
+#include "co2Sensor.h"
+#include "noiseSensor.h"
 
 #define MAX_WIFI_CON_TRIES 3
 
