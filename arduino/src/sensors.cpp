@@ -1,18 +1,24 @@
 #include "sensors.h"
+#include "Adafruit_SGP40.h"
 #include <Adafruit_Sensor.h>
 #include <Arduino.h>
 #include <DHT.h>
 #include <DHT_U.h>
 
-Adafruit_ADT7410 tempsensor;
+#define DHTPIN 13 // Digital pin connected to the DHT sensor
+#define DHTTYPE DHT11 // DHT 11
 
-void setup_temp_sensor()
+Adafruit_ADT7410 tempsensor;
+Adafruit_SGP40 sgp;
+DHT_Unified dht(DHTPIN, DHTTYPE);
+const int noisePin = A0;
+
+uint32_t delayMS;
+
+void setupTempSensor()
 {
     tempsensor = Adafruit_ADT7410();
-    Serial.println("ADT7410 demo");
 
-    // Make sure the sensor is found, you can also pass in a different i2c
-    // address with tempsensor.begin(0x49) for example
     if (!tempsensor.begin()) {
         Serial.println("Couldn't find ADT7410!");
         while (1)
@@ -22,49 +28,10 @@ void setup_temp_sensor()
     // sensor takes 250 ms to get first readings
     delay(250);
 
-    // ** Optional **
-    // Can set ADC resolution
-    // ADT7410_13BIT = 13 bits (default)
-    // ADT7410_16BIT = 16 bits
     tempsensor.setResolution(ADT7410_16BIT);
-    Serial.print("Resolution = ");
-    switch (tempsensor.getResolution()) {
-    case ADT7410_13BIT:
-        Serial.print("13 ");
-        break;
-    case ADT7410_16BIT:
-        Serial.print("16 ");
-        break;
-    default:
-        Serial.print("??");
-    }
-    Serial.println("bits");
 }
 
-float get_temp_from_sensor()
-{
-    float c = tempsensor.readTempC();
-    // delay(1000);
-    return c;
-}
-
-#define DHTPIN 13 // Digital pin connected to the DHT sensor
-// Feather HUZZAH ESP8266 note: use pins 3, 4, 5, 12, 13 or 14 --
-// Pin 15 can work but DHT must be disconnected during program upload.
-
-// Uncomment the type of sensor in use:
-#define DHTTYPE DHT11 // DHT 11
-// #define DHTTYPE    DHT22     // DHT 22 (AM2302)
-// #define DHTTYPE    DHT21     // DHT 21 (AM2301)
-
-// See guide for details on sensor wiring and usage:
-//   https://learn.adafruit.com/dht/overview
-
-DHT_Unified dht(DHTPIN, DHTTYPE);
-
-uint32_t delayMS;
-
-void setup_humidity_sensor()
+void setupHumiditySensor()
 {
     // Initialize device.
     dht.begin();
@@ -92,26 +59,7 @@ void setup_humidity_sensor()
     // delayMS = sensor.min_delay / 1000;
 }
 
-float get_humidity()
-{
-    // Delay between measurements.
-    // Get temperature event and print its value.
-    float humidity = 0.0f;
-    sensors_event_t event;
-    dht.humidity().getEvent(&event);
-    if (isnan(event.relative_humidity)) {
-        Serial.println(F("Error reading humidity!"));
-    } else {
-        humidity = event.relative_humidity; // unit in %
-    }
-    return humidity;
-}
-
-#include "Adafruit_SGP40.h"
-
-Adafruit_SGP40 sgp;
-
-void setup_co2_sensor()
+void setupCo2Sensor()
 {
     if (!sgp.begin()) {
         Serial.println("SGP40 sensor not found :(");
@@ -124,7 +72,27 @@ void setup_co2_sensor()
     Serial.println(sgp.serialnumber[2], HEX);
 }
 
-void loop_co2_sensor(float t, float h)
+float getTemp()
+{
+    float c = tempsensor.readTempC();
+    return c;
+}
+
+
+float getHumidity()
+{
+    float humidity = 0.0f;
+    sensors_event_t event;
+    dht.humidity().getEvent(&event);
+    if (isnan(event.relative_humidity)) {
+        Serial.println(F("Error reading humidity!"));
+    } else {
+        humidity = event.relative_humidity;
+    }
+    return humidity;
+}
+
+void getCo2(float t, float h)
 {
     uint16_t sraw;
     int32_t voc_index;
@@ -145,9 +113,7 @@ void loop_co2_sensor(float t, float h)
     Serial.println(voc_index);
 }
 
-const int noisePin = A0;
-
-void get_noise_level()
+void getNoiseLevel()
 {
     int micValue = analogRead(noisePin);
     Serial.print("Noise Level: ");

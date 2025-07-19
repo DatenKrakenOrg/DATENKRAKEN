@@ -5,11 +5,11 @@
 
 extern Adafruit_ADT7410 tempsensor;
 
-void setup_temp_sensor();
-void setup_humidity_sensor();
-float get_temp_from_sensor();
-float get_humidity();
-void loop_co2_sensor(float t, float h);
-void setup_co2_sensor();
-void get_noise_level();
+void setupTempSensor();
+void setupHumiditySensor();
+void setupCo2Sensor();
+float getTemp();
+float getHumidity();
+void getCo2(float t, float h);
+void getNoiseLevel();
 #endif
