@@ -1,4 +1,4 @@
-#include "sensors.h"
+#include "humiditySensor.h"
 #include "Adafruit_SGP40.h"
 #include <Adafruit_Sensor.h>
 #include <Arduino.h>
@@ -8,28 +8,8 @@
 #define DHTPIN 13 // Digital pin connected to the DHT sensor
 #define DHTTYPE DHT11 // DHT 11
 
-Adafruit_ADT7410 tempsensor;
-Adafruit_SGP40 sgp;
 DHT_Unified dht(DHTPIN, DHTTYPE);
 const int noisePin = A0;
-
-uint32_t delayMS;
-
-void setupTempSensor()
-{
-    tempsensor = Adafruit_ADT7410();
-
-    if (!tempsensor.begin()) {
-        Serial.println("Couldn't find ADT7410!");
-        while (1)
-            ;
-    }
-
-    // sensor takes 250 ms to get first readings
-    delay(250);
-
-    tempsensor.setResolution(ADT7410_16BIT);
-}
 
 void setupHumiditySensor()
 {
@@ -56,28 +36,7 @@ void setupHumiditySensor()
     Serial.print(sensor.resolution);
     Serial.println(F("%"));
     Serial.println(F("------------------------------------"));
-    // delayMS = sensor.min_delay / 1000;
 }
-
-void setupCo2Sensor()
-{
-    if (!sgp.begin()) {
-        Serial.println("SGP40 sensor not found :(");
-        while (1)
-            ;
-    }
-
-    Serial.print(sgp.serialnumber[0], HEX);
-    Serial.print(sgp.serialnumber[1], HEX);
-    Serial.println(sgp.serialnumber[2], HEX);
-}
-
-float getTemp()
-{
-    float c = tempsensor.readTempC();
-    return c;
-}
-
 
 float getHumidity()
 {
@@ -92,30 +51,3 @@ float getHumidity()
     return humidity;
 }
 
-void getCo2(float t, float h)
-{
-    uint16_t sraw;
-    int32_t voc_index;
-
-    Serial.print("Temp: ");
-    Serial.print(t);
-    Serial.print(" Humidity: ");
-    Serial.print(h);
-    Serial.println();
-
-    delay(1000);
-    sraw = sgp.measureRaw(t, h);
-    Serial.print("Raw measurement: ");
-    Serial.println(sraw);
-
-    voc_index = sgp.measureVocIndex(t, h);
-    Serial.print("Voc Index: ");
-    Serial.println(voc_index);
-}
-
-void getNoiseLevel()
-{
-    int micValue = analogRead(noisePin);
-    Serial.print("Noise Level: ");
-    Serial.println(micValue);
-}
