@@ -6,4 +6,6 @@ extern Adafruit_ADT7410 tempsensor;
 
 void setupTempSensor();
 float getTemp();
+void printTemp();
+
 #endif

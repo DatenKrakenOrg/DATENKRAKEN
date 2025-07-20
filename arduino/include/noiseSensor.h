@@ -1,4 +1,7 @@
 #ifndef NOISESENSOR_H
 #define NOISESENSOR_H
-void getNoiseLevel();
+
+int getNoiseLevel();
+void printNoiseLevel();
+
 #endif

@@ -1,18 +1,17 @@
 #include "co2Sensor.h"
 #include "Adafruit_SGP40.h"
+#include "api/Common.h"
 #include <Adafruit_Sensor.h>
 #include <Arduino.h>
-#include <DHT.h>
-#include <DHT_U.h>
 
 Adafruit_SGP40 sgp;
 
 void setupCo2Sensor()
 {
-    if (!sgp.begin()) {
-        Serial.println("SGP40 sensor not found :(");
-        while (1)
-            ;
+    while (!sgp.begin()) {
+        Serial.println("SGP40 sensor not found");
+        Serial.println("Trying again in 1 second");
+        delay(1000);
     }
 
     Serial.print(sgp.serialnumber[0], HEX);
@@ -20,23 +19,27 @@ void setupCo2Sensor()
     Serial.println(sgp.serialnumber[2], HEX);
 }
 
-void getCo2(float t, float h)
+int getCo2Voc(float t, float h)
+{
+    int32_t voc_index;
+    voc_index = sgp.measureVocIndex(t, h);
+    return voc_index;
+}
+
+int getCo2Raw(float t, float h)
 {
     uint16_t sraw;
-    int32_t voc_index;
+    sraw = sgp.measureRaw(t, h);
+    return sraw;
+}
 
-    Serial.print("Temp: ");
-    Serial.print(t);
-    Serial.print(" Humidity: ");
-    Serial.print(h);
+void printCo2(float t, float h)
+{
+    Serial.print("Raw measurement: ");
+    Serial.print(getCo2Raw(t, h));
     Serial.println();
 
-    delay(1000);
-    sraw = sgp.measureRaw(t, h);
-    Serial.print("Raw measurement: ");
-    Serial.println(sraw);
-
-    voc_index = sgp.measureVocIndex(t, h);
     Serial.print("Voc Index: ");
-    Serial.println(voc_index);
+    Serial.print(getCo2Voc(t, h));
+    Serial.println();
 }

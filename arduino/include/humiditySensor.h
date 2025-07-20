@@ -3,4 +3,6 @@
 
 void setupHumiditySensor();
 float getHumidity();
+void printHumidity();
+
 #endif

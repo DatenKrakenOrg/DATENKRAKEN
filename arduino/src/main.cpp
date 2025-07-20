@@ -47,12 +47,11 @@ void connectMqtt()
     Serial.print("Attempting to connect to the MQTT broker: ");
     Serial.println(broker);
 
-    if (!mqttClient.connect(broker, port)) {
+    while (!mqttClient.connect(broker, port)) {
         Serial.print("MQTT connection failed! Error code = ");
         Serial.println(mqttClient.connectError());
-
-        while (1)
-            ;
+        Serial.println("Trying again in 1 second");
+        delay(1000);
     }
 
     Serial.println("You're connected to the MQTT broker!");
@@ -81,8 +80,10 @@ void loop()
     if (currentMillis - previousMillis >= interval) {
         previousMillis = currentMillis;
 
-        getCo2(getTemp(), getHumidity());
-        getNoiseLevel();
+        printTemp();
+        printHumidity();
+        printCo2(getTemp(), getHumidity());
+        printNoiseLevel();
 
         // // send message, the Print interface can be used to set the message contents
         // mqttClient.beginMessage(topic);

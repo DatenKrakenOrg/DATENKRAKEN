@@ -8,10 +8,10 @@ void setupTempSensor()
 {
     tempsensor = Adafruit_ADT7410();
 
-    if (!tempsensor.begin()) {
+    while (!tempsensor.begin()) {
         Serial.println("Couldn't find ADT7410!");
-        while (1)
-            ;
+        Serial.println("Trying again in 1 second");
+        delay(1000);
     }
 
     // sensor takes 250 ms to get first readings
@@ -24,4 +24,11 @@ float getTemp()
 {
     float c = tempsensor.readTempC();
     return c;
+}
+
+void printTemp()
+{
+    Serial.print("Temp: ");
+    Serial.print(getTemp());
+    Serial.println();
 }
