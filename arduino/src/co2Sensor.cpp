@@ -1,7 +1,5 @@
 #include "co2Sensor.h"
 #include "Adafruit_SGP40.h"
-#include "api/Common.h"
-#include <Adafruit_Sensor.h>
 #include <Arduino.h>
 
 Adafruit_SGP40 sgp;

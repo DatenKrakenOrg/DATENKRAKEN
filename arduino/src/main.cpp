@@ -1,10 +1,10 @@
 #include "arduino_secrets.h"
+#include "co2Sensor.h"
+#include "humiditySensor.h"
+#include "noiseSensor.h"
+#include "tempSensor.h"
 #include <ArduinoMqttClient.h>
 #include <WiFiNINA.h>
-#include "tempSensor.h"
-#include "humiditySensor.h"
-#include "co2Sensor.h"
-#include "noiseSensor.h"
 
 #define MAX_WIFI_CON_TRIES 3
 
@@ -18,7 +18,7 @@ const char broker[] = BROKER;
 int port = 1883;
 const char topic[] = TOPIC;
 
-const long interval = 1000;
+const long interval = 2000;
 unsigned long previousMillis = 0;
 
 int count = 0;
@@ -36,8 +36,14 @@ void connectWifi()
         connection_tries++;
     }
 
-    Serial.println("You're connected to the network");
+    if (connection_tries >= MAX_WIFI_CON_TRIES){
+        Serial.println("Connection to WiFi failed");
+    }
+    else {
+        Serial.println("You're connected to the network");
+    }
     Serial.println();
+
 }
 
 void connectMqtt()
@@ -93,7 +99,7 @@ void loop()
         // mqttClient.println(get_humidity());
         // mqttClient.endMessage();
 
-        // Serial.println();
+        Serial.println();
 
         count++;
     }
