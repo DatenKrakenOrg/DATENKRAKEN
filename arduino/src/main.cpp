@@ -32,6 +32,7 @@ void loop()
     mqttClient.poll();
     unsigned long currentMillis = millis();
 
+    JsonDocument doc;
     if (currentMillis - previousMillis >= interval) {
         previousMillis = currentMillis;
 
@@ -39,8 +40,6 @@ void loop()
         sendMqttMessage("dhbw/ai/si2023/6/hum/303", "test");
         sendMqttMessage("dhbw/ai/si2023/6/co2/303", "test");
         sendMqttMessage("dhbw/ai/si2023/6/mic/303", "test");
-
-        Serial.println();
 
         count++;
     }
