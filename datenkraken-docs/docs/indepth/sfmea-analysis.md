@@ -340,7 +340,6 @@ Risk priority number (RPN) = S * O * D, The higher the RPN, the more critical th
 </table>
 
 # Corrective Actions  
-
 <table>
   <thead>
     <tr>
@@ -405,14 +404,6 @@ Risk priority number (RPN) = S * O * D, The higher the RPN, the more critical th
     </tr>
     <!-- Monitor -->
     <tr>
-      <td>FA12</td>
-      <td><strong>Monitor</strong></td>
-      <td>Database</td>
-      <td>Writing not possible</td>
-      <td>108</td>
-      <td>Introduce write verification; enable rollback and logging</td>
-    </tr>
-    <tr>
       <td>FA10</td>
       <td><strong>Monitor</strong></td>
       <td>Database</td>
@@ -420,8 +411,16 @@ Risk priority number (RPN) = S * O * D, The higher the RPN, the more critical th
       <td>120</td>
       <td>Strengthen QA/test coverage; use data integrity checks</td>
     </tr>
+    <tr>
+      <td>FA12</td>
+      <td><strong>Monitor</strong></td>
+      <td>Database</td>
+      <td>Writing not possible</td>
+      <td>108</td>
+      <td>Introduce write verification; enable rollback and logging</td>
+    </tr>
   </tbody>
-  </table>
+</table>
 
 # Summary
 This FMEA analyzes the failure modes in a sensor-to-database pipeline involving Arduino hardware, MQTT-based data transmission, and a backend database.
