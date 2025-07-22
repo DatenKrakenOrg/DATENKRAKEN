@@ -5,6 +5,7 @@
 #include "noiseSensor.h"
 #include "tempSensor.h"
 #include "wifi.h"
+#include "ntp.h"
 
 const long interval = 2000;
 unsigned long previousMillis = 0;
@@ -23,6 +24,7 @@ void setup()
     setupTempSensor();
     setupHumiditySensor();
     setupCo2Sensor();
+    setupNTP();
 }
 
 void loop()
