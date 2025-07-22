@@ -5,6 +5,7 @@
 #include "tempSensor.h"
 #include <ArduinoMqttClient.h>
 #include <WiFiNINA.h>
+#include <ArduinoJson.h>
 
 #define MAX_WIFI_CON_TRIES 3
 
@@ -70,8 +71,8 @@ void setup()
     while (!Serial) {
         ;
     }
-    // connectWifi();
-    // connectMqtt();
+    connectWifi();
+    connectMqtt();
 
     setupTempSensor();
     setupHumiditySensor();
@@ -83,6 +84,7 @@ void loop()
     mqttClient.poll();
     unsigned long currentMillis = millis();
 
+    JsonDocument doc;
     if (currentMillis - previousMillis >= interval) {
         previousMillis = currentMillis;
 
@@ -91,13 +93,12 @@ void loop()
         printCo2(getTemp(), getHumidity());
         printNoiseLevel();
 
-        // // send message, the Print interface can be used to set the message contents
-        // mqttClient.beginMessage(topic);
-        // mqttClient.print("temp: ");
-        // mqttClient.println(get_temp_from_sensor());
-        // mqttClient.print("humidity: ");
-        // mqttClient.println(get_humidity());
-        // mqttClient.endMessage();
+        char json_string[100];
+        doc["value"] = getHumidity();
+        serializeJson(doc, json_string);
+        mqttClient.beginMessage(topic);
+        mqttClient.print(json_string);
+        mqttClient.endMessage();
 
         Serial.println();
 
