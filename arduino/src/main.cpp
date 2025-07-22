@@ -3,6 +3,7 @@
 #include "humiditySensor.h"
 #include "noiseSensor.h"
 #include "tempSensor.h"
+#include "ntp.h"
 #include <ArduinoMqttClient.h>
 #include <WiFiNINA.h>
 
@@ -70,12 +71,13 @@ void setup()
     while (!Serial) {
         ;
     }
-    // connectWifi();
+    connectWifi();
     // connectMqtt();
 
     setupTempSensor();
     setupHumiditySensor();
     setupCo2Sensor();
+    setupNTP();
 }
 
 void loop()
@@ -90,6 +92,7 @@ void loop()
         printHumidity();
         printCo2(getTemp(), getHumidity());
         printNoiseLevel();
+        updateNTP();
 
         // // send message, the Print interface can be used to set the message contents
         // mqttClient.beginMessage(topic);
