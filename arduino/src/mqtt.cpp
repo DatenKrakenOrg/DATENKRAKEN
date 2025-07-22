@@ -1,5 +1,7 @@
 #include "mqtt.h"
 #include "arduino_secrets.h"
+#include "humiditySensor.h"
+#include "tempSensor.h"
 #include "wifi.h"
 #include <ArduinoMqttClient.h>
 
@@ -32,3 +34,4 @@ void sendMqttMessage(char topic[], char payload[])
     mqttClient.println(payload);
     mqttClient.endMessage();
 }
+

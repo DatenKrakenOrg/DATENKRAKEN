@@ -15,11 +15,7 @@ void setupNTP(){
   timeClient.begin();
 }
 
-void updateNTP() {
+unsigned long getNTP() {
   timeClient.update();
-
-  Serial.print("Time ");
-  Serial.println(timeClient.getEpochTime());
-
-  delay(1000);
+  return timeClient.getEpochTime();
 }
