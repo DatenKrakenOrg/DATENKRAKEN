@@ -14,9 +14,10 @@
 3. Design/Conceptional Mistakes
 
 
-<table border="1" cellspacing="0" cellpadding="8">
+<table cellspacing="0" cellpadding="8">
   <thead>
     <tr>
+      <th>ID</th>
       <th>Component</th>
       <th>Failure Mode</th>
       <th>Failure mode</th>
@@ -27,6 +28,7 @@
   <tbody>
     <!-- Arduino -->
     <tr>
+      <td>FA1</td>
       <td>Arduino</td>
       <td>Data Missing</td>
       <td>Loss of function</td>
@@ -34,6 +36,7 @@
       <td>End effect: Database, UI, Subscriber script</td>
     </tr>
     <tr>
+      <td>FA2</td>
       <td>Arduino</td>
       <td>Data Inaccurate</td>
       <td>Incorrect function</td>
@@ -41,6 +44,7 @@
       <td>End effect: Database, UI, Subscriber script</td>
     </tr>
     <tr>
+      <td>FA3</td>
       <td>Arduino</td>
       <td>Data Timeless</td>
       <td>Erroneous function</td>
@@ -48,6 +52,7 @@
       <td>End effect: Database, UI, Subscriber script</td>
     </tr>
     <tr>
+      <td>FA4</td>
       <td>Arduino</td>
       <td>Erroneous/Inconsistent Datapoints</td>
       <td>Loss of function</td>
@@ -55,6 +60,7 @@
       <td>End effect: Database, UI, Subscriber script</td>
     </tr>
     <tr>
+      <td>FA5</td>
       <td>Arduino</td>
       <td>Data cannot be transferred</td>
       <td>Erroneous function</td>
@@ -63,13 +69,15 @@
     </tr>
     <!-- Subscription Script -->
     <tr>
+      <td>FA6</td>
       <td>Subscription Script</td>
       <td>Data cannot be received (from MQTT-Server)</td>
       <td>Loss of function</td>
       <td>Arduino down</td>
       <td>End effect: Database, UI</td>
     </tr>
-    <tr>Erroneous
+    <tr>
+      <td>FA7</td>
       <td>Subscription Script</td>
       <td>Data cannot be transferred (to the database)</td>
       <td>Erroneous function</td>
@@ -78,6 +86,7 @@
     </tr>
     <!-- Database -->
     <tr>
+      <td>FA8</td>
       <td>Database</td>
       <td>Not available (permanent)</td>
       <td>Loss of function</td>
@@ -85,6 +94,7 @@
       <td>End effect: Database, UI, Subscriber script</td>
     </tr>
     <tr>
+      <td>FA9</td>
       <td>Database</td>
       <td>Not available (temporary)</td>
       <td>Loss of function</td>
@@ -92,6 +102,7 @@
       <td>End effect: Database, UI, Subscriber script</td>
     </tr>
     <tr>
+      <td>FA10</td>
       <td>Database</td>
       <td>Faulty data cleaning</td>
       <td>Incorrect function</td>
@@ -99,6 +110,7 @@
       <td>End effect: Database, UI, Subscriber script</td>
     </tr>
     <tr>
+      <td>FA11</td>
       <td>Database</td>
       <td>Reading not possible</td>
       <td>Incorrect function</td>
@@ -106,6 +118,7 @@
       <td>End effect: Database, UI, Subscriber script</td>
     </tr>
     <tr>
+      <td>FA12</td>
       <td>Database</td>
       <td>Writing not possible</td>
       <td>Incorrect function</td>
@@ -120,117 +133,116 @@
 2. (O)ccurrence can be rated in a likelyhood of 1 (Failure unlikely) - 10 (Failure is almost inevitable)
 3. (D)etectability can be rated in a scope of detectable from 1 (certain to be detected) - 10 (Not likely to be detected)  
 Risk priority number (RPN) = S * O * D, The higher the RPN, the more critical the failure mode.
-
-<table border="1">
+<table>
   <thead>
     <tr>
+      <th>ID</th>
       <th>Component</th>
       <th>Failure Mode</th>
-      <th>Severity</th>
-      <th>Occurrence</th>
-      <th>Detection</th>
-      <th>RPN (S×O×D)</th>
+      <th>Failure mode</th>
+      <th>Cause of Failure</th>
+      <th>Effect of Failure</th>
     </tr>
   </thead>
   <tbody>
     <!-- Arduino -->
     <tr>
+      <td>FA1</td>
       <td>Arduino</td>
       <td>Data Missing</td>
-      <td>8</td>
-      <td>5</td>
-      <td>4</td>
-      <td>160</td>
+      <td>Loss of function</td>
+      <td>Power loss, sensor hardware error</td>
+      <td>End effect: Database, UI, Subscriber script</td>
     </tr>
     <tr>
+      <td>FA2</td>
       <td>Arduino</td>
       <td>Data Inaccurate</td>
-      <td>7</td>
-      <td>6</td>
-      <td>5</td>
-      <td>210</td>
+      <td>Incorrect function</td>
+      <td>Power loss, Sensor inaccuracy</td>
+      <td>End effect: Database, UI, Subscriber script</td>
     </tr>
     <tr>
+      <td>FA3</td>
       <td>Arduino</td>
       <td>Data Timeless</td>
-      <td>6</td>
-      <td>4</td>
-      <td>6</td>
-      <td>144</td>
+      <td>Erroneous function</td>
+      <td>Power loss, NTP Server not reachable</td>
+      <td>End effect: Database, UI, Subscriber script</td>
     </tr>
     <tr>
+      <td>FA4</td>
       <td>Arduino</td>
       <td>Erroneous/Inconsistent Datapoints</td>
-      <td>7</td>
-      <td>5</td>
-      <td>5</td>
-      <td>175</td>
+      <td>Loss of function</td>
+      <td>Power loss, Unexpected Environmental influences</td>
+      <td>End effect: Database, UI, Subscriber script</td>
     </tr>
     <tr>
+      <td>FA5</td>
       <td>Arduino</td>
       <td>Data cannot be transferred</td>
-      <td>8</td>
-      <td>4</td>
-      <td>6</td>
-      <td>192</td>
+      <td>Erroneous function</td>
+      <td>Power loss, Server not reachable</td>
+      <td>End effect: Database, UI, Subscriber script</td>
     </tr>
     <!-- Subscription Script -->
     <tr>
+      <td>FA6</td>
       <td>Subscription Script</td>
       <td>Data cannot be received (from MQTT-Server)</td>
-      <td>9</td>
-      <td>3</td>
-      <td>7</td>
-      <td>189</td>
+      <td>Loss of function</td>
+      <td>Arduino down</td>
+      <td>End effect: Database, UI</td>
     </tr>
     <tr>
+      <td>FA7</td>
       <td>Subscription Script</td>
       <td>Data cannot be transferred (to the database)</td>
-      <td>9</td>
-      <td>4</td>
-      <td>6</td>
-      <td>216</td>
+      <td>Erroneous function</td>
+      <td>Database connection error, Database down</td>
+      <td>End effect: Database, UI</td>
     </tr>
     <!-- Database -->
     <tr>
+      <td>FA8</td>
       <td>Database</td>
       <td>Not available (permanent)</td>
-      <td>10</td>
-      <td>2</td>
-      <td>2</td>
-      <td>40</td>
+      <td>Loss of function</td>
+      <td>DHBW-Server down/crashed</td>
+      <td>End effect: Database, UI, Subscriber script</td>
     </tr>
     <tr>
+      <td>FA9</td>
       <td>Database</td>
       <td>Not available (temporary)</td>
-      <td>7</td>
-      <td>5</td>
-      <td>6</td>
-      <td>210</td>
+      <td>Loss of function</td>
+      <td>Restart / Maintenance / Overload</td>
+      <td>End effect: Database, UI, Subscriber script</td>
     </tr>
     <tr>
+      <td>FA10</td>
       <td>Database</td>
       <td>Faulty data cleaning</td>
-      <td>6</td>
-      <td>4</td>
-      <td>5</td>
-      <td>120</td>
+      <td>Incorrect function</td>
+      <td>Incorrect scripting code</td>
+      <td>End effect: Database, UI, Subscriber script</td>
     </tr>
     <tr>
+      <td>FA11</td>
       <td>Database</td>
       <td>Reading not possible</td>
-      <td>9</td>
-      <td>3</td>
-      <td>3</td>
-      <td>81</td>
+      <td>Incorrect function</td>
+      <td>Query issue / Permission issue</td>
+      <td>End effect: Database, UI, Subscriber script</td>
     </tr>
     <tr>
+      <td>FA12</td>
       <td>Database</td>
       <td>Writing not possible</td>
-      <td>9</td>
-      <td>4</td>
-      <td>3</td>
-      <td>108</td>
+      <td>Incorrect function</td>
+      <td>Disk full / Permission issue</td>
+      <td>End effect: Database, UI, Subscriber script</td>
     </tr>
   </tbody>
 </table>
@@ -239,10 +251,10 @@ Risk priority number (RPN) = S * O * D, The higher the RPN, the more critical th
 - EVIDENT: The failure is readily detected during operation.
 - DORMANT: The failure can be detected when maintenance is performed.
 - HIDDEN: The failure is not detected unless intentionally sought, for instance, by testing the system.
-
-<table border="1">
+<table>
   <thead>
     <tr>
+      <th>ID</th>
       <th>Component</th>
       <th>Failure Mode</th>
       <th>Detection measure</th>
@@ -251,63 +263,75 @@ Risk priority number (RPN) = S * O * D, The higher the RPN, the more critical th
   <tbody>
     <!-- Arduino -->
     <tr>
+      <td>FA1</td>
       <td>Arduino</td>
       <td>Data Missing</td>
       <td>Dormant</td>
     </tr>
     <tr>
+      <td>FA2</td>
       <td>Arduino</td>
       <td>Data Inaccurate</td>
       <td>Dormant</td>
     </tr>
     <tr>
+      <td>FA3</td>
       <td>Arduino</td>
       <td>Data Timeless</td>
       <td>Dormant</td>
     </tr>
     <tr>
+      <td>FA4</td>
       <td>Arduino</td>
       <td>Erroneous/Inconsistent Datapoints</td>
       <td>Dormant</td>
     </tr>
     <tr>
+      <td>FA5</td>
       <td>Arduino</td>
       <td>Data cannot be transferred</td>
       <td>Dormant</td>
     </tr>
     <!-- Subscription Script -->
     <tr>
+      <td>FA6</td>
       <td>Subscription Script</td>
       <td>Data cannot be received (from MQTT-Server)</td>
       <td>Hidden</td>
     </tr>
     <tr>
+      <td>FA7</td>
       <td>Subscription Script</td>
       <td>Data cannot be transferred (to the database)</td>
       <td>Hidden</td>
     </tr>
     <!-- Database -->
     <tr>
+      <td>FA8</td>
       <td>Database</td>
       <td>Not available (permanent)</td>
       <td>Evident</td>
     </tr>
     <tr>
+      <td>FA9</td>
       <td>Database</td>
       <td>Not available (temporary)</td>
       <td>Evident</td>
     </tr>
     <tr>
+      <td>FA10</td>
       <td>Database</td>
       <td>Faulty data cleaning</td>
       <td>Evident</td>
     </tr>
     <tr>
+      <td>FA11</td>
       <td>Database</td>
       <td>Reading not possible</td>
       <td>Evident</td>
     </tr>
     <tr>
+      <td>FA12</td>
       <td>Database</td>
       <td>Writing not possible</td>
       <td>Evident</td>
@@ -316,10 +340,10 @@ Risk priority number (RPN) = S * O * D, The higher the RPN, the more critical th
 </table>
 
 # Corrective Actions  
-
-<table border="1">
+<table>
   <thead>
     <tr>
+      <th>ID</th>
       <th>Priority</th>
       <th>Component</th>
       <th>Failure Mode</th>
@@ -330,6 +354,7 @@ Risk priority number (RPN) = S * O * D, The higher the RPN, the more critical th
   <tbody>
     <!-- High Priority -->
     <tr>
+      <td>FA7</td>
       <td><strong>High</strong></td>
       <td>Subscription Script</td>
       <td>Data cannot be transferred (to the database)</td>
@@ -337,6 +362,7 @@ Risk priority number (RPN) = S * O * D, The higher the RPN, the more critical th
       <td>Implement retry logic, use a message queue or buffer in case of failure</td>
     </tr>
     <tr>
+      <td>FA2</td>
       <td><strong>High</strong></td>
       <td>Arduino</td>
       <td>Data Inaccurate</td>
@@ -344,6 +370,7 @@ Risk priority number (RPN) = S * O * D, The higher the RPN, the more critical th
       <td>Calibrate sensors regularly; add data validation checks</td>
     </tr>
     <tr>
+      <td>FA9</td>
       <td><strong>High</strong></td>
       <td>Database</td>
       <td>Not available (temporary)</td>
@@ -352,6 +379,7 @@ Risk priority number (RPN) = S * O * D, The higher the RPN, the more critical th
     </tr>
     <!-- Medium Priority -->
     <tr>
+      <td>FA5</td>
       <td><strong>Medium</strong></td>
       <td>Arduino</td>
       <td>Data cannot be transferred</td>
@@ -359,6 +387,7 @@ Risk priority number (RPN) = S * O * D, The higher the RPN, the more critical th
       <td>Add ACK checks; implement timeout and retransmission logic</td>
     </tr>
     <tr>
+      <td>FA6</td>
       <td><strong>Medium</strong></td>
       <td>Subscription Script</td>
       <td>Data cannot be received (from MQTT-Server)</td>
@@ -366,6 +395,7 @@ Risk priority number (RPN) = S * O * D, The higher the RPN, the more critical th
       <td>Auto-reconnect on failure; improve server health monitoring</td>
     </tr>
     <tr>
+      <td>FA4</td>
       <td><strong>Medium</strong></td>
       <td>Arduino</td>
       <td>Erroneous/Inconsistent Datapoints</td>
@@ -374,18 +404,20 @@ Risk priority number (RPN) = S * O * D, The higher the RPN, the more critical th
     </tr>
     <!-- Monitor -->
     <tr>
-      <td><strong>Monitor</strong></td>
-      <td>Database</td>
-      <td>Writing not possible</td>
-      <td>108</td>
-      <td>Introduce write verification; enable rollback and logging</td>
-    </tr>
-    <tr>
+      <td>FA10</td>
       <td><strong>Monitor</strong></td>
       <td>Database</td>
       <td>Faulty data cleaning</td>
       <td>120</td>
       <td>Strengthen QA/test coverage; use data integrity checks</td>
+    </tr>
+    <tr>
+      <td>FA12</td>
+      <td><strong>Monitor</strong></td>
+      <td>Database</td>
+      <td>Writing not possible</td>
+      <td>108</td>
+      <td>Introduce write verification; enable rollback and logging</td>
     </tr>
   </tbody>
 </table>
