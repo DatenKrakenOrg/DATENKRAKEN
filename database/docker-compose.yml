@@ -1,0 +1,18 @@
+services:
+  timescaledb:
+    build:
+      dockerfile: Dockerfile
+    container_name: datenkraken_db
+    restart: unless-stopped
+    ports:
+      - "5432:5432"
+    volumes:
+      - datenkraken_db_data:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_DB=datenkraken
+      - UI_PASSWORD=${UI_PASSWORD}
+
+volumes:
+  datenkraken_db_data:
