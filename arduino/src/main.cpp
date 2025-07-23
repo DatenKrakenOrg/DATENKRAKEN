@@ -1,22 +1,21 @@
+#include "ArduinoJson.h"
+#include "ArduinoJson.hpp"
+#include "ArduinoJson/Document/JsonDocument.hpp"
+#include "ArduinoJson/Json/JsonSerializer.hpp"
 #include "arduino_secrets.h"
 #include "co2Sensor.h"
 #include "humiditySensor.h"
 #include "mqtt.h"
-#include "wifi.h"
 #include "noiseSensor.h"
-#include "tempSensor.h"
 #include "ntp.h"
-#include "ArduinoJson.h"
-#include "ArduinoJson.hpp"                                                                                                                                                                   
-#include "ArduinoJson/Document/JsonDocument.hpp"                                                                                                                                             
-#include "ArduinoJson/Json/JsonSerializer.hpp" 
+#include "tempSensor.h"
+#include "wifi.h"
 
-const long interval = 100;
+const long interval = 1000;
 unsigned long previousMillis = 0;
 
-
-int sound[30] = {0};
-int voc[7] = {0};
+int sound[30] = { 0 };
+int voc[7] = { 0 };
 
 int voc_idx = 0;
 int seconds_index = 0;
@@ -45,69 +44,64 @@ void loop()
     if (currentMillis - previousMillis >= interval) {
         previousMillis = currentMillis;
         sound[seconds_index++] = getNoiseLevel();
-        Serial.println(sound[seconds_index-1]);
     }
 
-    if (voc_idx % 5 == 0) {
-        Serial.println(voc_idx);
+    if (seconds_index % 5 == 0) {
         voc[voc_idx++] = getCo2Voc(getTemp(), getHumidity());
-        Serial.print("Voc: ");
-        Serial.println(voc[voc_idx-1]);
     }
 
     // Sound
-    if(seconds_index == 30) {
-
+    if (seconds_index == 30) {
         unsigned long unix_timestamp = getNTP();
-
-        for(int i = 0; i < seconds_index;i++){
-            doc["value"][i] = sound[i];
-        }
 
         Serial.println("sending mic..");
         doc["timestamp"] = unix_timestamp;
+        for (int i = 0; i < seconds_index; i++) {
+            doc["value"][i] = sound[i];
+        }
         doc["sequence"] = count;
-        doc["meta"]["customfield"] = "value";
-        char json_string[8000];
+        doc["meta"] = "null";
+        char json_string[8192];
         Serial.println("before serialize mic");
         serializeJsonPretty(doc, json_string);
         sendMqttMessage("dhbw/ai/si2023/6/mic/303", json_string);
         Serial.println("sended mic successfully");
         doc.clear();
 
-        // voc 
-        for(int i = 0; i < voc_idx;i++){
-            doc["value"][i] = voc[i];
-        }
-
+        // voc
         Serial.println("sending voc...");
         doc["timestamp"] = unix_timestamp;
+        for (int i = 0; i < voc_idx; i++) {
+            doc["value"][i] = voc[i];
+        }
         doc["sequence"] = count;
-        doc["meta"]["customfield"] = "value";
-        char voc_string[8000];
-        serializeJsonPretty(doc, voc_string);
-        sendMqttMessage("dhbw/ai/si2023/6/co2/303", voc_string);
+        doc["meta"] = "null";
+        char vocString[4096];
+        serializeJsonPretty(doc, vocString);
+        sendMqttMessage("dhbw/ai/si2023/6/co2/303", vocString);
         doc.clear();
 
-
-        // Humid + Temp
+        // Humid
         Serial.println("sending humidity...");
-        doc["value"] = getHumidity();
         doc["timestamp"] = unix_timestamp;
+        doc["value"] = getHumidity();
         doc["sequence"] = count;
-        char json_string2[8000];
-        serializeJsonPretty(doc, json_string2);
-        sendMqttMessage("dhbw/ai/si2023/6/hum/303", json_string2);
+        doc["meta"] = "null";
+        char humString[1024];
+        serializeJsonPretty(doc, humString);
+        sendMqttMessage("dhbw/ai/si2023/6/hum/303", humString);
         doc.clear();
 
+        // Temp
         Serial.println("sending temp...");
-        doc["value"] = getTemp();
         doc["timestamp"] = unix_timestamp;
+        doc["value"] = getTemp();
         doc["sequence"] = count;
+        doc["meta"] = "null";
 
-        char json_string3[8000];
-        serializeJsonPretty(doc, json_string3);
-        sendMqttMessage("dhbw/ai/si2023/6/temp/303", json_string3);
+        char tempString[1024];
+        serializeJsonPretty(doc, tempString);
+        sendMqttMessage("dhbw/ai/si2023/6/temp/303", tempString);
         doc.clear();
 
         seconds_index = 0;
