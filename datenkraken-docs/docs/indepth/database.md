@@ -1,4 +1,5 @@
 # Database
+The following chapter describes our decision regarding our database. The database name used within the project ist: datenkraken.
 ## Bronze
 The bronze table has to store roughly 172k messages in the 60 days of our project period as discussed here <a href=""></a>. As specified the sensor data must be stored in the following fields (with additional fields of the <a href="/DATENKRAKEN/arduino/mqtt/">messageformat</a>).
 
@@ -30,10 +31,29 @@ The tables are named in the following schema:
 
 <b>bronze.SENSORTYPE</b>
 
-The database is named as followed:
+### Bronze table size
+In order to estimate the final size of the database we inserted 172k rows of realistic dummy data into the temperature table. By examining its relation and index size we wanted to make sure we dont run into future trouble. We found out that the biggest table within the 60 day period of our project would be the temperature table with 16kB of memory usage.
 
-datenkraken
+**On ~172k temperature entries => 60min*24h*60days**
+```
+datenkraken=# SELECT pg_size_pretty(hypertable_size('bronze.temperature'));
+ pg_size_pretty 
+----------------
+ 106 MB
+(1 row)
+```
 
-## Bronze TimescaleDB specific settings
-By free command we examined the ram size of the AI401 server. It showed around 405 gb ram. Assuming 6 groups this would mean each group should have around 64 gb ram free (~- MQTT Broker, Docker Containers, etc.). By default
+**On ~5m noise entries => 60min*24h*60days*60 entries per minute**
+```
+datenkraken=# SELECT pg_size_pretty(hypertable_size('bronze.noise'));
+ pg_size_pretty 
+----------------
+ 341 MB
+(1 row)
+```
 
+Although this table size isn't very high we decided to create a composite index on the columns time and arduino_id in order to speed up read processes. We only need a composite index out of two reasons:
+
+1. Our use case primarily will only need two filters within the dashboard -> in general by time (to scale diagrams), by time and arduino_id (to view each room). Therefore a composite index should be created.
+2. Even if we filter only for time (for development purposes) timescale has a index on time by default.
+3. Even if we filter only for arduino_id, we defined segments (partitions) for arduino_id on our hypertable definition.
