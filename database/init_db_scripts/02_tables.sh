@@ -12,6 +12,8 @@ CREATE TABLE bronze.temperature (
    tsdb.orderby = 'time DESC'
 );
 
+CREATE INDEX ON bronze.temperature (time, arduino_id);
+
 CREATE TABLE bronze.humidity (
    time        TIMESTAMPTZ       NOT NULL,
    arduino_id  TEXT              NOT NULL,
@@ -22,6 +24,9 @@ CREATE TABLE bronze.humidity (
    tsdb.segmentby = 'arduino_id',
    tsdb.orderby = 'time DESC'
 );
+
+CREATE INDEX ON bronze.humidity (time, arduino_id);
+
 
 CREATE TABLE bronze.voc (
    time        TIMESTAMPTZ       NOT NULL,
@@ -34,6 +39,8 @@ CREATE TABLE bronze.voc (
    tsdb.orderby = 'time DESC'
 );
 
+CREATE INDEX ON bronze.voc (time, arduino_id);
+
 CREATE TABLE bronze.noise (
    time        TIMESTAMPTZ       NOT NULL,
    arduino_id  TEXT              NOT NULL,
@@ -44,4 +51,6 @@ CREATE TABLE bronze.noise (
    tsdb.segmentby = 'arduino_id',
    tsdb.orderby = 'time DESC'
 );
+
+CREATE INDEX ON bronze.noise (time, arduino_id);
 EOSQL
