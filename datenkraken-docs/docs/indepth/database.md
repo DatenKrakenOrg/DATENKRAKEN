@@ -1,5 +1,5 @@
 # Database
-The following chapter describes our decision regarding our database. The database name used within the project ist: datenkraken.
+The following chapter describes our decision regarding our database. The database name used within the project is: datenkraken.
 ## Bronze
 The bronze table has to store roughly 172k messages in the 60 days of our project period as discussed here <a href=""></a>. As specified the sensor data must be stored in the following fields (with additional fields of the <a href="/DATENKRAKEN/arduino/mqtt/">messageformat</a>).
 
@@ -34,7 +34,7 @@ The tables are named in the following schema:
 ### Bronze table size
 In order to estimate the final size of the database we inserted 172k rows of realistic dummy data into the temperature table. By examining its relation and index size we wanted to make sure we dont run into future trouble. We found out that the biggest table within the 60 day period of our project would be the temperature table with 16kB of memory usage.
 
-**On ~172k temperature entries => 60min*24h*60days**
+__On ~172k temperature entries => 60min*24h*60days__
 ```
 datenkraken=# SELECT pg_size_pretty(hypertable_size('bronze.temperature'));
  pg_size_pretty 
@@ -43,7 +43,7 @@ datenkraken=# SELECT pg_size_pretty(hypertable_size('bronze.temperature'));
 (1 row)
 ```
 
-**On ~5m noise entries => 60min*24h*60days*60 entries per minute**
+__On ~5m noise entries => 60min*24h*60days*60 entries per minute__
 ```
 datenkraken=# SELECT pg_size_pretty(hypertable_size('bronze.noise'));
  pg_size_pretty 
@@ -52,7 +52,7 @@ datenkraken=# SELECT pg_size_pretty(hypertable_size('bronze.noise'));
 (1 row)
 ```
 
-Although this table size isn't very high we decided to create a composite index on the columns time and arduino_id in order to speed up read processes. We only need a composite index out of two reasons:
+Although this table size isn't very high we decided to create a composite index on the columns time and arduino_id in order to speed up read processes. We only need a composite index out of three reasons:
 
 1. Our use case primarily will only need two filters within the dashboard -> in general by time (to scale diagrams), by time and arduino_id (to view each room). Therefore a composite index should be created.
 2. Even if we filter only for time (for development purposes) timescale has a index on time by default.
