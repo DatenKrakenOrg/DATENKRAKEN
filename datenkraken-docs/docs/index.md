@@ -23,3 +23,6 @@
 ARC42 Template taken from public repo: <a href="https://github.com/NetworkedAssets/arc42-in-markdown-template/tree/master">Take a look here</a>
 
 Thanks to you!
+
+## AI Usage
+Within the documentation we collectively use foundation models to generate blueprints of html tables. <b>Foundation models weren't instructed to generate the actual informative content of each table! Instead it's only used to reduce the workload of repetitive tasks (e.g. enumerations, html syntax, etc.).</b>
