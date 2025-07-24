@@ -57,3 +57,5 @@ Although this table size isn't very high we decided to create a composite index 
 1. Our use case primarily will only need two filters within the dashboard -> in general by time (to scale diagrams), by time and arduino_id (to view each room). Therefore a composite index should be created.
 2. Even if we filter only for time (for development purposes) timescale has a index on time by default.
 3. Even if we filter only for arduino_id, we defined segments (partitions) for arduino_id on our hypertable definition.
+
+When we want to detect bugs later on this could therefore help a lot, since in the worst case we had to trace it from gold to bronze layer and vice versa.
