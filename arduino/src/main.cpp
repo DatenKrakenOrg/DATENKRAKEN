@@ -23,12 +23,11 @@ void setup()
     Serial.begin(115200);
 
     connectWifi();
-    connectMqtt();
+    setupMqtt();
     setupTempSensor();
     setupHumiditySensor();
     setupCo2Sensor();
     setupNTP();
-    mqttClient.setTxPayloadSize(8192);
 }
 
 void loop()

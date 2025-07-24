@@ -1,7 +1,6 @@
 #include "mqtt.h"
 #include "arduino_secrets.h"
-#include "humiditySensor.h"
-#include "tempSensor.h"
+#include "jsonhandler.h"
 #include "wifi.h"
 #include <ArduinoMqttClient.h>
 
@@ -9,6 +8,12 @@ const char broker[] = BROKER;
 int port = 1883;
 
 MqttClient mqttClient(wifiClient);
+
+void setupMqtt()
+{
+    connectMqtt();
+    mqttClient.setTxPayloadSize(JSONSIZE);
+}
 
 void connectMqtt()
 {
@@ -34,4 +39,3 @@ void sendMqttMessage(char topic[], char payload[])
     mqttClient.println(payload);
     mqttClient.endMessage();
 }
-

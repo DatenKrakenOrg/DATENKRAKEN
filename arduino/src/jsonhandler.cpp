@@ -15,7 +15,7 @@ void buildAndSendJsonNoise(unsigned long timestamp, int value[], int count, int 
     }
     doc["sequence"] = count;
     doc["meta"] = "null";
-    char jsonString[8192];
+    char jsonString[JSONSIZE];
     serializeJsonPretty(doc, jsonString);
     sendMqttMessage("dhbw/ai/si2023/6/mic/303", jsonString);
     doc.clear();
@@ -29,7 +29,7 @@ void buildAndSendJsonVoc(unsigned long timestamp, int value[], int vocIndex, int
     }
     doc["sequence"] = count;
     doc["meta"] = "null";
-    char jsonString[8192];
+    char jsonString[JSONSIZE];
     serializeJsonPretty(doc, jsonString);
     sendMqttMessage("dhbw/ai/si2023/6/co2/303", jsonString);
     doc.clear();
@@ -41,7 +41,7 @@ void buildAndSendJsonTemp(unsigned long timestamp, float value, int count)
     doc["value"] = value;
     doc["sequence"] = count;
     doc["meta"] = "null";
-    char jsonString[8192];
+    char jsonString[JSONSIZE];
     serializeJsonPretty(doc, jsonString);
     sendMqttMessage("dhbw/ai/si2023/6/temp/303", jsonString);
     doc.clear();
@@ -53,7 +53,7 @@ void buildAndSendJsonHum(unsigned long timestamp, int value, int count)
     doc["value"] = value;
     doc["sequence"] = count;
     doc["meta"] = "null";
-    char jsonString[8192];
+    char jsonString[JSONSIZE];
     serializeJsonPretty(doc, jsonString);
     sendMqttMessage("dhbw/ai/si2023/6/hum/303", jsonString);
     doc.clear();
