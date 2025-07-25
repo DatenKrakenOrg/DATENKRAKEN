@@ -34,7 +34,7 @@ The tables are named in the following schema:
 ### Bronze table size
 In order to estimate the final size of the database we inserted 172k rows of realistic dummy data into the temperature table. By examining its relation and index size we wanted to make sure we dont run into future trouble. We found out that the biggest table within the 60 day period of our project would be the temperature table with 16kB of memory usage.
 
-__On ~172k temperature entries => 60min*24h*60days__
+_On ~172k temperature entries => 60min x 24h x 60days_
 ```
 datenkraken=# SELECT pg_size_pretty(hypertable_size('bronze.temperature'));
  pg_size_pretty 
@@ -43,7 +43,7 @@ datenkraken=# SELECT pg_size_pretty(hypertable_size('bronze.temperature'));
 (1 row)
 ```
 
-__On ~5m noise entries => 60min*24h*60days*60 entries per minute__
+_On ~5m noise entries => 60min x 24h x 60days x 60 entries per minute_
 ```
 datenkraken=# SELECT pg_size_pretty(hypertable_size('bronze.noise'));
  pg_size_pretty 
