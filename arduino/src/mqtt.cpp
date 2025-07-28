@@ -1,6 +1,7 @@
 #include "mqtt.h"
 #include "arduino_secrets.h"
 #include "jsonhandler.h"
+#include "ntp.h"
 #include "wifi.h"
 #include <ArduinoMqttClient.h>
 #include <WiFiNINA.h>
@@ -39,6 +40,7 @@ void sendMqttMessage(char topic[], char payload[])
     if (WiFi.status() != WL_CONNECTED) {
         WiFi.end();
         connectWifi();
+        setupNTP();
     }
     if (!mqttClient.connected()) {
         mqttClient.stop();

@@ -20,10 +20,10 @@ void setupNTP()
 
 unsigned long getNTP()
 {
-
     if (WiFi.status() != WL_CONNECTED) {
         WiFi.end();
         connectWifi();
+        setupNTP();
     }
     timeClient.update();
     return timeClient.getEpochTime();
