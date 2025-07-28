@@ -1,5 +1,18 @@
 # Database
 The following chapter describes our decision regarding our database. The database name used within the project is: datenkraken.
+
+There are three users within the database:
+**ui** -> read-only on gold schema
+**dev** -> all privileges on tables within bronze, silver, gold except for delte
+**datenkraken_admin** -> all
+
+Configuration via .env:
+```bash
+POSTGRES_USER=
+POSTGRES_PASSWORD=
+UI_PASSWORD=
+DEV_PASSWORD=
+```
 ## Bronze
 The bronze table has to store roughly 172k messages in the 60 days of our project period as discussed here <a href=""></a>. As specified the sensor data must be stored in the following fields (with additional fields of the <a href="/DATENKRAKEN/arduino/mqtt/">messageformat</a>).
 
@@ -10,6 +23,8 @@ Fields that are part of all tables:
 1. time: TIMESTAMPTZ
 
 2. arduino_id: text -> denormalized since timescaledb does a dictionary compression / + enums do not allow to delete individual values within enum <a href="https://www.postgresql.org/docs/current/datatype-enum.html">8.7. Enumerated Types</a>
+
+3. deleted_at: TIMESTAMPZ -> soft delete
 
 Field per table:
 
@@ -32,7 +47,7 @@ The tables are named in the following schema:
 <b>bronze.SENSORTYPE</b>
 
 ### Bronze table size
-In order to estimate the final size of the database we inserted 172k rows of realistic dummy data into the temperature table. By examining its relation and index size we wanted to make sure we dont run into future trouble. We found out that the biggest table within the 60 day period of our project would be the temperature table with 16kB of memory usage.
+In order to estimate the final size of the database we inserted 172k rows of realistic dummy data into the temperature table. By examining its relation and index size we wanted to make sure we dont run into future trouble. We found out that the biggest table within the 60 day period of our project would be the temperature table with 16kB of memory usage. (Without deleted_at)
 
 _On ~172k temperature entries => 60min x 24h x 60days_
 ```
