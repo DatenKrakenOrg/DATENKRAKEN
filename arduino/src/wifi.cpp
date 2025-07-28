@@ -1,5 +1,4 @@
 #include "arduino_secrets.h"
-#include "utility/wl_definitions.h"
 #include <WiFiNINA.h>
 
 char ssid[] = SECRET_SSID;
@@ -14,7 +13,7 @@ void connectWifi()
 
     while (WiFi.begin(ssid, pass) != WL_CONNECTED) {
         Serial.print(".");
-        delay(5000);
+        delay(1000);
     }
 
     Serial.println("You're connected to the network");

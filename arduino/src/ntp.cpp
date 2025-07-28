@@ -22,6 +22,7 @@ unsigned long getNTP()
 {
 
     if (WiFi.status() != WL_CONNECTED) {
+        WiFi.end();
         connectWifi();
     }
     timeClient.update();

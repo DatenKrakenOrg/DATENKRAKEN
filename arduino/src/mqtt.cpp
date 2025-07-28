@@ -37,9 +37,11 @@ void connectMqtt()
 void sendMqttMessage(char topic[], char payload[])
 {
     if (WiFi.status() != WL_CONNECTED) {
+        WiFi.end();
         connectWifi();
     }
-    if (!mqttClient.connected()){
+    if (!mqttClient.connected()) {
+        mqttClient.stop();
         connectMqtt();
     }
     mqttClient.beginMessage(topic);
