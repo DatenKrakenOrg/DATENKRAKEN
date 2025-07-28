@@ -17,7 +17,7 @@ services:
 
   pgadmin:
     image: dpage/pgadmin4:9.6.0
-    container_name: pgadmin
+    container_name: datenkraken_pgadmin
     restart: unless-stopped
     environment:
       - PGADMIN_DEFAULT_EMAIL=${PGADMIN_DEFAULT_EMAIL}
