@@ -3,6 +3,7 @@
 #include "jsonhandler.h"
 #include "wifi.h"
 #include <ArduinoMqttClient.h>
+#include <WiFiNINA.h>
 
 const char broker[] = BROKER;
 int port = 1883;
@@ -35,6 +36,12 @@ void connectMqtt()
 
 void sendMqttMessage(char topic[], char payload[])
 {
+    if (WiFi.status() != WL_CONNECTED) {
+        connectWifi();
+    }
+    if (!mqttClient.connected()){
+        connectMqtt();
+    }
     mqttClient.beginMessage(topic);
     mqttClient.println(payload);
     mqttClient.endMessage();

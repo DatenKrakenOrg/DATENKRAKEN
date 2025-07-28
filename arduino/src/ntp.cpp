@@ -1,4 +1,6 @@
+#include "wifi.h"
 #include <NTPClient.h>
+#include <WiFiNINA.h>
 #include <WiFiUdp.h>
 
 WiFiUDP ntpUDP;
@@ -11,11 +13,17 @@ NTPClient timeClient(ntpUDP);
 // additionally you can specify the update interval (in milliseconds).
 // NTPClient timeClient(ntpUDP, "europe.pool.ntp.org", 3600, 60000);
 
-void setupNTP(){
-  timeClient.begin();
+void setupNTP()
+{
+    timeClient.begin();
 }
 
-unsigned long getNTP() {
-  timeClient.update();
-  return timeClient.getEpochTime();
+unsigned long getNTP()
+{
+
+    if (WiFi.status() != WL_CONNECTED) {
+        connectWifi();
+    }
+    timeClient.update();
+    return timeClient.getEpochTime();
 }
