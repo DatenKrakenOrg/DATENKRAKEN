@@ -3,6 +3,7 @@
 psql -v ON_ERROR_STOP=1 --username "$POSTGRES_USER" --dbname "$POSTGRES_DB" <<-EOSQL
 CREATE TABLE bronze.temperature (
    time        TIMESTAMPTZ       NOT NULL,
+   deleted_at  TIMESTAMPTZ,
    arduino_id  TEXT              NOT NULL,
    temperature FLOAT4            NOT NULL
 ) WITH (
@@ -12,10 +13,11 @@ CREATE TABLE bronze.temperature (
    tsdb.orderby = 'time DESC'
 );
 
-CREATE INDEX ON bronze.temperature (time, arduino_id);
+CREATE INDEX ON bronze.temperature (time, arduino_id, deleted_at);
 
 CREATE TABLE bronze.humidity (
    time        TIMESTAMPTZ       NOT NULL,
+   deleted_at  TIMESTAMPTZ,
    arduino_id  TEXT              NOT NULL,
    humidity    SMALLINT          NOT NULL
 ) WITH (
@@ -25,11 +27,12 @@ CREATE TABLE bronze.humidity (
    tsdb.orderby = 'time DESC'
 );
 
-CREATE INDEX ON bronze.humidity (time, arduino_id);
+CREATE INDEX ON bronze.humidity (time, arduino_id, deleted_at);
 
 
 CREATE TABLE bronze.voc (
    time        TIMESTAMPTZ       NOT NULL,
+   deleted_at  TIMESTAMPTZ,
    arduino_id  TEXT              NOT NULL,
    voc         SMALLINT          NOT NULL
 ) WITH (
@@ -39,10 +42,11 @@ CREATE TABLE bronze.voc (
    tsdb.orderby = 'time DESC'
 );
 
-CREATE INDEX ON bronze.voc (time, arduino_id);
+CREATE INDEX ON bronze.voc (time, arduino_id, deleted_at);
 
 CREATE TABLE bronze.noise (
    time        TIMESTAMPTZ       NOT NULL,
+   deleted_at  TIMESTAMPTZ,
    arduino_id  TEXT              NOT NULL,
    noise       SMALLINT          NOT NULL
 ) WITH (
@@ -52,5 +56,5 @@ CREATE TABLE bronze.noise (
    tsdb.orderby = 'time DESC'
 );
 
-CREATE INDEX ON bronze.noise (time, arduino_id);
+CREATE INDEX ON bronze.noise (time, arduino_id, deleted_at);
 EOSQL
