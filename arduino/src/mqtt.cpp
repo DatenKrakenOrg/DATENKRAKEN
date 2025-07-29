@@ -43,6 +43,11 @@ void sendMqttMessage(char topic[], char payload[])
         setupNTP();
     }
     if (!mqttClient.connected()) {
+        if (WiFi.status() != WL_CONNECTED) {
+            WiFi.end();
+            connectWifi();
+            setupNTP();
+        }
         mqttClient.stop();
         connectMqtt();
     }
