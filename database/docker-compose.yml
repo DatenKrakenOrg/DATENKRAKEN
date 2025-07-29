@@ -5,7 +5,7 @@ services:
     container_name: datenkraken_db
     restart: unless-stopped
     ports:
-      - "5432:5432"
+      - "6000:5432"
     volumes:
       - datenkraken_db_data:/var/lib/postgresql/data
     environment:
@@ -13,6 +13,21 @@ services:
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
       - POSTGRES_DB=datenkraken
       - UI_PASSWORD=${UI_PASSWORD}
+      - DEV_PASSWORD=${DEV_PASSWORD}
+
+  pgadmin:
+    image: dpage/pgadmin4:9.6.0
+    container_name: datenkraken_pgadmin
+    restart: unless-stopped
+    environment:
+      - PGADMIN_DEFAULT_EMAIL=${PGADMIN_DEFAULT_EMAIL}
+      - PGADMIN_DEFAULT_PASSWORD=${PGADMIN_DEFAULT_PASSWORD}
+    ports:
+      - "6001:80"
+    depends_on:
+      - timescaledb
+
+    
 
 volumes:
   datenkraken_db_data:
