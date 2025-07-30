@@ -1,5 +1,0 @@
-[Unit]
-description = "Backup db script"
-
-[Service]
-ExecStart=/home/$USER/backup.sh
