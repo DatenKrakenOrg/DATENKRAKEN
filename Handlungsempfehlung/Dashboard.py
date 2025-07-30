@@ -1,12 +1,24 @@
 import streamlit as st
+from dotenv import load_dotenv
 from status_engine import get_status, get_recommendations, get_virtual_recommendations, filter_recommendations, fetch_weather_data
 import plotly.graph_objects as go
 import numpy as np
 import pandas as pd
 import json
 import os
-API_KEY = "756c317560b3496480d121915252507"
+import requests
+
+
+base_dir = os.path.dirname(__file__)
+env_path = os.path.join(base_dir, "weatherapi.env")
+
+load_dotenv(dotenv_path=env_path) 
+API_KEY = os.getenv("WEATHER_API_KEY")
+if not API_KEY:
+    raise ValueError("WEATHER_API_KEY ist nicht gesetzt!")
 LOCATION = "Heidenheim,DE"
+
+# Set Streamlit page configuration
 st.set_page_config(layout="wide")
 
 
@@ -66,7 +78,7 @@ def get_bar_color(param_name, value):
         return "green"
     elif status == "warning":
         return "orange"
-    else:  # critical
+    else:  
         return "red"
     
 
@@ -74,10 +86,10 @@ def get_bar_color(param_name, value):
 # Beispiel-Sensordaten
 #--------------------------------
 sensor_data = {
-    "temperature_inside": 20,   # Beispielwert für Innentemperatur
-    "humidity_inside": 35,      # Beispielwert für Innenfeuchtigkeit
-    "co2_level": 1200,          # Beispielwert für CO2-Gehalt
-    "noise_level": 55           # Beispielwert für Geräuschpegel
+    "temperature_inside": 20,   
+    "humidity_inside": 35,      
+    "co2_level": 1200,         
+    "noise_level": 55           
 }
 
 
@@ -147,20 +159,22 @@ for idx, (param, value) in enumerate(sensor_data.items()):
             else:
                 st.success("Wert im optimalen Bereich")  # Optimal = grün
 
+
+
 # ---------------------------------------
 # Aktuelles Wetter in Heidenheim anzeigen
 # ---------------------------------------
-st.markdown("---")  # Trennlinie
+st.markdown("---")  
 
 weather_data = fetch_weather_data(API_KEY, "Heidenheim,DE")
 
 if weather_data:
-    location_name = weather_data["location"]["name"]
-    temp = weather_data["current"]["temp_c"]
-    condition = weather_data["current"]["condition"]["text"]
-    rain_chance = weather_data["forecast"]["forecastday"][0]["day"]["daily_chance_of_rain"]
+    location_name = weather_data["name"]
+    temp = weather_data["main"]["temp"]
+    condition = weather_data["weather"][0]["description"]
+    rain_amount = weather_data.get("rain", {}).get("1h", 0)
 
     st.subheader(f"Aktuelles Wetter in {location_name}")
-    st.write(f"**{condition}**, {temp} °C, Regenwahrscheinlichkeit: {rain_chance} %")
+    st.write(f"**{condition}**, {temp} °C, Regenmenge (letzte Stunde): {rain_amount} mm")
 else:
     st.warning("Konnte Wetterdaten nicht abrufen (bitte API-Key prüfen).")

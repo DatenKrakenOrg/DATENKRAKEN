@@ -1,8 +1,19 @@
+from dotenv import load_dotenv
 import json
 import os
 import requests
 
-API_KEY = "756c317560b3496480d121915252507"
+
+base_dir = os.path.dirname(__file__)
+env_path = os.path.join(base_dir, "weatherapi.env")
+
+load_dotenv(dotenv_path=env_path) 
+API_KEY = os.getenv("WEATHER_API_KEY")
+if not API_KEY:
+    raise ValueError("WEATHER_API_KEY ist nicht gesetzt!")
+
+location = "Heidenheim,DE"
+
 
 # Config-Datei laden
 def load_config(config_file="parameter.json"):
@@ -15,10 +26,9 @@ config = load_config()
 
 
 def fetch_weather_data(api_key, location="Heidenheim,DE"):
-    """
-    Holt Wetterdaten von WeatherAPI.com (oder OpenWeatherMap).
-    """
-    url = f"http://api.weatherapi.com/v1/forecast.json?key={api_key}&q={location}&days=1&aqi=yes"
+    
+
+    url = f"https://api.openweathermap.org/data/2.5/weather?q={location}&appid={api_key}&units=metric&lang=de"
     try:
         response = requests.get(url)
         response.raise_for_status()
@@ -46,14 +56,14 @@ def get_status(value, param_name):
         return "critical"
 
 
-def get_virtual_recommendations(api_key, location="Berlin,DE"):
+def get_virtual_recommendations(api_key, location="Heidenheim,DE"):
     weather_data = fetch_weather_data(api_key, location)
     if not weather_data:
         return []
-
+    
     weather = {
-        "temp": weather_data["current"]["temp_c"],
-        "condition": weather_data["current"]["condition"]["text"].lower()
+        "temp": weather_data["main"]["temp"],  # °C
+        "condition": weather_data["weather"][0]["description"].lower()
     }
 
     recs = []
@@ -62,6 +72,7 @@ def get_virtual_recommendations(api_key, location="Berlin,DE"):
             continue
 
         try:
+            # 'weather' wird im eval() als Kontext bereitgestellt
             if eval(rec["condition"], {}, {"weather": weather}):
                 recs.append({
                     "parameter": "virtual_weather",
@@ -73,6 +84,7 @@ def get_virtual_recommendations(api_key, location="Berlin,DE"):
                 "message": f"Fehler bei Wetter-Empfehlung {rec['id']}: {e}"
             })
     return recs
+
 
 
 # Gibt Handlungsempfehlungen und Warnungen zurück
@@ -129,7 +141,7 @@ def filter_recommendations(sensor_data, weather_data, recommendations):
     Beispiel: 'Lüften' wird unterdrückt, wenn Innen-Temp < Außen-Temp.
     """
     inside_temp = sensor_data.get("temperature_inside")
-    outside_temp = weather_data["current"]["temp_c"]
+    outside_temp = weather_data["main"]["temp"]
 
     filtered = []
     for rec in recommendations:
