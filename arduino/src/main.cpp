@@ -22,12 +22,12 @@ void setup()
 {
     Serial.begin(115200);
 
-    connectWifi();
-    setupMqtt();
     setupTempSensor();
     setupHumiditySensor();
     setupCo2Sensor();
+    connectWifi();
     setupNTP();
+    setupMqtt();
 }
 
 void loop()
