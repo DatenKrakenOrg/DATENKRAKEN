@@ -1,8 +1,10 @@
 #include "mqtt.h"
 #include "arduino_secrets.h"
 #include "jsonhandler.h"
+#include "ntp.h"
 #include "wifi.h"
 #include <ArduinoMqttClient.h>
+#include <WiFiNINA.h>
 
 const char broker[] = BROKER;
 int port = 1883;
@@ -35,6 +37,20 @@ void connectMqtt()
 
 void sendMqttMessage(char topic[], char payload[])
 {
+    if (WiFi.status() != WL_CONNECTED) {
+        WiFi.end();
+        connectWifi();
+        setupNTP();
+    }
+    if (!mqttClient.connected()) {
+        if (WiFi.status() != WL_CONNECTED) {
+            WiFi.end();
+            connectWifi();
+            setupNTP();
+        }
+        mqttClient.stop();
+        connectMqtt();
+    }
     mqttClient.beginMessage(topic);
     mqttClient.println(payload);
     mqttClient.endMessage();
