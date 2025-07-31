@@ -1,0 +1,90 @@
+{
+
+  "description": "Defining the Paramters including optimal ranges, tolerances, and recommendations for indoor environmental conditions.",
+
+
+  "parameters": {
+    "temperature_inside": {
+    "optimal_range": { "min": 20, "max": 22 },
+    "tolerance": 3,
+    "unit": "°C",
+    "display_range": { "min": 10, "max": 30 }
+  },
+  "humidity_inside": {
+    "optimal_range": { "min": 40, "max": 60 },
+    "tolerance": 10,
+    "unit": "%",
+    "display_range": { "min": 0, "max": 100 }
+  },
+  "co2_level": {
+    "optimal_range": { "min": 0, "max": 800 },
+    "tolerance": 200,
+    "unit": "ppm",
+    "display_range": { "min": 0, "max": 2000 }
+  },
+  "noise_level": {
+    "optimal_range": { "min": 0, "max": 50 },
+    "tolerance": 10,
+    "unit": "dB(A)",
+    "display_range": { "min": 0, "max": 100 }
+  },
+  "virtual_weather": {
+    "optimal_range": { "min": 0, "max": 1 },
+    "tolerance": 0,
+    "unit": "",
+    "display_range": { "min": 0, "max": 1 }
+  }
+  },
+
+  "recommendations": [
+    {
+      "id": "temp_cooling",
+      "category": "Temperature Management",
+      "message": "Nutze Klimageräte oder Ventilatoren, um die Temperatur zu senken!",
+      "condition": "value > optimal_range['max'] + tolerance",
+      "parameter": "temperature_inside"
+    },
+    {
+      "id": "temp_heating",
+      "category": "Temperature Management",
+      "message": "Heizen empfohlen, um die Raumtemperatur zu erhöhen!",
+      "condition": "value < optimal_range['min'] - tolerance",
+      "parameter": "temperature_inside"
+    },
+    {
+      "id": "humidity_low",
+      "category": "Humidity Control",
+      "message": "Luftbefeuchter einsetzen, um die Luftfeuchtigkeit zu erhöhen!",
+      "condition": "value < optimal_range['min'] - tolerance",
+      "parameter": "humidity_inside"
+    },
+    {
+      "id": "humidity_high",
+      "category": "Humidity Control",
+      "message": "Lüfte oder nutze Entfeuchter, um die Luftfeuchtigkeit zu reduzieren!",
+      "condition": "value > optimal_range['max'] + tolerance",
+      "parameter": "humidity_inside"
+    },
+    {
+      "id": "co2_high",
+      "category": "CO₂ Reduction",
+      "message": "CO₂-Wert hoch: Stoßlüften empfohlen!",
+      "condition": "value > optimal_range['max'] + tolerance",
+      "parameter": "co2_level"
+    },
+    {
+      "id": "noise_high",
+      "category": "Noise Reduction",
+      "message": "Lärmpegel zu hoch: Fenster schließen und Gerätegeräusche minimieren!",
+      "condition": "value > optimal_range['max'] + tolerance",
+      "parameter": "noise_level"
+    },
+    {
+    "id": "weather_sun_hot",
+    "category": "Weather",
+    "message": "Jalousien schließen (starke Sonne & Hitze)!",
+    "condition": "weather['temp'] > 25 and 'sun' in weather['condition']",
+    "parameter": "virtual_weather"
+    }
+  ]
+}
