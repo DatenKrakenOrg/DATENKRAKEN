@@ -14,7 +14,7 @@ void buildAndSendJsonNoise(unsigned long timestamp, int value[], int count, int 
         doc["value"][i] = value[i];
     }
     doc["sequence"] = count;
-    doc["meta"] = "null";
+    doc["meta"]["device_id"] = 303;
     char jsonString[JSONSIZE];
     serializeJsonPretty(doc, jsonString);
     sendMqttMessage("dhbw/ai/si2023/6/mic/303", jsonString);
@@ -28,7 +28,7 @@ void buildAndSendJsonVoc(unsigned long timestamp, int value[], int vocIndex, int
         doc["value"][i] = value[i];
     }
     doc["sequence"] = count;
-    doc["meta"] = "null";
+    doc["meta"]["device_id"] = 303;
     char jsonString[JSONSIZE];
     serializeJsonPretty(doc, jsonString);
     sendMqttMessage("dhbw/ai/si2023/6/co2/303", jsonString);
@@ -38,9 +38,9 @@ void buildAndSendJsonVoc(unsigned long timestamp, int value[], int vocIndex, int
 void buildAndSendJsonTemp(unsigned long timestamp, float value, int count)
 {
     doc["timestamp"] = timestamp;
-    doc["value"] = value;
+    doc["value"][0] = value;
     doc["sequence"] = count;
-    doc["meta"] = "null";
+    doc["meta"]["device_id"] = 303;
     char jsonString[JSONSIZE];
     serializeJsonPretty(doc, jsonString);
     sendMqttMessage("dhbw/ai/si2023/6/temp/303", jsonString);
@@ -50,9 +50,9 @@ void buildAndSendJsonTemp(unsigned long timestamp, float value, int count)
 void buildAndSendJsonHum(unsigned long timestamp, int value, int count)
 {
     doc["timestamp"] = timestamp;
-    doc["value"] = value;
+    doc["value"][0] = value;
     doc["sequence"] = count;
-    doc["meta"] = "null";
+    doc["meta"]["device_id"] = 303;
     char jsonString[JSONSIZE];
     serializeJsonPretty(doc, jsonString);
     sendMqttMessage("dhbw/ai/si2023/6/hum/303", jsonString);
