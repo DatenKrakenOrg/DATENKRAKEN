@@ -1,6 +1,6 @@
 # Effects of Room Parameters on Learning Performance
 
-A healthy and comfortable indoor climate is a crucial foundation for successful teaching and effective learning. In particular, in classrooms and smaller lecture halls with high occupant density, factors such as room temperature, relative humidity, and the concentration of carbon dioxide (CO₂) directly affect the well-being, health and cognitive performance of those present. Numerous scientific studies show that an optimally set indoor climate not only improves subjective comfort but also enables measurable gains in concentration and learning performance.
+A healthy and comfortable indoor climate is a crucial foundation for successful teaching and effective learning. In particular, in classrooms and smaller lecture halls with high occupant density, factors such as room temperature, relative humidity, and the concentration of airborne pollutants directly affect the well-being, health and cognitive performance of those present. Numerous scientific studies show that an optimally set indoor climate not only improves subjective comfort but also enables measurable gains in concentration and learning performance.
 
 ## Room Temperature and Cognitive Performance
 
@@ -13,10 +13,10 @@ However, when the temperature rises above 25 °C, productivity subconsciously de
 Humidity also significantly influences comfort and health indoors. A range of 40 to 60 % relative humidity is considered ideal (Peder Wolkoff, 2007, p. 854). At humidity levels below 30 %, mucous membranes dry out, leading to irritated eyes, dry throat and increased infection risk. At the same time, the respiratory tract’s ability to defend against pollutants and pathogens is reduced.  
 Conversely, high humidity above 60 % promotes mold growth, which in turn increases the risk of respiratory diseases and allergies. High humidity also impairs the body’s temperature regulation, as sweat evaporates less effectively.
 
-## CO₂ Concentration and Cognitive Performance
+## VOC Index and Indoor Air Quality
 
-CO₂ concentration in classrooms is a key indicator of air quality and ventilation needs. While fresh outdoor air contains about 420 ppm CO₂ (as of 2023), indoor levels should ideally remain below 1000 ppm. Even at concentrations of 1000 ppm, first complaints such as fatigue and difficulty concentrating occur (Wargocki Pawel, 2017). Levels above 2000 ppm can lead to headaches, dizziness and nausea. Moreover, CO₂ concentration has a huge impact on attendance. For every 1000 ppm increase in CO₂, absence rises by 10–20 % (D. G. Shendell, 2004).  
-Regular ventilation approximately every 20 to 45 minutes or the use of mechanical ventilation systems is necessary to keep CO₂ levels at a healthy level. Good ventilation not only lowers CO₂ but also reduces sick days and improves learning performance.
+The VOC (Volatile Organic Compounds) index is an important indicator of indoor air quality and ventilation needs. VOCs are emitted from building materials, furniture, cleaning products, and human activity. Elevated VOC levels can lead to symptoms such as headaches, dizziness, fatigue, irritation of the eyes and airways, and reduced cognitive performance. A VOC index of 100 or less is generally considered good air quality, while values above 200 suggest poor air quality that requires immediate action. Prolonged exposure to elevated VOC levels can also aggravate asthma and allergies.
+Regular ventilation approximately every 20 to 45 minutes or the use of mechanical ventilation systems is necessary to keep VOC levels at a healthy level. Good ventilation not only lowers VOCs but also reduces sick days and improves learning performance. The use of low-emission building materials and cleaning products also significantly improves indoor air quality.
 
 ## Noise Level and Concentration in Class
 
@@ -30,6 +30,7 @@ In summary, an optimal indoor climate is essential for students’ health, well-
 -	Optimal air temperature between 20 and 22 °C   
 -	Implement cooling or shading strategies if indoor temperature exceeds 25 °C  
 -	Avoid direct sunlight by using blinds or shades in warm/sunny weather
+-   Use continuous monitoring to detect overheating early
 
 **Humidity Control**  
 -	Optimal relative humidity between 40 and 60 %  
@@ -37,9 +38,10 @@ In summary, an optimal indoor climate is essential for students’ health, well-
 -	Ventilate regularly or use dehumidifiers if RH > 60 %  
 -	Watch for signs of mold growth at high humidity levels to prevent health risks
 
-**CO₂ Reduction through Ventilation**  
--	CO₂ level should be < 1000 ppm  
--	Perform shock ventilation when levels exceed 1000 ppm  
+**VOC Reduction through Ventilation**  
+-	VOC index should be < 100 (optimal)
+-	Ventilate immediately if VOC index > 100 
+-   Identify and remove sources if index remains high
 
 **Noise Reduction**  
 -	Keep ambient noise at a maximum of 50 dB(A)  
