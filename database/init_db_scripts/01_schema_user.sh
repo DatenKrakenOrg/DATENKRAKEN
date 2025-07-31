@@ -11,9 +11,13 @@ psql -v ON_ERROR_STOP=1 --username "$POSTGRES_USER" --dbname "$POSTGRES_DB" <<-E
     GRANT USAGE ON SCHEMA silver TO dev;
     GRANT USAGE ON SCHEMA gold TO dev;
     ALTER DEFAULT PRIVILEGES IN SCHEMA bronze GRANT SELECT, INSERT, UPDATE ON TABLES TO dev;
+    ALTER DEFAULT PRIVILEGES IN SCHEMA bronze GRANT USAGE ON SEQUENCES TO dev;
     -- Default privileges granted for update only on is_deleted column -> not easily done due to timescale compressing
     ALTER DEFAULT PRIVILEGES IN SCHEMA silver GRANT ALL ON TABLES TO dev;
+    ALTER DEFAULT PRIVILEGES IN SCHEMA silver GRANT USAGE ON SEQUENCES TO dev;
     ALTER DEFAULT PRIVILEGES IN SCHEMA gold GRANT ALL ON TABLES TO dev;
+    ALTER DEFAULT PRIVILEGES IN SCHEMA gold GRANT USAGE ON SEQUENCES TO dev;
+    
     REVOKE DELETE ON ALL TABLES IN SCHEMA bronze FROM dev;
 
     ALTER ROLE ui SET search_path TO gold, public;
