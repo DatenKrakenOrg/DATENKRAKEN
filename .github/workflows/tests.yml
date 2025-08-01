@@ -28,4 +28,6 @@ jobs:
 
       - name: Run tests
         run: |
-          PYTHONPATH=. pytest frontend/tests
+          export PYTHONPATH=$PYTHONPATH:$(pwd)
+          export WEATHER_API_KEY=dummy
+          pytest frontend/tests
