@@ -5,7 +5,7 @@ import requests
 
 
 base_dir = os.path.dirname(__file__)
-env_path = os.path.join(base_dir, "weatherapi.env")
+env_path = os.path.join(base_dir, ".env")
 
 load_dotenv(dotenv_path=env_path) 
 API_KEY = os.getenv("WEATHER_API_KEY")
@@ -15,7 +15,7 @@ if not API_KEY:
 location = "Heidenheim,DE"
 
 
-# Config-Datei laden
+
 def load_config(config_file="parameter.json"):
     base_dir = os.path.dirname(__file__)
     file_path = os.path.join(base_dir, config_file)
@@ -38,7 +38,7 @@ def fetch_weather_data(api_key, location="Heidenheim,DE"):
         return None
     
 
-# Berechne den Status für einen einzelnen Wert
+
 def get_status(value, param_name):
     param_cfg = config["parameters"].get(param_name)
     if not param_cfg:
@@ -62,7 +62,7 @@ def get_virtual_recommendations(api_key, location="Heidenheim,DE"):
         return []
     
     weather = {
-        "temp": weather_data["main"]["temp"],  # °C
+        "temp": weather_data["main"]["temp"],  
         "condition": weather_data["weather"][0]["description"].lower()
     }
 
@@ -72,7 +72,6 @@ def get_virtual_recommendations(api_key, location="Heidenheim,DE"):
             continue
 
         try:
-            # 'weather' wird im eval() als Kontext bereitgestellt
             if eval(rec["condition"], {}, {"weather": weather}):
                 recs.append({
                     "parameter": "virtual_weather",
@@ -87,20 +86,20 @@ def get_virtual_recommendations(api_key, location="Heidenheim,DE"):
 
 
 
-# Gibt Handlungsempfehlungen und Warnungen zurück
+
 def get_recommendations(sensor_data):
     recommendations = []
     for param, value in sensor_data.items():
         status = get_status(value, param)
 
-        # Warnung hinzufügen, falls der Wert im Warnbereich liegt
+
         if status == "warning":
             recommendations.append({
                 "parameter": param,
                 "message": "  Wert nähert sich kritischem Bereich an. Überwache den Parameter regelmäßig."
             })
 
-    # Kritische Empfehlungen hinzufügen
+
     for rec in config["recommendations"]:
         param = rec["parameter"]
         value = sensor_data.get(param)
@@ -136,16 +135,12 @@ def get_recommendations(sensor_data):
 
 
 def filter_recommendations(sensor_data, weather_data, recommendations):
-    """
-    Filtert Empfehlungen, die unter bestimmten Bedingungen nicht passen.
-    Beispiel: 'Lüften' wird unterdrückt, wenn Innen-Temp < Außen-Temp.
-    """
+
     inside_temp = sensor_data.get("temperature_inside")
     outside_temp = weather_data["main"]["temp"]
 
     filtered = []
     for rec in recommendations:
-        # Lüften Empfehlung blocken wenn Innen-Temp < Außen-Temp
         if "lüften" in rec["message"].lower() and inside_temp < outside_temp:
             continue
         filtered.append(rec)

@@ -16,11 +16,11 @@
     "unit": "%",
     "display_range": { "min": 0, "max": 100 }
   },
-  "co2_level": {
-    "optimal_range": { "min": 0, "max": 800 },
-    "tolerance": 200,
-    "unit": "ppm",
-    "display_range": { "min": 0, "max": 2000 }
+  "voc_index": {
+      "optimal_range": { "min": 0, "max": 100 },
+      "tolerance": 100,
+      "unit": "Index",
+      "display_range": { "min": 0, "max": 400 }
   },
   "noise_level": {
     "optimal_range": { "min": 0, "max": 50 },
@@ -66,11 +66,11 @@
       "parameter": "humidity_inside"
     },
     {
-      "id": "co2_high",
-      "category": "CO₂ Reduction",
-      "message": "CO₂-Wert hoch: Stoßlüften empfohlen!",
+      "id": "voc_high",
+      "category": "VOC Reduction",
+      "message": "VOC-Wert hoch: Räume sofort lüften und mögliche Schadstoffquellen entfernen!",
       "condition": "value > optimal_range['max'] + tolerance",
-      "parameter": "co2_level"
+      "parameter": "voc_index"
     },
     {
       "id": "noise_high",
