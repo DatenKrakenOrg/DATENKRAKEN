@@ -2,26 +2,30 @@ name: Run Frontend Tests
 
 on:
   push:
-    branches: ["main", "dev", "feature/*"]
+    branches:
+      - main
+      - feature/testing-setup
   pull_request:
-    branches: ["main", "dev"]
 
 jobs:
   test-frontend:
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v3
 
       - name: Set up Python
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v4
         with:
-          python-version: "3.11"
+          python-version: '3.11'
 
       - name: Install dependencies
         run: |
-          pip install pytest streamlit plotly pandas requests python-dotenv
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt || true
+          pip install pytest streamlit requests python-dotenv plotly pandas numpy
 
       - name: Run tests
-        run: pytest frontend/tests
-
+        run: |
+          PYTHONPATH=. pytest frontend/tests
