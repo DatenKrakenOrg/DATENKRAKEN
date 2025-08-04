@@ -5,6 +5,6 @@
 extern MqttClient mqttClient;
 void setupMqtt();
 void connectMqtt();
-void sendMqttMessage(char topic[], char payload[]);
+void sendMqttMessage(String topic, char payload[]);
 
 #endif
