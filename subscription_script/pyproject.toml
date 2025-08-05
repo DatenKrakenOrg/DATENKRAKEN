@@ -15,7 +15,7 @@ dependencies = [
 ]
 
 [project.scripts]
-subscription-script = "subscription_script:main"
+subscription-script = "subscription_script.main:main"
 
 [build-system]
 requires = ["uv_build>=0.8.0,<0.9"]

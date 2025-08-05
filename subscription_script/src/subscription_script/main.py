@@ -12,7 +12,7 @@ logging.basicConfig(
 )
 
 
-broker = "aicon.dhbw-heidenheim.de"
+broker = os.getenv("BROKER_IP")
 port = 1883
 topics = [
     "dhbw/ai/si2023/6/co2/#",

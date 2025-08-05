@@ -14,6 +14,8 @@ services:
       - POSTGRES_DB=datenkraken
       - UI_PASSWORD=${UI_PASSWORD}
       - DEV_PASSWORD=${DEV_PASSWORD}
+    networks:
+      - datenkraken-db-net
 
   pgadmin:
     image: dpage/pgadmin4:9.6.0
@@ -26,8 +28,13 @@ services:
       - "6001:80"
     depends_on:
       - timescaledb
+    networks:
+      - datenkraken-db-net
 
-    
+  
+networks:
+  datenkraken-db-net:
+    external: true
 
 volumes:
   datenkraken_db_data:
