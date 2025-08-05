@@ -35,7 +35,7 @@ void connectMqtt()
     Serial.println();
 }
 
-void sendMqttMessage(char topic[], char payload[])
+void sendMqttMessage(String topic, char payload[])
 {
     if (WiFi.status() != WL_CONNECTED) {
         WiFi.end();
