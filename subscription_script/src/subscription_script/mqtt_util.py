@@ -19,9 +19,9 @@ def connect_mqtt(
 ) -> mqtt_client.Client:
     def on_connect(client, userdata, flags, rc, properties):
         if rc == 0:
-            print("Connected to MQTT Broker!")
+            logging.info("Connected to MQTT Broker!")
         else:
-            print("Failed to connect, return code %d\n", rc)
+            logging.critical("Failed to connect, return code %d\n", rc)
 
     client = mqtt_client.Client(
         client_id=client_id,
@@ -35,7 +35,7 @@ def connect_mqtt(
     return client
 
 
-def on_disconnect(client, userdata, rc) -> None:
+def on_disconnect(client, userdata, flags, rc, properties) -> None:
     logging.info("Disconnected with result code: %s. Attempting reconnection..", rc)
 
 
