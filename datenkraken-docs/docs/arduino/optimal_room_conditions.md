@@ -27,23 +27,27 @@ In addition to temperature, humidity and air quality, noise level also has a sig
 In summary, an optimal indoor climate is essential for students’ health, well-being and learning ability. Based on the researched optimal values, a set of guidelines has been developed:
 
 **Temperature Management**  
+
 - Optimal air temperature between 20 and 22 °C  
 - Implement cooling or shading strategies if indoor temperature exceeds 25 °C  
 - Avoid direct sunlight by using blinds or shades in warm/sunny weather  
 - Use continuous monitoring to detect overheating early  
 
 **Humidity Control**  
+
 - Optimal relative humidity between 40 and 60 %  
 - Use humidifiers if RH < 40 %  
 - Ventilate regularly or use dehumidifiers if RH > 60 %  
 - Watch for signs of mold growth at high humidity levels to prevent health risks  
 
 **VOC Reduction through Ventilation**  
+
 - VOC index should be < 100 (optimal)  
 - Ventilate immediately if VOC index > 100  
 - Identify and remove sources if index remains high  
 
 **Noise Reduction**  
+
 - Keep ambient noise at a maximum of 50 dB(A)  
 - Signal-to-noise ratio of at least +15 dB  
 - Keep windows facing busy streets closed during lessons  
