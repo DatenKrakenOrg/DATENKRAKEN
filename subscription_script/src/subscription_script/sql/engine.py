@@ -4,7 +4,7 @@ from sqlalchemy import create_engine, Engine
 from sqlalchemy.orm import sessionmaker, Session
 from sqlalchemy.exc import OperationalError
 from typing import Union, List
-from sql.orm import Temperature, Humidity, Voc, Noise
+from subscription_script.sql.orm import Temperature, Humidity, Voc, Noise
 
 _engine: Union[Engine, None] = None
 _session_factory: Union[Session, None] = None

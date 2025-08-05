@@ -1,8 +1,8 @@
 from dotenv import load_dotenv
 import os
 import logging
-from mqtt_util import connect_mqtt, on_disconnect, on_message
-from sql.engine import set_engine_session_factory
+from subscription_script.mqtt_util import connect_mqtt, on_disconnect, on_message
+from subscription_script.sql.engine import set_engine_session_factory
 
 load_dotenv()
 

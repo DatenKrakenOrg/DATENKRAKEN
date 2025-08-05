@@ -4,8 +4,8 @@ from datetime import datetime
 from zoneinfo import ZoneInfo
 
 from typing import List, Union
-from sql.orm import Temperature, Humidity, Voc, Noise
-from sql.engine import insert_into_db
+from subscription_script.sql.orm import Temperature, Humidity, Voc, Noise
+from subscription_script.sql.engine import insert_into_db
 from paho.mqtt import client as mqtt_client
 
 _temp_seq = 0
