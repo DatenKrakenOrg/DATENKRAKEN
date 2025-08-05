@@ -45,7 +45,7 @@ def on_message(client, userdata, msg) -> None:
     payload = None
     try:
         payload = json.loads(msg.payload.decode())
-    except:
+    except Exception:
         logging.critical(f"Error during deserialization of {msg.payload.decode()} from {msg.topic} topic")
 
     try:
@@ -123,5 +123,5 @@ def on_message(client, userdata, msg) -> None:
 
         if len(orm_objs) > 0:
             insert_into_db(orm_objs)
-    except:
-        logging.critical(f"Error during insertion of datapoint from {msg.topic} topic")
+    except Exception as e:
+        logging.critical(f"Error during insertion of datapoint from {msg.topic} topic. Exception: {e}")

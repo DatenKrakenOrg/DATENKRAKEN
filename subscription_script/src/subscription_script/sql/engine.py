@@ -2,7 +2,7 @@ import os
 import logging
 from sqlalchemy import create_engine, Engine
 from sqlalchemy.orm import sessionmaker, Session
-from sqlalchemy.exc import OperationalError
+from sqlalchemy.exc import OperationalError, IntegrityError
 from typing import Union, List
 from subscription_script.sql.orm import Temperature, Humidity, Voc, Noise
 

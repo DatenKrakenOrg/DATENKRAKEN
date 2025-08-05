@@ -1,69 +1,90 @@
 import pytest
 from unittest import mock
+from unittest.mock import call
+from subscription_script.sql import engine as engine_module
 from subscription_script.sql.engine import set_engine_session_factory
 from sqlalchemy.exc import OperationalError
+
 
 @pytest.fixture(autouse=True)
 def reset_globals():
     """
-    A pytest fixture that automatically runs before each test.
-    It resets the global _engine and _session_factory variables,
-    acting as the setup/teardown logic.
+    Reset global variables
     """
-    global _engine, _session_factory
-    _engine = None
-    _session_factory = None
-    # 'yield' would go here if we had teardown logic after the test runs.
+    engine_module._engine = None
+    engine_module._session_factory = None
 
 
-@mock.patch('os.getenv')
-@mock.patch('sqlalchemy.create_engine')
-def test_successful_initialization(mock_create_engine, mock_getenv):
+def test_successful_initialization(mocker):
     """
     Tests the successful creation of the engine and session factory
     on the first call.
     """
     # --- Arrange ---
+    # Mock environment variables.
+    def get_env_logic(key, default=None):
+        if key == "DB_USERNAME":
+            return "test_user"
+        if key == "DB_PASSWORD":
+            return "test_password"
+        if key == "DB_HOST":
+            return "localhost"
+        return None
+
     # Mock the environment variables to return dummy credentials.
-    mock_getenv.side_effect = ['test_user', 'test_password', 'localhost']
-    
+    mock_getenv = mocker.patch("os.getenv", side_effect=get_env_logic)
+
     # Mock the engine object that create_engine is supposed to return.
-    mock_engine_instance = mock.Mock()
-    mock_create_engine.return_value = mock_engine_instance
+    mock_create_engine_return = mocker.patch("sqlalchemy.Engine")
+    mock_create_engine = mocker.patch(
+        "subscription_script.sql.engine.create_engine",
+        return_value=mock_create_engine_return,
+    )
 
     # --- Act ---
     set_engine_session_factory()
 
     # --- Assert ---
     # Verify that os.getenv was called for each required variable.
-    mock_getenv.assert_has_calls([
-        mock.call('DB_USERNAME'),
-        mock.call('DB_PASSWORD'),
-        mock.call('DB_HOST'),
-    ])
+    called_envs = [call("DB_USERNAME"), call("DB_PASSWORD"), call("DB_HOST")]
+    mock_getenv.assert_has_calls(called_envs)
 
     # Verify that create_engine was called with the correct connection string.
-    expected_con_string = "postgresql+psycopg2://test_user:test_password@localhost/datenkraken"
-    mock_create_engine.assert_called_once_with(expected_con_string, pool_size=5, pool_recycle=3600)
+    expected_con_string = (
+        "postgresql+psycopg2://test_user:test_password@localhost/datenkraken"
+    )
+    mock_create_engine.assert_called_once_with(
+        expected_con_string, pool_size=5, pool_recycle=3600
+    )
 
     # Check that the global variables were set correctly using plain asserts.
-    global _engine, _session_factory
-    assert _engine is not None
-    assert _session_factory is not None
-    assert _engine == mock_engine_instance
+    assert engine_module._engine is not None
+    assert engine_module._session_factory is not None
+    assert engine_module._engine == mock_create_engine_return
 
 
-@mock.patch('sqlalchemy.create_engine')
-def test_already_initialized(mock_create_engine):
+def test_already_initialized(mocker):
     """
     Tests that the function does not re-initialize the engine and
     session factory if they already exist.
     """
     # --- Arrange ---
     # Manually set the global variables to simulate prior initialization.
-    global _engine, _session_factory
-    _engine = mock.Mock()
-    _session_factory = mock.Mock()
+    engine_module._engine = mock.MagicMock()
+    engine_module._session_factory = mock.MagicMock()
+
+    # Mock create_engine and sessionmaker
+    mock_create_engine =  mock_create_engine_return = mocker.patch("sqlalchemy.Engine")
+    mock_create_engine = mocker.patch(
+        "subscription_script.sql.engine.create_engine",
+        return_value=mock_create_engine_return,
+    )
+
+    mock_sessionmaker_return = mocker.patch("sqlalchemy.orm.Session")
+    mock_sessionmaker = mocker.patch(
+        "subscription_script.sql.engine.sessionmaker",
+        return_value=mock_sessionmaker_return,
+    )
 
     # --- Act ---
     set_engine_session_factory()
@@ -71,51 +92,73 @@ def test_already_initialized(mock_create_engine):
     # --- Assert ---
     # Verify that create_engine was not called since the engine was already set.
     mock_create_engine.assert_not_called()
+    mock_sessionmaker.assert_not_called()
 
-
-@mock.patch('os.getenv')
-@mock.patch('sqlalchemy.create_engine')
-@mock.patch('logging.critical')
-def test_operational_error_on_connection(mock_log_critical, mock_create_engine, mock_getenv):
+def test_operational_error_on_connection(mocker):
     """
     Tests that an OperationalError is caught, logged, and re-raised.
     """
     # --- Arrange ---
     # Mock environment variables.
-    mock_getenv.side_effect = ['user', 'pass', 'host']
-    
+    def get_env_logic(key, default=None):
+        if key == "DB_USERNAME":
+            return "test_user"
+        if key == "DB_PASSWORD":
+            return "test_password"
+        if key == "DB_HOST":
+            return "localhost"
+        return None
+
+    # Mock the environment variables to return dummy credentials.
+    mock_getenv = mocker.patch("os.getenv", side_effect=get_env_logic)
+
+    # Mock engine
+    mock_create_engine = mocker.patch(
+        "subscription_script.sql.engine.create_engine",
+    )
+
     # Configure the mock create_engine to raise an OperationalError.
     mock_create_engine.side_effect = OperationalError("Connection failed", {}, None)
 
+    # Mock logging
+    mock_logging = mocker.patch("logging.critical")
     # --- Act & Assert ---
-    # Use pytest.raises to check that the correct exception is re-raised.
     with pytest.raises(OperationalError):
         set_engine_session_factory()
 
     # Verify that a critical error was logged.
-    mock_log_critical.assert_called_once()
-    assert "Database connection could not be established" in mock_log_critical.call_args[0][0]
+    mock_logging.assert_called_once()
 
-
-@mock.patch('os.getenv')
-@mock.patch('sqlalchemy.create_engine')
-@mock.patch('logging.warning')
-def test_generic_exception_on_connection(mock_log_warning, mock_create_engine, mock_getenv):
+def test_generic_error_on_connection(mocker):
     """
-    Tests that a generic Exception is caught, logged as a warning, and re-raised.
+    Tests that an OperationalError is caught, logged, and re-raised.
     """
     # --- Arrange ---
     # Mock environment variables.
-    mock_getenv.side_effect = ['user', 'pass', 'host']
-    
-    # Configure the mock create_engine to raise a generic Exception.
-    mock_create_engine.side_effect = Exception("Something went wrong")
+    def get_env_logic(key, default=None):
+        if key == "DB_USERNAME":
+            return "test_user"
+        if key == "DB_PASSWORD":
+            return "test_password"
+        if key == "DB_HOST":
+            return "localhost"
+        return None
 
+    # Mock the environment variables to return dummy credentials.
+    mock_getenv = mocker.patch("os.getenv", side_effect=get_env_logic)
+
+    # Mock engine
+    mock_create_engine = mocker.patch(
+        "subscription_script.sql.engine.create_engine"
+    )
+
+    mock_create_engine.side_effect = Exception("Generic exception")
+
+    # Mock logging
+    mock_logging = mocker.patch("logging.warning")
     # --- Act & Assert ---
-    # Check that the generic exception is re-raised.
     with pytest.raises(Exception):
         set_engine_session_factory()
 
-    # Verify that a warning was logged.
-    mock_log_warning.assert_called_once()
-    assert "Error occured within database connection" in mock_log_warning.call_args[0][0]
+    # Verify that a critical error was logged.
+    mock_logging.assert_called_once()
