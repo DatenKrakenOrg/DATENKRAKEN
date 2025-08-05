@@ -142,6 +142,10 @@ Risk priority number (RPN) = S * O * D, The higher the RPN, the more critical th
       <th>Failure mode</th>
       <th>Cause of Failure</th>
       <th>Effect of Failure</th>
+      <th>Severity</th>
+      <th>Occurrence</th>
+      <th>Detection</th>
+      <th>RPN (S×O×D)</th>
     </tr>
   </thead>
   <tbody>
@@ -153,6 +157,10 @@ Risk priority number (RPN) = S * O * D, The higher the RPN, the more critical th
       <td>Loss of function</td>
       <td>Power loss, sensor hardware error</td>
       <td>End effect: Database, UI, Subscriber script</td>
+      <td>8</td>
+      <td>5</td>
+      <td>4</td>
+      <td>160</td>
     </tr>
     <tr>
       <td>FA2</td>
@@ -161,6 +169,10 @@ Risk priority number (RPN) = S * O * D, The higher the RPN, the more critical th
       <td>Incorrect function</td>
       <td>Power loss, Sensor inaccuracy</td>
       <td>End effect: Database, UI, Subscriber script</td>
+      <td>7</td>
+      <td>6</td>
+      <td>5</td>
+      <td>210</td>
     </tr>
     <tr>
       <td>FA3</td>
@@ -169,6 +181,10 @@ Risk priority number (RPN) = S * O * D, The higher the RPN, the more critical th
       <td>Erroneous function</td>
       <td>Power loss, NTP Server not reachable</td>
       <td>End effect: Database, UI, Subscriber script</td>
+      <td>6</td>
+      <td>4</td>
+      <td>6</td>
+      <td>144</td>
     </tr>
     <tr>
       <td>FA4</td>
@@ -177,6 +193,10 @@ Risk priority number (RPN) = S * O * D, The higher the RPN, the more critical th
       <td>Loss of function</td>
       <td>Power loss, Unexpected Environmental influences</td>
       <td>End effect: Database, UI, Subscriber script</td>
+      <td>7</td>
+      <td>5</td>
+      <td>5</td>
+      <td>175</td>
     </tr>
     <tr>
       <td>FA5</td>
@@ -185,6 +205,10 @@ Risk priority number (RPN) = S * O * D, The higher the RPN, the more critical th
       <td>Erroneous function</td>
       <td>Power loss, Server not reachable</td>
       <td>End effect: Database, UI, Subscriber script</td>
+      <td>8</td>
+      <td>4</td>
+      <td>6</td>
+      <td>192</td>
     </tr>
     <!-- Subscription Script -->
     <tr>
@@ -194,6 +218,10 @@ Risk priority number (RPN) = S * O * D, The higher the RPN, the more critical th
       <td>Loss of function</td>
       <td>Arduino down</td>
       <td>End effect: Database, UI</td>
+      <td>9</td>
+      <td>3</td>
+      <td>7</td>
+      <td>189</td>
     </tr>
     <tr>
       <td>FA7</td>
@@ -202,6 +230,10 @@ Risk priority number (RPN) = S * O * D, The higher the RPN, the more critical th
       <td>Erroneous function</td>
       <td>Database connection error, Database down</td>
       <td>End effect: Database, UI</td>
+      <td>9</td>
+      <td>4</td>
+      <td>6</td>
+      <td>216</td>
     </tr>
     <!-- Database -->
     <tr>
@@ -211,6 +243,10 @@ Risk priority number (RPN) = S * O * D, The higher the RPN, the more critical th
       <td>Loss of function</td>
       <td>DHBW-Server down/crashed</td>
       <td>End effect: Database, UI, Subscriber script</td>
+      <td>10</td>
+      <td>2</td>
+      <td>2</td>
+      <td>40</td>
     </tr>
     <tr>
       <td>FA9</td>
@@ -219,6 +255,10 @@ Risk priority number (RPN) = S * O * D, The higher the RPN, the more critical th
       <td>Loss of function</td>
       <td>Restart / Maintenance / Overload</td>
       <td>End effect: Database, UI, Subscriber script</td>
+      <td>7</td>
+      <td>5</td>
+      <td>6</td>
+      <td>210</td>
     </tr>
     <tr>
       <td>FA10</td>
@@ -227,6 +267,10 @@ Risk priority number (RPN) = S * O * D, The higher the RPN, the more critical th
       <td>Incorrect function</td>
       <td>Incorrect scripting code</td>
       <td>End effect: Database, UI, Subscriber script</td>
+      <td>6</td>
+      <td>4</td>
+      <td>5</td>
+      <td>120</td>
     </tr>
     <tr>
       <td>FA11</td>
@@ -235,6 +279,10 @@ Risk priority number (RPN) = S * O * D, The higher the RPN, the more critical th
       <td>Incorrect function</td>
       <td>Query issue / Permission issue</td>
       <td>End effect: Database, UI, Subscriber script</td>
+      <td>9</td>
+      <td>3</td>
+      <td>3</td>
+      <td>81</td>
     </tr>
     <tr>
       <td>FA12</td>
@@ -243,6 +291,10 @@ Risk priority number (RPN) = S * O * D, The higher the RPN, the more critical th
       <td>Incorrect function</td>
       <td>Disk full / Permission issue</td>
       <td>End effect: Database, UI, Subscriber script</td>
+      <td>9</td>
+      <td>4</td>
+      <td>3</td>
+      <td>108</td>
     </tr>
   </tbody>
 </table>
