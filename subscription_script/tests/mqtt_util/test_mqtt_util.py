@@ -7,6 +7,9 @@ from subscription_script.mqtt_util import on_message
 
 @pytest.fixture(autouse=True)
 def setup_sequences():
+    """
+    Reset sequence numbers
+    """
     mqtt_util._temp_seq = 0
     mqtt_util._hum_seq = 0
     mqtt_util._voc_seq = 0
@@ -15,8 +18,7 @@ def setup_sequences():
 
 def test_deserialization_error(mocker):
     """
-    Tests that the function does not re-initialize the engine and
-    session factory if they already exist.
+    Tests whether a error is logged whenever a deserialization error occurs on the payload
     """
     # --- Arrange ---
     mock_msg = mock.MagicMock()
@@ -35,8 +37,7 @@ def test_deserialization_error(mocker):
 
 def test_datatype_mismatch_in_payload(mocker):
     """
-    Tests that the function does not re-initialize the engine and
-    session factory if they already exist.
+    Tests whether a datatype mismatch happens on the value. Should also be logged.
     """
     # --- Arrange ---
     mock_msg = mock.MagicMock()
@@ -63,8 +64,7 @@ def test_datatype_mismatch_in_payload(mocker):
 
 def test_seq_interrupt(mocker):
     """
-    Tests that the function does not re-initialize the engine and
-    session factory if they already exist.
+    Tests wheter a interrupt on the sequence number is logged.
     """
     # Temp Test
     # --- Arrange ---
@@ -179,8 +179,7 @@ def test_seq_interrupt(mocker):
 
 def test_insert(mocker):
     """
-    Tests that the function does not re-initialize the engine and
-    session factory if they already exist.
+    Tests whether a correct insert is possible.
     """
     # Temp Test
     # --- Arrange ---

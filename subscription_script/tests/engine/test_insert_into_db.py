@@ -13,10 +13,9 @@ def reset_globals():
     engine_module._session_factory = None
 
 
-def test_successful_initialization(mocker):
+def test_error_on_missing_ses_factory(mocker):
     """
-    Tests the successful creation of the engine and session factory
-    on the first call.
+    Tests whether a critical log occurs whenever session_factory is unset
     """
     # --- Arrange ---
 
@@ -69,9 +68,7 @@ def test_insert_into_db_exception_on_commit(mocker):
 
 def test_insert_into_db_successful(mocker):
     """
-    Given a list of ORM objects,
-    When session.commit() raises an exception,
-    Then the error should be logged and the exception should be handled.
+    Tests successful insert
     """
     # --- Arrange ---
 

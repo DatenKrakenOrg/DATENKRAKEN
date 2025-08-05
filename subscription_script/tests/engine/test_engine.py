@@ -131,7 +131,7 @@ def test_operational_error_on_connection(mocker):
 
 def test_generic_error_on_connection(mocker):
     """
-    Tests that an OperationalError is caught, logged, and re-raised.
+    Tests that an generic excepion is caught, logged, and re-raised.
     """
     # --- Arrange ---
     # Mock environment variables.
@@ -145,7 +145,7 @@ def test_generic_error_on_connection(mocker):
         return None
 
     # Mock the environment variables to return dummy credentials.
-    mock_getenv = mocker.patch("os.getenv", side_effect=get_env_logic)
+    mocker.patch("os.getenv", side_effect=get_env_logic)
 
     # Mock engine
     mock_create_engine = mocker.patch(
