@@ -11,7 +11,7 @@ This document will describe how we choose to backup our database in case of unex
 
 # Implementation
 To meet the expectations and criterias, which are needed in order to have a successful backup strategy, there are two ways to solve this  
-1. cronjob
+1. cronjob  
 2. Systemd-Unit
 
 Although systemd units are more complex to configure, they offer more options for controlling them.
