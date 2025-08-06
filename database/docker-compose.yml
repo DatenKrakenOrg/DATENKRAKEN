@@ -4,8 +4,6 @@ services:
       dockerfile: Dockerfile
     container_name: datenkraken_db
     restart: unless-stopped
-    ports:
-      - "6000:5432"
     volumes:
       - datenkraken_db_data:/var/lib/postgresql/data
     environment:
