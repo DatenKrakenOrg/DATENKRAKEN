@@ -1,6 +1,7 @@
 # Configuring a Cronjob
 - The backup.sh is triggered every 24h at 00:00.
 - The uptime.sh is triggered every minute.
+- Edit a cronjob with crontab -e
 
 ```sh
 # Each task to run has to be defined through a single line
@@ -22,6 +23,6 @@
 # 0 5 * * 1 tar -zcf /var/backups/home.tgz /home/
 # 
 # m h  dom mon dow   command
-* * * * * /home/USER/uptime.sh
-0 0 * * * /home/USER/backup.sh;
+* * * * * bash /home/$USER/uptime.sh
+0 0 * * * bash /home/$USER/backup.sh
 ```
