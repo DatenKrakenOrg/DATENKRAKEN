@@ -1,5 +1,4 @@
 import pytest
-from unittest import mock
 from subscription_script.sql import engine as engine_module
 from subscription_script.sql.engine import insert_into_db
 from sqlalchemy.exc import IntegrityError

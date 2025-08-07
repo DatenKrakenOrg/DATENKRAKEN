@@ -110,7 +110,7 @@ def test_operational_error_on_connection(mocker):
         return None
 
     # Mock the environment variables to return dummy credentials.
-    mock_getenv = mocker.patch("os.getenv", side_effect=get_env_logic)
+    mocker.patch("os.getenv", side_effect=get_env_logic)
 
     # Mock engine
     mock_create_engine = mocker.patch(
