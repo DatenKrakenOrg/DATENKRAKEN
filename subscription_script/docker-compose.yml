@@ -1,0 +1,23 @@
+services:
+  subscription_script:
+    build:
+      dockerfile: Dockerfile
+    container_name: datenkraken_subscription_script
+    restart: unless-stopped
+    environment:
+      - USERNAME=${USERNAME}
+      - PASSWORD=${PASSWORD}
+      - CLIENT_ID=${CLIENT_ID}
+      - BROKER_IP=${BROKER_IP}
+      - DB_USERNAME=${DB_USERNAME}
+      - DB_PASSWORD=${DB_PASSWORD}
+      # Must include port
+      - DB_HOST=${DB_HOST}
+    networks:
+      - datenkraken-db-net
+
+
+
+networks:
+  datenkraken-db-net:
+    external: true
