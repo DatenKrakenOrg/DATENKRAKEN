@@ -1,3 +1,15 @@
+"""Proposes the entry point of the subscription script. Configurable via env-var.
+
+USERNAME - MQTT-Broker Username
+PASSWORD - MQTT Broker Password
+CLIENT_ID - MQTT Client ID => CANNOT BE DUPLICATED
+BROKER_IP - MQTT Broker Hostname
+
+DB_USERNAME - Database Username
+DB_PASSWORD - Database Password
+DB_HOST - Database Hostname
+"""
+
 from dotenv import load_dotenv
 import os
 import logging
@@ -26,6 +38,7 @@ password = os.getenv("PASSWORD")
 
 
 def main():
+    """Initializes and runs the subscription script. Reconnects automatically by calling client.loop_forever()"""
     set_engine_session_factory()
     client = connect_mqtt(client_id, username, password, broker, port)
     client.on_disconnect = on_disconnect

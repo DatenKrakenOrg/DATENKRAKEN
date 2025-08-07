@@ -2,7 +2,7 @@ import os
 import logging
 from sqlalchemy import create_engine, Engine
 from sqlalchemy.orm import sessionmaker, Session
-from sqlalchemy.exc import OperationalError, IntegrityError
+from sqlalchemy.exc import OperationalError
 from typing import Union, List
 from subscription_script.sql.orm import Temperature, Humidity, Voc, Noise
 
@@ -11,6 +11,7 @@ _session_factory: Union[Session, None] = None
 
 
 def set_engine_session_factory() -> None:
+    """Initializes global engine (with connection pool of size 5 and a session_factory). Must be called once in order to being able to insert orm objects."""
     global _engine
     global _session_factory
 
@@ -30,6 +31,14 @@ def set_engine_session_factory() -> None:
 
 
 def insert_into_db(orm_objs: List[Union[Temperature, Humidity, Voc, Noise]]) -> None:
+    """Can be used to insert mulipe orm objects into a posgresql (timescaledb in our use-case) => Mapping can be found in sql.orm
+
+    Args:
+        orm_objs (List[Union[Temperature, Humidity, Voc, Noise]]): Multiple orm objects found in sql.orm that should be inserted into timescale.
+
+    Raises:
+        RuntimeError: May be raised whenever no session_factory was initialized (and engine) via sql.engine.set_engine_session_factory()
+    """
     if _session_factory is None:
         logging.critical(
             "Database session factory not initialized. Call set_engine_session_factory() first."

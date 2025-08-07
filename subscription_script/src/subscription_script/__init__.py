@@ -1,2 +1,1 @@
-def main() -> None:
-    print("Hello from subscription-script!")
+"""Proposes the main entry point of the mqtt functionality."""
