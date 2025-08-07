@@ -20,11 +20,13 @@ Since we collect sensordata using different sample rates in order to be more mem
 
 Fields that are part of all tables:
 
-1. time: TIMESTAMPTZ
+1. id: BIGSERIAL => used for composite primary key with the time field. => Composite primary key since this is the proposed way of timescaledb without inheriting any bottlenocks due to the index. (See down below: Best practices)
 
-2. arduino_id: text -> denormalized since timescaledb does a dictionary compression / + enums do not allow to delete individual values within enum <a href="https://www.postgresql.org/docs/current/datatype-enum.html">8.7. Enumerated Types</a>
+2. time: TIMESTAMPTZ
 
-3. deleted_at: TIMESTAMPZ -> soft delete
+3. arduino_id: text -> denormalized since timescaledb does a dictionary compression / + enums do not allow to delete individual values within enum <a href="https://www.postgresql.org/docs/current/datatype-enum.html">8.7. Enumerated Types</a>
+
+4. deleted_at: TIMESTAMPZ -> soft delete
 
 Field per table:
 
