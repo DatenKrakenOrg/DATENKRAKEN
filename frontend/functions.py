@@ -82,9 +82,9 @@ def define_page(roomNumber, sensor_data):
                 display_range = config["parameters"][param]["display_range"]
                 value_range = [display_range["min"], display_range["max"]]
                 bar_color = get_bar_color(param, value)
+              
                 fig = gauge_plot(value, title, value_range, bar_color, unit)
-                st.plotly_chart(fig, use_container_width=False)
-
+                st.plotly_chart(fig, use_container_width=True)
 
                 if param_to_recs[param]:
                     for msg in param_to_recs[param]:
@@ -100,3 +100,13 @@ def define_page(roomNumber, sensor_data):
                         st.warning("Wert im Toleranzbereich!")
                     else:
                         st.success("Wert im optimalen Bereich")
+
+    st.header("Liniendiagramm")
+    selected_param = st.selectbox("Parameter auswählen", list(sensor_data.keys()))
+    if selected_param:
+        df = pd.DataFrame(sensor_data, index=[0])
+        fig = go.Figure()
+        fig.add_trace(go.Scatter(x=df.index, y=df[selected_param], mode='lines+markers', name=selected_param))
+        fig.update_layout(title=f"{selected_param.replace('_', ' ').capitalize()} Verlauf", xaxis_title="Zeit", yaxis_title=config["parameters"][selected_param]["unit"])
+        st.plotly_chart(fig, use_container_width=True)
+    
