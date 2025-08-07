@@ -42,14 +42,14 @@ def test_datatype_mismatch_in_payload(mocker):
     # --- Arrange ---
     mock_msg = mock.MagicMock()
 
-    mock_json = mocker.patch(
+    mocker.patch(
         "json.loads",
         return_value={
-            "timestamp": "1753098733",
+            "timestamp": 1753098733,
             # Mismatch
             "value": "23.45",
             "sequence": 123,
-            "meta": {"firmware": "v1.2.3", "startup": "1753098730"},
+            "meta": {"device_id": 303},
         },
     )
 
@@ -72,10 +72,10 @@ def test_seq_interrupt(mocker):
     mock_msg.topic = "dhbw/ai/si2023/6/temp/429"
     
     payload = {
-        "timestamp": "1753098733",
+        "timestamp": 1753098733,
         "value": [24.54, 23.56],
         "sequence": 2,
-        "meta": {"firmware": "v1.2.3", "startup": "1753098730"},
+        "meta": {"device_id": 303},
     }
 
     mocker.patch(
@@ -103,7 +103,7 @@ def test_seq_interrupt(mocker):
         "timestamp": "1753098733",
         "value": [24.54, 23.56],
         "sequence": 2,
-        "meta": {"firmware": "v1.2.3", "startup": "1753098730"},
+        "meta": {"device_id": 303},
     }
 
     mocker.patch(
@@ -128,10 +128,10 @@ def test_seq_interrupt(mocker):
     mock_msg.topic = "dhbw/ai/si2023/6/co2/429"
     
     payload = {
-        "timestamp": "1753098733",
+        "timestamp": 1753098733,
         "value": [24.54, 23.56],
         "sequence": 2,
-        "meta": {"firmware": "v1.2.3", "startup": "1753098730"},
+        "meta": {"device_id": 303},
     }
 
     mocker.patch(
@@ -156,10 +156,10 @@ def test_seq_interrupt(mocker):
     mock_msg.topic = "dhbw/ai/si2023/6/mic/429"
     
     payload = {
-        "timestamp": "1753098733",
+        "timestamp": 1753098733,
         "value": [24.54, 23.56],
         "sequence": 2,
-        "meta": {"firmware": "v1.2.3", "startup": "1753098730"},
+        "meta": {"device_id": 303},
     }
 
     mocker.patch(
