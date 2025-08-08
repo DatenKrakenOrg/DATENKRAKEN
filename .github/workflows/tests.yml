@@ -21,11 +21,11 @@ jobs:
         with:
           python-version: '3.11'
 
-      - name: Install dependencies using uv
+      - name: Install dependencies
         run: |
-          curl -Ls https://astral.sh/uv/install.sh | sh
-          echo "$HOME/.local/bin" >> $GITHUB_PATH
-          uv pip install --system --all
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt || true
+          pip install pytest streamlit requests python-dotenv plotly pandas numpy
 
       - name: Run tests
         run: |
