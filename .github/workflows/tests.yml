@@ -16,14 +16,16 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      - name: Install uv
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies using uv
         run: |
           curl -Ls https://astral.sh/uv/install.sh | sh
           echo "$HOME/.local/bin" >> $GITHUB_PATH
-
-      - name: Install dependencies from uv.lock
-        run: |
-          uv pip install --system
+          uv pip install --system --requirement uv.lock
 
       - name: Run tests
         run: |
