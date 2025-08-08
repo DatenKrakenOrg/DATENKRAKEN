@@ -1,12 +1,12 @@
 [project]
-name = "datenkraken"
+name = "fontend"
 version = "0.1.0"
-description = "Add your description here"
+description = "UV project for the frontend"
 readme = "README.md"
 requires-python = ">=3.13"
 dependencies = [
     "pandas>=2.3.1",
     "plotly>=6.2.0",
     "python-dotenv>=1.1.1",
-    "streamlit>=1.47.1",
+    "streamlit>=1.48.0",
 ]

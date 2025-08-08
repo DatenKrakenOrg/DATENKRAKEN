@@ -19,8 +19,8 @@
   "voc_index": {
       "optimal_range": { "min": 0, "max": 100 },
       "tolerance": 100,
-      "unit": "Index",
-      "display_range": { "min": 0, "max": 400 }
+      "unit": " ",
+      "display_range": { "min": 0, "max": 500 }
   },
   "noise_level": {
     "optimal_range": { "min": 0, "max": 50 },
