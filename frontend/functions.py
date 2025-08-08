@@ -5,7 +5,7 @@ import pandas as pd
 import json
 import os
 import requests
-from frontend.status_engine import get_status, get_recommendations, get_virtual_recommendations, filter_recommendations, fetch_weather_data
+from status_engine import get_status, get_recommendations, get_virtual_recommendations, filter_recommendations, fetch_weather_data
 API_KEY = os.getenv("WEATHER_API_KEY")
 LOCATION = "Heidenheim,DE"
 

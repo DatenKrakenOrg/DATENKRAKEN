@@ -5,7 +5,7 @@ import requests
 
 
 base_dir = os.path.dirname(__file__)
-env_path = os.path.join(base_dir, ".env")
+env_path = os.path.join(base_dir, "_env")
 
 load_dotenv(dotenv_path=env_path) 
 API_KEY = os.getenv("WEATHER_API_KEY")

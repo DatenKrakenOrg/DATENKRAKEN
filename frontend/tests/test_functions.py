@@ -7,7 +7,7 @@ import os
 def test_load_config_creates_dict():
     config = functions.load_config("parameter.json")
     assert isinstance(config, dict)
-    assert "parameters" in config  # Erwartet, dass das JSON diesen Key enthält
+    assert "parameters" in config  # Expected key in the JSON config
 
 def test_gauge_plot_returns_figure():
     fig = functions.gauge_plot(
