@@ -18,11 +18,14 @@
     {
       devShells.x86_64-linux.default = pkgs.mkShell {
         packages = with pkgs;[
-          python313
           uv
           pre-commit
           platformio
           clang_19
+          gcc
+          python3
+    python3Packages.numpy
+    python3Packages.pandas
         ];
 
         shellHook = ''
