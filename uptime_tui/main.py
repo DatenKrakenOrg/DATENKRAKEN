@@ -6,124 +6,58 @@ import numpy as np
 CSV_FILE_NAME = "postgres_start_times.csv"
 
 def calculate_uptime_stats():
-    try:
-        print("Loading data...")
-        # Load data with optimized parsing
-        df = pd.read_csv(CSV_FILE_NAME, 
-                        dtype={'postgres_start_time': np.int64, 'recorded_time': np.int64})
-        
-        print("Converting timestamps...")
-        # Vectorized timestamp conversion
-        df['start'] = pd.to_datetime(df['postgres_start_time'], unit='s', utc=True)
-        df['recorded'] = pd.to_datetime(df['recorded_time'], unit='s', utc=True)
-        
-        # Convert to local timezone (UTC+2)
-        local_tz = pytz.timezone('Europe/Berlin')
-        df['start_local'] = df['start'].dt.tz_convert(local_tz)
-        df['recorded_local'] = df['recorded'].dt.tz_convert(local_tz)
-        
-        # Get newest time from the file
-        newest_time = df['recorded_local'].max()
-        
-        # Get start of current week (Monday)
-        start_of_week = newest_time - timedelta(days=newest_time.weekday())
-        start_of_week = start_of_week.replace(hour=0, minute=0, second=0, microsecond=0)
-        
-        print("Calculating uptime...")
-        # Initialize totals
-        elapsed_uptime = timedelta(0)
-        elapsed_total = timedelta(0)
-        
-        results = []
-        for day in range(7):
-            day_start = start_of_week + timedelta(days=day)
-            day_end = day_start + timedelta(days=1)
-            
-            # Skip days after newest_time
-            if day_start > newest_time:
-                results.append({
-                    'date': day_start.date(),
-                    'day': day_start.strftime('%A'),
-                    'uptime': timedelta(0),
-                    'downtime': timedelta(0),
-                    'availability': 0.0,
-                    'status': 'Future'
-                })
-                continue
-                
-            # For current day, only count up to newest_time
-            if day_end > newest_time:
-                day_end = newest_time
-                day_status = 'Partial'
-            else:
-                day_status = 'Complete'
-            
-            day_duration = day_end - day_start
-            elapsed_total += day_duration
-            
-            # Filter events for this day
-            day_mask = ((df['recorded_local'] >= day_start) & 
-                       (df['start_local'] < day_end))
-            day_events = df[day_mask].sort_values('start_local')
-            
-            # Calculate uptime for this day
-            day_uptime = timedelta(0)
-            coverage_start = day_start
-            
-            for _, row in day_events.iterrows():
-                if row['start_local'] < row['recorded_local']:
-                    period_start = max(row['start_local'], coverage_start)
-                    period_end = min(row['recorded_local'], day_end)
-                    
-                    if period_start < period_end:
-                        uptime_period = period_end - period_start
-                        day_uptime += uptime_period
-                        coverage_start = period_end
-            
-            elapsed_uptime += day_uptime
-            
-            # Calculate daily availability
-            day_availability = (day_uptime.total_seconds() / day_duration.total_seconds() * 100 
-                              if day_duration.total_seconds() > 0 else 0.0)
-            
-            results.append({
-                'date': day_start.date(),
-                'day': day_start.strftime('%A'),
-                'uptime': day_uptime,
-                'downtime': day_duration - day_uptime,
-                'availability': day_availability,
-                'status': day_status
-            })
-        
-        # Calculate weekly availability (only elapsed time)
-        weekly_availability = (elapsed_uptime.total_seconds() / elapsed_total.total_seconds() * 100
-                             if elapsed_total.total_seconds() > 0 else 0.0)
-        
-        return pd.DataFrame(results), weekly_availability
+    print("Loading data...")
+    # Load data with optimized parsing
+    df = pd.read_csv(CSV_FILE_NAME, 
+                    dtype={'postgres_start_time': np.int64, 'recorded_time': np.int64})
     
-    except Exception as e:
-        print(f"Error: {e}")
-        return pd.DataFrame(), 0.0
+    print("Converting timestamps...")
+    # Vectorized timestamp conversion
+    df['start'] = pd.to_datetime(df['postgres_start_time'], unit='s', utc=True)
+    df['recorded'] = pd.to_datetime(df['recorded_time'], unit='s', utc=True)
+    
+    # Convert to local timezone (UTC+2)
+    local_tz = pytz.timezone('Europe/Berlin')
+    df['start_local'] = df['start'].dt.tz_convert(local_tz)
+    df['recorded_local'] = df['recorded'].dt.tz_convert(local_tz)
+    
+    # Get newest time from the file
+    newest_time = df['recorded_local'].max()
+    
+    # Get start of current week (Monday)
+    start_of_week = newest_time - timedelta(days=7)
+    start_of_week = start_of_week.replace(hour=0, minute=0, second=0, microsecond=0)
+    
 
-if __name__ == "__main__":
-    print("Calculating PostgreSQL uptime statistics...")
-    start_time = datetime.now()
-    
-    uptime_df, weekly_uptime_pct = calculate_uptime_stats()
-    
-    if not uptime_df.empty:
-        print("\nDaily Uptime Report (Local Time):")
-        print(uptime_df.to_string(
-            columns=['date', 'day', 'uptime', 'downtime', 'availability', 'status'],
-            formatters={
-                'uptime': lambda x: str(x).split('.')[0],
-                'downtime': lambda x: str(x).split('.')[0],
-                'availability': '{:.2f}%'.format
-            },
-            index=False
-        ))
-        
-        print(f"\nWeekly Uptime Percentage: {weekly_uptime_pct:.2f}% (of elapsed time)")
-        print(f"Calculation completed in {datetime.now() - start_time}")
-    else:
-        print("No results could be calculated.")
+    print(start_of_week, newest_time)
+    print()
+    uptime = df['recorded_local'] - df['start_local']
+    df_week = df[df['recorded_local'] >= start_of_week]
+
+    downtime_count = (df_week['postgres_start_time'] == 0).sum()
+
+    totaltime = newest_time - start_of_week
+    total_downtime = timedelta(0)
+    # Iterate through records to compute downtime
+    prev_time = start_of_week
+    for idx, row in df_week.iterrows():
+        current_time = row['recorded_local']
+        time_since_prev = current_time - prev_time
+
+        # If DB was down, add the entire interval since last check
+        if row['postgres_start_time'] == 0:
+            total_downtime += time_since_prev
+
+        prev_time = current_time
+
+    # Calculate uptime
+    total_uptime = totaltime - total_downtime
+    uptime_percentage = (total_uptime.total_seconds() / totaltime.total_seconds()) * 100
+
+    print("\n--- Results ---")
+    print(f"Analysis period: {start_of_week} to {newest_time}")
+    print(f"Total time: {totaltime}")
+    print(f"Total downtime: {total_downtime}")
+    print(f"Uptime percentage: {uptime_percentage:.2f}%")
+
+calculate_uptime_stats()
