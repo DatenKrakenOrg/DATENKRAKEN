@@ -3,7 +3,7 @@ from datetime import datetime, timedelta
 import pytz
 import numpy as np
 
-CSV_FILE_NAME="postgres_start_times.csv"
+CSV_FILE_NAME = "postgres_start_times.csv"
 
 def calculate_uptime_stats():
     try:
@@ -22,11 +22,11 @@ def calculate_uptime_stats():
         df['start_local'] = df['start'].dt.tz_convert(local_tz)
         df['recorded_local'] = df['recorded'].dt.tz_convert(local_tz)
         
-        # Get current time
-        current_time = datetime.now(local_tz)
+        # Get newest time from the file
+        newest_time = df['recorded_local'].max()
         
         # Get start of current week (Monday)
-        start_of_week = current_time - timedelta(days=current_time.weekday())
+        start_of_week = newest_time - timedelta(days=newest_time.weekday())
         start_of_week = start_of_week.replace(hour=0, minute=0, second=0, microsecond=0)
         
         print("Calculating uptime...")
@@ -39,8 +39,8 @@ def calculate_uptime_stats():
             day_start = start_of_week + timedelta(days=day)
             day_end = day_start + timedelta(days=1)
             
-            # Skip future days
-            if day_start > current_time:
+            # Skip days after newest_time
+            if day_start > newest_time:
                 results.append({
                     'date': day_start.date(),
                     'day': day_start.strftime('%A'),
@@ -51,9 +51,9 @@ def calculate_uptime_stats():
                 })
                 continue
                 
-            # For current day, only count up to current time
-            if day_end > current_time:
-                day_end = current_time
+            # For current day, only count up to newest_time
+            if day_end > newest_time:
+                day_end = newest_time
                 day_status = 'Partial'
             else:
                 day_status = 'Complete'
