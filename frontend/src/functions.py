@@ -83,9 +83,7 @@ def define_page(roomNumber, sensor_data):
                 value_range = [display_range["min"], display_range["max"]]
                 bar_color = get_bar_color(param, value)
                 fig = gauge_plot(value, title, value_range, bar_color, unit)
-                st.plotly_chart(fig, use_container_width=False)
-
-
+                st.plotly_chart(fig, use_container_width=True)
                 if param_to_recs[param]:
                     for msg in param_to_recs[param]:
                         if "!" in msg:
