@@ -82,7 +82,7 @@ The purpose of this layer is to create filtered and cleaned layer of data. We de
 
 1. **Accuracy** - How correct is the data values?
 2. **Completeness** - Is all information present?
-3. **Consistency** - Does the data match other trusted data sources?    
+3. **Consistency** - Does the data match other trusted data sources? (Not checkable => Ignored) 
 4. **Validity** - Does the data conform to the predetermined format & constraints?
 5. **Timeliness** - How up-to-date is the data?
 6. **Intergrity** - Is the data maintained & updates over time?
@@ -98,7 +98,7 @@ We used the following query to check those:
 
 ### Values Min, Max Check
 ```sql
-SELECT * FROM bronze.table ORDER BY values DESC LIMIT 50;
+SELECT * FROM bronze.temperature ORDER BY values DESC LIMIT 50;
 ```
 -> Check for min max values. (via desc, asc)
 
@@ -193,3 +193,32 @@ The following days show a similar output. BUT on weeknds the voc index stays per
  - Noise: 0 - 1023
  - Voc: 0 - 500
  - Time: 05. August - NOW()
+
+## Completeness & Timeliness & Integrity
+Here we check whether there are datapoints missing, and whether that happens often or not.
+
+For that we used the following sql, which calculates the difference of concuring timestamps and filters whether the difference is lower than 45 seconds (15 seconds difference due to timestamp inaccuracies by the arduino)
+
+```sql
+SELECT *
+FROM (
+    SELECT 
+        id,
+        time,
+        LAG(time) OVER (ORDER BY time) AS previous_time,
+        EXTRACT(EPOCH FROM time - LAG(time) OVER (ORDER BY time)) AS diff_seconds
+    FROM bronze.noise
+    WHERE time::date < '2026-01-01'
+) AS sub
+WHERE diff_seconds > 45;
+```
+
+By examining the tables we see that there are time periods in which data points are missing. The time on which the datapoints are missing are equal upon all bronze tables. Since we want to know whether this can expose a risk to our project we count the differences that exceed a threshhold of 7.5 Minutes (since our current plan as of 12.08.25 is to give a user suggestion in 15 min intervalls => small offset such that there may be enough values to aggregate from as fallback)
+
+We conclude that there is only one datapoint with a higher difference, therefore this isn't much of a risk. Due to that we do not plan to propose consequences for the silver layer.
+
+## Uniqueness
+We checked before, that almost no data points are severely missing. BUT a open question is, whether the sampling rate is set to low, and whether we want to aggregate (by mean) a bigger timewindow than the window that the sensor samples. This could make sense to reduce data points within the silver layer, but we would also lose data due to that, although memory is not the problem in our project => This leads to our decision of not removing information.
+
+Other than that we propose the following to reduce duplication:
+- Filter for deleted rows (due to soft-delete) => those are unnecessary for gold either way!

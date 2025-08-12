@@ -32,3 +32,16 @@ SELECT * FROM bronze.temperature ORDER BY time ASC LIMIT 50;
 SELECT * FROM bronze.noise ORDER BY time ASC LIMIT 50;
 SELECT * FROM bronze.voc ORDER BY time ASC LIMIT 50;
 SELECT * FROM bronze.humidity ORDER BY time ASC LIMIT 50;
+
+--- Completeness & Timeliness
+SELECT *
+FROM (
+    SELECT 
+        id,
+        time,
+        LAG(time) OVER (ORDER BY time) AS previous_time,
+        EXTRACT(EPOCH FROM time - LAG(time) OVER (ORDER BY time)) AS diff_seconds
+    FROM bronze.temperature
+    WHERE time::date < '2026-01-01'
+) AS sub
+WHERE diff_seconds > 450;
