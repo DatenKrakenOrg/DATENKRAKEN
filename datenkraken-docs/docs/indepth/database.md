@@ -65,8 +65,7 @@ _On ~5m noise entries => 60min x 24h x 60days x 60 entries per minute_
 datenkraken=# SELECT pg_size_pretty(hypertable_size('bronze.noise'));
  pg_size_pretty 
 ----------------
- 341 MB
-(1 row)
+ 341 MB (1 row)
 ```
 
 Although this table size isn't very high we decided to create a composite index on the columns time and arduino_id in order to speed up read processes. We only need a composite index out of three reasons:
@@ -77,7 +76,7 @@ Although this table size isn't very high we decided to create a composite index 
 
 When we want to detect bugs later on this could therefore help a lot, since in the worst case we had to trace it from gold to bronze layer and vice versa.
 
-# Silver
+## Silver
 The purpose of this layer is to create filtered and cleaned layer of data. We develop the layer definition by the typical data quality criterias:
 
 1. **Accuracy** - How correct is the data values?
@@ -88,7 +87,7 @@ The purpose of this layer is to create filtered and cleaned layer of data. We de
 6. **Intergrity** - Is the data maintained & updates over time?
 7. **Uniqueness** - How little duplication is there in the records?
 
-## Accuracy & Validity
+### Accuracy & Validity
 Since we don't have direct access to other data sources we check the datas accuracy and validity based on plausibility rule set. Therefore we examine the columns as following
 
 1. values -> sorted by min, max  see if range is plausible + singular values -> see whether values are plausible
@@ -96,7 +95,7 @@ Since we don't have direct access to other data sources we check the datas accur
 
 We used the following query to check those:
 
-### Values Min, Max Check
+#### Values Min, Max Check
 ```sql
 SELECT * FROM bronze.temperature ORDER BY values DESC LIMIT 50;
 ```
@@ -176,15 +175,16 @@ The following days show a similar output. BUT on weeknds the voc index stays per
 
  We therefore conclude it doesn't have to do with bad data quality (f.e. in a lack of sensor quality), but it seems like the air quality just turns bad, due to reasons like (disabled vents, etc.) => We could talk about that with the facility management.
 
- **Except for that no other flaws could be found depending the values.
+*Except for that no other flaws could be found depending the values.*
 
- ### Timestamp
+#### Timestamp
 
  When examining the timestamp the same way as in the Values check, we see that there multiple timestamp that differ largely in its id of the datetime around 2036-02-07 07:28:46+01. It seems like there is a bug in the timeline which we could take a look at later. It shouldn't be a hurry since those points are really rare and not concurrent.
 
  But still a plausibility check should be introduced, especially since problems are already occuring.
 
- ### Solution Strategy
+#### Solution Strategy
+
  We introduce plausibility checks for the technical valid ranges that the sensors produce output for. Other than that we filter timestamp for the range of the start date around 05. August and the todays date (since the bug occurs only for the year 2036 this should be filtered out easily)
 
  Our checks would therefore filter as following:
@@ -194,7 +194,7 @@ The following days show a similar output. BUT on weeknds the voc index stays per
  - Voc: 0 - 500
  - Time: 05. August - NOW()
 
-## Completeness & Timeliness & Integrity
+### Completeness & Timeliness & Integrity
 Here we check whether there are datapoints missing, and whether that happens often or not.
 
 For that we used the following sql, which calculates the difference of concuring timestamps and filters whether the difference is lower than 45 seconds (15 seconds difference due to timestamp inaccuracies by the arduino)
@@ -217,22 +217,24 @@ By examining the tables we see that there are time periods in which data points 
 
 We conclude that there is only one datapoint with a higher difference, therefore this isn't much of a risk. Due to that we do not plan to propose consequences for the silver layer.
 
-## Uniqueness
+### Uniqueness
 In order to persist a good data quality it's also necessary to remove duplicates (and unnecessary data). For our use case any information is considered use less, that doesn't add "much" validity to our guidance -> This bases on the insight of a trend (f.e. temperature rises soon, or threshold was reached).
 
 Our final goal is to generate a table in which enough datapoints (with timestamp) for each sensor temperature, humidity, voc and noise for given time intervalls T in order to provide guidance for the next T intervall. Therefore we proposed to start with a sampling rate in the bronze layer, that is as small as reasonable concerning memory, and not as high as that we could not detect when trends start to happen when aggregating data. => Those intervalls can be found in the Arduino part of our project.
 
 Therefore we now have to find out which time intervall T can be aggreggated in order to:
+
 1. Not lose too much information in the data as, that we could not detect trends for the next intervall T
 2. Not to choose a time intervall T as that the provided guidance can not be considered useful for the user
 
-## Finding the optimal time intervall T
+### Finding the optimal time intervall T
 In order to find the optimal time intervall T in which we can aggregate data via it's we propose the following solution:
+
 0. Define multiple time intervalls T, which a user considers useful to get guidance of
-1. Set a reasonable threshhold r for CV
-2. For each time intervall T calculate it's CV value within => CV will measure how much information will still be contained when calculating the mean for the time intervall T
+1. Set a reasonable threshhold r for VC
+2. For each time intervall T calculate it's VC value within => VC will measure how much information will still be contained when calculating the mean for the time intervall T
 3. For each time intervall T additionally calculate the average of Cv scores
-4. For each time intervall T Calculate the ratio: Count of time buckets of T where CV >= r / Total count of time buckets of T => In order to see whether the average of CV considers also local trends (if this ratio is low, then the average of CV for T was dominated by global trends)
+4. For each time intervall T Calculate the ratio: Count of time buckets of T where VC >= r / Total count of time buckets of T => In order to see whether the average of VC considers also local trends (if this ratio is low, then the average of VC for T was dominated by global trends)
 
 Based on the metrics generated by 3 and 4 we now are able to choose a reasonable time intervall T for each sensor based on evidence found in the data.
 
@@ -241,7 +243,7 @@ This may still remove local trends, since it doesn't consider correlations (like
 This is done via the following sql query:
 
 ```sql
-\echo TemperatureCV
+\echo TemperatureVC
 WITH
 params(win) AS (
   -- Bucket intervals
@@ -334,7 +336,7 @@ ORDER BY avg_vc_over_days ASC, overall_ratio_cv_ge_r ASC;
 This results in:
 
 ```
-TemperatureCV
+TemperatureVC
  interval_t |   avg_vc_over_days    |   sd_vc_over_days    | total_bucket_count | total_high_vc_count |   overall_ratio_cv_ge_r    | r_used 
 ------------+-----------------------+----------------------+--------------------+---------------------+----------------------------+--------
  00:01:00   |  0.004096811605428777 | 0.010881863662589643 |              11136 |                   0 | 0.000000000000000000000000 |   0.05
@@ -347,7 +349,7 @@ TemperatureCV
  02:00:00   |  0.009348634338048636 | 0.009355182752916011 |                 97 |                   0 |     0.00000000000000000000 |   0.05
 (8 rows)
 
-HumidityCV
+HumidityVC
  interval_t |    avg_vc_over_days    |              sd_vc_over_days               | total_bucket_count | total_high_vc_count |   overall_ratio_cv_ge_r    | r_used 
 ------------+------------------------+--------------------------------------------+--------------------+---------------------+----------------------------+--------
  00:01:00   | 0.01003824050420096598 | 0.0272505818512915200238898325253984089320 |              11134 |                   1 | 0.000089814981138853960841 |   0.05
@@ -360,7 +362,7 @@ HumidityCV
  02:00:00   | 0.01748013206572656803 | 0.0249439030232373111144416397398254643436 |                 97 |                   2 |     0.02061855670103092784 |   0.05
 (8 rows)
 
-NoiseCV
+NoiseVC
  interval_t |    avg_vc_over_days    |              sd_vc_over_days               | total_bucket_count | total_high_vc_count | overall_ratio_cv_ge_r  | r_used 
 ------------+------------------------+--------------------------------------------+--------------------+---------------------+------------------------+--------
  00:01:00   | 0.67614093053442794826 | 0.0395677440154126209471657890175795303836 |              11257 |               11257 | 1.00000000000000000000 |   0.05
@@ -373,7 +375,7 @@ NoiseCV
  02:00:00   | 0.82261823166499906387 | 0.1776718629923812049802336560646289116728 |                 97 |                  97 | 1.00000000000000000000 |   0.05
 (8 rows)
 
-VocCV
+VocVC
  interval_t |    avg_vc_over_days    |              sd_vc_over_days               | total_bucket_count | total_high_vc_count | overall_ratio_cv_ge_r  | r_used 
 ------------+------------------------+--------------------------------------------+--------------------+---------------------+------------------------+--------
  00:01:00   | 0.06549801672478114071 | 0.1998280657738917264856766372341726407558 |              11257 |                  34 | 0.00302034289775250955 |   0.05
@@ -387,7 +389,7 @@ VocCV
 (8 rows)
 ```
 
-### Interpretation
+#### Interpretation
 ![Variational Coefficient Heatmap](./images/database/vc-heatmap.png)
 
 The heatmap shows a unified view across all intervalls and their corresponding varational coefficient (generated by ChatGPT based on the above values). The following interpretation also considers the other columns shown before, but for a better visibility the heatmap was added.
@@ -400,7 +402,7 @@ Our conclusions regarding the final intervall size is as follows:
 
 3. **Voc** - Since the voc sensor can reach peaks pretty quick due to its physical properties (also seen by std) we even consider a r > 0.05 as acceptable. Therefore we propose a interval of **5 minutes** due to high statistical noise as proposed through std on higher intervalls, and its bucket cv ratio that increases significantly on a **15 minute ratio**
 
-## Definition
+### Definition
 
 We define the silver layer for each sensor as following:
 
