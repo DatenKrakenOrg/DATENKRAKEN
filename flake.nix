@@ -24,8 +24,8 @@
           clang_19
           gcc
           python3
-    python3Packages.numpy
-    python3Packages.pandas
+          python3Packages.numpy
+          python3Packages.pandas
         ];
 
         shellHook = ''
