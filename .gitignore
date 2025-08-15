@@ -207,9 +207,7 @@ marimo/_lsp/
 __marimo__/
 
 # Secrets
-arduino/src/arduino_secrets.h
-*secrets.h
-*secret*
+arduino/include/arduino_secrets.h
 .env
 arduino/.pio/
 arduino/compile_commands.json
