@@ -4,11 +4,17 @@ on:
   push:
   pull_request:
 
+# Set default working directory for all `run:` steps
+defaults:
+  run:
+    working-directory: arduino
+
 jobs:
   test-native:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout repository
+        uses: actions/checkout@v4
 
       - name: Setup Python
         uses: actions/setup-python@v5
@@ -19,10 +25,17 @@ jobs:
         uses: actions/cache@v4
         with:
           path: ~/.platformio
-          key: pio-${{ runner.os }}-${{ hashFiles('**/platformio.ini') }}
+          key: pio-${{ runner.os }}-${{ hashFiles('arduino/platformio.ini') }}
 
       - name: Install PlatformIO
         run: pip install platformio
+
+      # Optional: if you keep only an example secrets header in Git
+      # - name: Prepare secrets header (optional)
+      #   run: |
+      #     if [ -f include/arduino_secrets.h.example ] && [ ! -f include/arduino_secrets.h ]; then
+      #       cp include/arduino_secrets.h.example include/arduino_secrets.h
+      #     fi
 
       - name: Run native tests
         run: pio test -e native
