@@ -1,7 +1,6 @@
 #ifndef JSONHANDLER_H 
 #define JSONHANDLER_H
-#include <ArduinoJson.h>
-extern StaticJsonDocument<512> doc;
+
 
 
 #define JSONSIZE 8192
