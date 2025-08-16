@@ -7,12 +7,13 @@
 #include <string>
 #include "jsonhandler.h"
 #include "mqtt_fake.h"
+#include "arduino_secrets.h"   
 
-// Expected topics based on arduino_secrets.h and jsonhandler.cpp
-static const std::string TOPIC_TEMP = "topic/subtopic/temp/1";
-static const std::string TOPIC_HUM  = "topic/subtopic/hum/1";
-static const std::string TOPIC_MIC  = "topic/subtopic/mic/1";
-static const std::string TOPIC_CO2  = "topic/subtopic/co2/1";
+
+static const std::string TOPIC_TEMP = std::string("topic/subtopic/temp/") + std::to_string(ROOM_ID);
+static const std::string TOPIC_HUM  = std::string("topic/subtopic/hum/")  + std::to_string(ROOM_ID);
+static const std::string TOPIC_MIC  = std::string("topic/subtopic/mic/")  + std::to_string(ROOM_ID);
+static const std::string TOPIC_CO2  = std::string("topic/subtopic/co2/")  + std::to_string(ROOM_ID);
 
 void setUp()   { PUBLISHED.clear(); }
 void tearDown(){}

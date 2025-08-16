@@ -4,7 +4,6 @@ on:
   push:
   pull_request:
 
-# Run all shell commands from the arduino/ directory
 defaults:
   run:
     working-directory: arduino
@@ -13,28 +12,23 @@ jobs:
   test-native:
     runs-on: ubuntu-latest
     steps:
-      # Step 1: Checkout repository
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      # Step 2: Setup Python (needed for PlatformIO)
       - name: Setup Python
         uses: actions/setup-python@v5
         with:
           python-version: "3.11"
 
-      # Step 3: Cache PlatformIO dependencies
       - name: Cache PlatformIO
         uses: actions/cache@v4
         with:
           path: ~/.platformio
           key: pio-${{ runner.os }}-${{ hashFiles('arduino/platformio.ini') }}
 
-      # Step 4: Install PlatformIO CLI
       - name: Install PlatformIO
         run: pip install platformio
 
-      # Step 5: Copy example secrets if missing
       - name: Prepare secrets header
         run: |
           if [ -f include/arduino_secrets.h.example ] && [ ! -f include/arduino_secrets.h ]; then
@@ -42,6 +36,5 @@ jobs:
             echo "arduino_secrets.h created from example file."
           fi
 
-      # Step 6: Run native tests (no Arduino hardware required)
       - name: Run native tests
         run: pio test -e native

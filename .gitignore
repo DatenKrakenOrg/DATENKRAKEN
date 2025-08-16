@@ -207,7 +207,12 @@ marimo/_lsp/
 __marimo__/
 
 # Secrets
-arduino/include/arduino_secrets.h
+arduino/src/arduino_secrets.h
+*secrets.h
+*secret*
 .env
 arduino/.pio/
 arduino/compile_commands.json
+
+# allow example file
+!arduino/src/arduino_secrets.example.h
