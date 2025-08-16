@@ -213,3 +213,8 @@ arduino/src/arduino_secrets.h
 .env
 arduino/.pio/
 arduino/compile_commands.json
+
+!arduino/include/arduino_secrets_template.h
+
+# allow example file
+!arduino/src/arduino_secrets.example.h

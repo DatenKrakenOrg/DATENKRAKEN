@@ -1,0 +1,40 @@
+name: CI (PlatformIO Native Tests)
+
+on:
+  push:
+  pull_request:
+
+defaults:
+  run:
+    working-directory: arduino
+
+jobs:
+  test-native:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Cache PlatformIO
+        uses: actions/cache@v4
+        with:
+          path: ~/.platformio
+          key: pio-${{ runner.os }}-${{ hashFiles('arduino/platformio.ini') }}
+
+      - name: Install PlatformIO
+        run: pip install platformio
+
+      - name: Prepare secrets header
+        run: |
+          if [ -f include/arduino_secrets.h.example ] && [ ! -f include/arduino_secrets.h ]; then
+            cp include/arduino_secrets.h.example include/arduino_secrets.h
+            echo "arduino_secrets.h created from example file."
+          fi
+
+      - name: Run native tests
+        run: pio test -e native
