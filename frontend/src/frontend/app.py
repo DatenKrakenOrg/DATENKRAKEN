@@ -7,6 +7,22 @@ status_colors = {"optimal": "green", "warning": "yellow", "critical": "red"}
 config = load_config()
 
 def calculate_room_status(sensor_data):
+    """Evaluates the overall status of a room based on the most severe status of the parameters.
+
+    Args:
+        sensor_data (dict): Dictionary containing sensor readings with the
+        following keys:
+            - "temperature_inside" (float | int): Room temperature in °C
+            - "humidity_inside" (float | int): Relative humidity in %
+            - "voc_index" (float | int): Indoor air quality index for volatile organic compounds (VOC)
+            - "noise_level" (float | int): Sound level in dB(A)
+
+    Returns:
+        str: The aggregated room status, one of:
+            - "critical": if any sensor is in a critical state
+            - "warning": if no sensor is critical, but at least one is warning
+            - "optimal": if all sensors are within optimal range
+    """
     room_status = "optimal"
     for param, value in sensor_data.items():
         status = get_status(value, param)
@@ -18,6 +34,9 @@ def calculate_room_status(sensor_data):
 
 
 def main():
+    """Streamlit app entry point for displaying room sensor overviews."""
+
+    
     st.set_page_config(layout="wide")
     st.title("Overview")
 
@@ -29,15 +48,7 @@ def main():
 
 
     for room in st.session_state.rooms:
-        room_status = "optimal"
-        for param, value in room["data"].items():
-            status = get_status(value, param)
-            if status == "critical":
-                room_status = "critical"
-                break
-            elif status == "warning" and room_status != "critical":
-                room_status = "warning"
-        room["status"] = room_status
+        room["status"] = calculate_room_status(room["data"])
 
     status_colors = {"optimal": "green", "warning": "yellow", "critical": "red"}
 

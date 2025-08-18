@@ -1,0 +1,14 @@
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+
+
+    command: ["/app/.venv/bin/python", "app.py"]
+    environment:
+      - PYTHONUNBUFFERED=1
+      - weather_api_key=${WEATHER_API_KEY}
+
+    restart: unless-stopped

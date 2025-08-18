@@ -9,6 +9,7 @@ import plotly.graph_objects as go
 import streamlit as st
 
 from status_engine import (
+    load_config,
     get_status,
     get_recommendations,
     get_virtual_recommendations,
@@ -20,17 +21,26 @@ API_KEY = os.getenv("WEATHER_API_KEY")
 LOCATION = "Heidenheim,DE"
 
 
-@st.cache_data(show_spinner=False)
-def load_config(config_file: str = "parameter.json") -> Dict:
-    # Loads parameter configuration from JSON with caching.
-    base_dir = os.path.dirname(__file__)
-    file_path = os.path.join(base_dir, config_file)
-    with open(file_path, "r", encoding="utf-8") as f:
-        return json.load(f)
+
+
 
 
 def gauge_plot(value: float, title: str, value_range: List[float], bar_color: str, unit: str) -> go.Figure:
-    # Creates a compact Plotly gauge for a single metric.
+    """Create a Plotly gauge chart for visualizing a single sensor value.
+
+    The gauge displays the given value within a defined range and uses a
+    colored bar to indicate its position. A numeric label with a unit is also
+    shown inside the gauge.
+
+    Args:
+        value (float): The numeric value to display.
+        title (str): Title of the gauge (e.g., parameter name).
+        value_range (List[float]): Two-element list [min, max] defining the axis range. Defined in parameter.json.
+        bar_color (str): Color of the gauge's bar (e.g., "green", "red").
+        unit (str): Measurement unit displayed next to the value (e.g., "°C"). Defined in parameter.json.
+
+    Returns:
+        go.Figure: A Plotly figure object containing the gauge visualization."""
     fig = go.Figure(
         go.Indicator(
             mode="gauge+number",
@@ -50,7 +60,23 @@ def gauge_plot(value: float, title: str, value_range: List[float], bar_color: st
 
 
 def get_bar_color(param_name: str, value: float) -> str:
-    # Maps a status to a gauge bar color.
+    """Return the color for a gauge bar based on parameter status.
+
+    Uses `get_status` to evaluate the given sensor value against the
+    configured thresholds. Maps the resulting status to a display color:
+
+        - "optimal"  -> "green"
+        - "warning"  -> "orange"
+        - "critical" -> "red"
+
+    Args:
+        param_name (str): Name of the parameter (e.g., "temperature_inside").
+        value (float): Sensor reading to evaluate.
+
+    Returns:
+        str: Color name ("green", "orange", or "red") corresponding to
+        the parameter status.
+    """
     status = get_status(value, param_name)
     if status == "optimal":
         return "green"
@@ -60,7 +86,23 @@ def get_bar_color(param_name: str, value: float) -> str:
 
 
 def build_param_recommendations(sensor_data: Dict[str, float]) -> Dict[str, List[str]]:
-    # Collects and groups recommendations per parameter.
+    """Build parameter-to-recommendation mappings from sensor and weather data.
+    The resulting recommendations are grouped by parameter name so that
+    each parameter has a list of associated messages.
+
+    Args:
+        sensor_data (Dict[str, float]): Dictionary of sensor readings,
+            e.g.:
+            {
+                "temperature_inside": 22,
+                "humidity_inside": 40,
+                "voc_index": 120,
+                "noise_level": 55
+            }
+
+    Returns:
+        Dict[str, List[str]]: Mapping from parameter names to a list of
+        recommendation messages."""
     recs = get_recommendations(sensor_data)
     virtual_recs = get_virtual_recommendations(API_KEY, LOCATION)
     recs.extend(virtual_recs)
@@ -73,7 +115,17 @@ def build_param_recommendations(sensor_data: Dict[str, float]) -> Dict[str, List
 
 
 def ensure_history(sensor_data: Dict[str, float], history_df: Optional[pd.DataFrame], param: str, value: float) -> pd.DataFrame:
-    # Ensures a non-empty history dataframe for the given parameter by simulating when missing.
+    """Ensure that a parameter has a valid history DataFrame.
+
+    If no history is provided, if it is empty, or if the given parameter is
+    not yet present in the history, this function generates a synthetic
+    48-hour history for the parameter with values fluctuating slightly
+    around the current value. Otherwise, the existing history DataFrame
+    is returned unchanged. 
+    """
+    #IMPORTANT: Should be removed or replaced with real history fetching logic with a fallback logic.
+
+
     if history_df is None or history_df.empty or param not in history_df.get("parameter", pd.Series(dtype=str)).unique():
         dates = [datetime.now() - timedelta(hours=i) for i in range(48, -1, -1)]
         vals = [value + (i % 5 - 2) * 0.2 for i in range(len(dates))]
@@ -82,7 +134,27 @@ def ensure_history(sensor_data: Dict[str, float], history_df: Optional[pd.DataFr
 
 
 def filter_period(df: pd.DataFrame, period: str) -> pd.DataFrame:
-    # Filters the dataframe by a chosen period window.
+    """ Filter a history DataFrame by a given time period.
+
+    Keeps only the rows in the DataFrame that fall within the selected
+    time window, based on the maximum timestamp in the "time" column.
+
+    Args:
+        df (pd.DataFrame): DataFrame with at least a "time" column of
+            datetime values.
+        period (str): Time period to filter by. Supported values:
+            - "Alle": No filtering, return full DataFrame.
+            - "24h": Last 24 hours.
+            - "7d": Last 7 days.
+            - "30d": Last 30 days.
+            - "90d": Last 90 days.
+
+    Returns:
+        pd.DataFrame: Filtered DataFrame containing only rows within
+        the chosen period.
+
+    """
+                
     if period == "Alle" or df.empty:
         return df
     now = df["time"].max()
@@ -96,7 +168,22 @@ def filter_period(df: pd.DataFrame, period: str) -> pd.DataFrame:
 
 
 def compute_y_range(df: pd.DataFrame) -> Tuple[float, float, float, float]:
-    # Computes default and global y-axis ranges with padding.
+    """Compute padded y-axis ranges from a time series DataFrame.
+
+    The function calculates the minimum and maximum values of the "value"
+    column and applies a 10% padding. It returns both a default range
+    (slightly padded around the data) and a global range (covering the
+    actual min/max values as well).
+
+    Args:
+        df (pd.DataFrame): DataFrame with a numeric "value" column.
+
+    Returns:
+        Tuple[float, float, float, float]:
+            - default_min: Lower bound with padding applied.
+            - default_max: Upper bound with padding applied.
+            - global_min: Absolute minimum (may equal or be below default_min).
+            - global_max: Absolute maximum (may equal or be above default_max)."""
     y_min = float(df["value"].min())
     y_max = float(df["value"].max())
     pad = (y_max - y_min) * 0.1 if y_max > y_min else max(abs(y_min), 1.0) * 0.1
@@ -108,7 +195,28 @@ def compute_y_range(df: pd.DataFrame) -> Tuple[float, float, float, float]:
 
 
 def render_overview_grid(config: Dict, sensor_data: Dict[str, float], param_to_recs: Dict[str, List[str]]) -> None:
-    # Renders the 4-column overview grid with gauges and messages.
+    """Render a grid of gauges and recommendations in a Streamlit app.
+
+    Displays each parameter from `sensor_data` in a 4-column grid layout.
+    For each parameter, a gauge plot is shown along with status indicators
+    and recommendation messages.
+
+    Args:
+        config (Dict): Configuration dictionary with parameter definitions,
+            must include for each parameter:
+                {
+                    "unit": <str>,
+                    "display_range": {"min": <float>, "max": <float>}
+                }
+        sensor_data (Dict[str, float]): Dictionary of current sensor values,
+            keyed by parameter name.
+        param_to_recs (Dict[str, List[str]]): Mapping from parameter names
+            to recommendation messages (warnings, hints, etc.).
+
+    Returns:
+        None
+        The function directly renders Streamlit components (gauges,
+        status messages, recommendations)."""
     col1, col2, col3, col4 = st.columns([1, 1, 1, 1])
     cols = [col1, col2, col3, col4]
     for idx, (param, value) in enumerate(sensor_data.items()):
@@ -136,7 +244,24 @@ def render_overview_grid(config: Dict, sensor_data: Dict[str, float], param_to_r
 
 
 def render_detail_header(sensor_data: Dict[str, float]) -> Optional[str]:
-    # Renders the back button and parameter selector and returns the selected parameter.
+    """Render the header section for the detailed parameter view in Streamlit.
+
+    Provides navigation and parameter selection:
+      - A **back button** ("Zurück") to switch the app back to overview mode.
+      - A **dropdown (selectbox)** to choose which parameter is currently
+        displayed in detail view.
+
+    The function ensures that `st.session_state.selected_param` is always set
+    to a valid parameter from `sensor_data`.
+
+    Args:
+        sensor_data (Dict[str, float]): Dictionary of current sensor values,
+            keyed by parameter name.
+
+    Returns:
+        Optional[str]: The currently selected parameter name, or None if
+        `sensor_data` is empty."""
+
     all_params = list(sensor_data.keys())
     if "selected_param" not in st.session_state or st.session_state.selected_param not in all_params:
         st.session_state.selected_param = all_params[0] if all_params else None
@@ -159,7 +284,30 @@ def render_detail_header(sensor_data: Dict[str, float]) -> Optional[str]:
 
 
 def render_detail_insights(config: Dict, param: str, value: float, history_df: pd.DataFrame, param_to_recs: Optional[Dict[str, List[str]]]) -> None:
-    # Renders the left-aligned gauge and right-hand insights panel.
+    """Render a detailed insight view for a selected parameter.
+
+    Displays a gauge visualization, current and recent metrics, status,
+    recommended ranges, and optional recommendations for the given parameter.
+
+    Args:
+        config (Dict): Configuration dictionary containing parameter metadata,
+            must include for each parameter:
+                {
+                    "unit": <str>,
+                    "display_range": {"min": <float>, "max": <float>},
+                    "optimal_range": {"min": <float>, "max": <float>}
+                }
+        param (str): The parameter name (e.g., "temperature_inside").
+        value (float): The current sensor reading for the parameter.
+        history_df (pd.DataFrame): DataFrame of historical values with columns
+            ["time", "parameter", "value"]. Used to compute deltas.
+        param_to_recs (Optional[Dict[str, List[str]]]): Mapping from parameter
+            names to recommendation messages. If provided, recommendations
+            for `param` are displayed.
+
+    Returns:
+        None
+        The function directly renders UI components."""
     unit = config["parameters"][param]["unit"]
     d_range = config["parameters"][param]["display_range"]
     o_range = config["parameters"][param]["optimal_range"]
@@ -197,6 +345,21 @@ def render_detail_insights(config: Dict, param: str, value: float, history_df: p
 
 
 def render_detail_timeseries(param: str, unit: str, df: pd.DataFrame, config: dict) -> None:
+    """Render a detailed time series chart for a given parameter in Streamlit.
+
+    Provides interactive visualization of historical parameter data with
+    filtering, y-axis control, and CSV export functionality.
+
+    Args:
+        param (str): The parameter name (e.g., "temperature_inside").
+        unit (str): The unit of the parameter (e.g., "°C").
+        df (pd.DataFrame): History DataFrame with columns ["time", "parameter", "value"].
+        config (dict): Configuration dictionary that must define
+            config["parameters"][param]["display_range"] with "min" and "max".
+
+    Returns:
+        None
+        The function directly renders UI components."""
     st.divider()
     left, right = st.columns([1, 1])
     with left:
@@ -248,7 +411,30 @@ def render_detail_timeseries(param: str, unit: str, df: pd.DataFrame, config: di
 
 
 def detail_view(config: Dict, sensor_data: Dict[str, float], history_df: Optional[pd.DataFrame] = None, param_to_recs: Optional[Dict[str, List[str]]] = None) -> None:
-    # Drives the detail view by selecting a parameter, rendering insights, and plotting the time series.
+    """Render the detailed view for a selected parameter in Streamlit.
+
+    Combines the header, insights, and time series components into a
+    full detail page for one parameter chosen by the user.
+
+    Args:
+        config (Dict): Configuration dictionary containing parameter metadata.
+            Must include for each parameter:
+                {
+                    "unit": <str>,
+                    "display_range": {"min": <float>, "max": <float>},
+                    "optimal_range": {"min": <float>, "max": <float>}
+                }
+        sensor_data (Dict[str, float]): Dictionary of current sensor readings,
+            keyed by parameter name.
+        history_df (Optional[pd.DataFrame]): Historical readings with columns
+            ["time", "parameter", "value"]. If None or incomplete, synthetic
+            history is generated via `ensure_history`.
+        param_to_recs (Optional[Dict[str, List[str]]]): Optional mapping from
+            parameter names to recommendation messages.
+
+    Returns:
+        None
+        The function directly renders Streamlit UI components."""
     selected = render_detail_header(sensor_data)
     if selected is None:
         st.info("Keine Parameter vorhanden.")
@@ -261,7 +447,23 @@ def detail_view(config: Dict, sensor_data: Dict[str, float], history_df: Optiona
 
 
 def define_page(roomNumber: int, sensor_data: Dict[str, float], history_df: Optional[pd.DataFrame] = None) -> None:
-    # Orchestrates page layout: overview grid, a single bottom "Detailed view" button, and the detail page.
+    """Define and render the Streamlit dashboard page for a specific room.
+
+    Sets up the Streamlit page layout, loads configuration, manages
+    session state (overview vs. detail view), and renders either the
+    parameter overview grid or the detailed parameter view.
+
+    Args:
+        roomNumber (int): Identifier for the room (used in page title).
+        sensor_data (Dict[str, float]): Dictionary of current sensor readings
+            keyed by parameter name.
+        history_df (Optional[pd.DataFrame]): Optional history of sensor data
+            with columns ["time", "parameter", "value"]. If None, synthetic
+            history will be generated when required.
+
+    Returns:
+        None
+        The function directly renders the Streamlit UI components."""
     st.set_page_config(page_title=f"Raum {roomNumber} Dashboard", layout="wide")
     st.title("Raumüberwachung Dashboard")
     config = load_config()
