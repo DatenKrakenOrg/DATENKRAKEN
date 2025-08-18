@@ -1,3 +1,3 @@
 #pragma once
-class String;  // forward-declare reicht
+class String;
 void sendMqttMessage(String topic, char payload[]);

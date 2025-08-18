@@ -10,10 +10,10 @@
 #include "arduino_secrets.h"   
 
 
-static const std::string TOPIC_TEMP = std::string("topic/subtopic/temp/") + std::to_string(ROOM_ID);
-static const std::string TOPIC_HUM  = std::string("topic/subtopic/hum/")  + std::to_string(ROOM_ID);
-static const std::string TOPIC_MIC  = std::string("topic/subtopic/mic/")  + std::to_string(ROOM_ID);
-static const std::string TOPIC_CO2  = std::string("topic/subtopic/co2/")  + std::to_string(ROOM_ID);
+static const std::string TOPIC_TEMP = std::string(TOPIC) + std::string("/temp/") + std::to_string(ROOM_ID);
+static const std::string TOPIC_HUM  = std::string(TOPIC) + std::string("/hum/")  + std::to_string(ROOM_ID);
+static const std::string TOPIC_MIC  = std::string(TOPIC) + std::string("/mic/")  + std::to_string(ROOM_ID);
+static const std::string TOPIC_CO2  = std::string(TOPIC) + std::string("/co2/")  + std::to_string(ROOM_ID);
 
 void setUp()   { PUBLISHED.clear(); }
 void tearDown(){}
