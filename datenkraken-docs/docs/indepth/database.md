@@ -408,3 +408,16 @@ We define the silver layer for each sensor as following:
 
 1. **A Continuous Aggregate that shows realtime data (via materialized_only = false)** - Refresh Policy: Update last 30 days till now() - 15 minutes all 15 minutes
 2. **Columns: time, arduino_id, avg_temperature_at_15m, stddev_temperature_at_15m** - differs based on each bucket interval chosen and for each sensor
+
+## Gold 
+The purpose of this layer is to create a layer with data that is solely used by our business logic within the UI. Since our UI only needs numerical representation of each sensors taken data point by time, we can define the gold layer as a passthrough view of our silver layer. Therefore we do not duplicate any data regarding memory, and we have a unified structure (naming conventions of each column) of each view. Therefore we stay with a good extensibility in the case that we do want to add more complex business logic / data strucure => f.e. replacing the views with materialized views.
+
+Since our recommendation algorithm is based on checking intervals of values per timebucket we only need the following columns of each sensor.
+
+1. **bucket_time** - Starting time of each time interval ([time intervals of each sensor](Interpretation))
+2. **arduino_id** - Arduino from which the data point comes from
+3. **avg_value_in_bucket** - Average of data points within the sensors time bucket
+
+**Don't forget: The first time_bucket describes the ongoing time intervall that is updated each time you query the view**
+
+For example if it's currently 10:46 and we query the gold.temperature view, then the first data point averages the ongoing time interval of (10:45 till NOW()). The second time bucket would be the full interval starting from (10:30 till 10:45).
