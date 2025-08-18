@@ -1,8 +1,11 @@
 [project]
-name = "fontend"
+name = "frontend"
 version = "0.1.0"
-description = "UV project for the frontend"
+description = "DATENKRAKEN UI"
 readme = "README.md"
+authors = [
+    { name = "cosi1110", email = "cosmas.penschke@gmail.com" }
+]
 requires-python = ">=3.13"
 dependencies = [
     "pandas>=2.3.1",
@@ -10,3 +13,10 @@ dependencies = [
     "python-dotenv>=1.1.1",
     "streamlit>=1.48.0",
 ]
+
+[project.scripts]
+frontend = "frontend.app:main"
+
+[build-system]
+requires = ["uv_build>=0.8.2,<0.9.0"]
+build-backend = "uv_build"
