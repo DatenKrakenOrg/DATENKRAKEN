@@ -55,7 +55,7 @@ def gauge_plot(value: float, title: str, value_range: List[float], bar_color: st
             },
         )
     )
-    fig.update_layout(width=250, height=250, margin=dict(l=20, r=20, t=50, b=20))
+    fig.update_layout(width=250, height=250, margin=dict(l=20, r=28, t=50, b=20))
     return fig
 
 

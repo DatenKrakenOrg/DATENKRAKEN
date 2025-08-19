@@ -10,5 +10,6 @@ services:
     environment:
       - PYTHONUNBUFFERED=1
       - weather_api_key=${WEATHER_API_KEY}
-
+    ports:
+      - "8501:8501"   
     restart: unless-stopped
