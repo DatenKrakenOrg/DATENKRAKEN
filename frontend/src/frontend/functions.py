@@ -319,7 +319,7 @@ def render_detail_insights(config: Dict, param: str, value: float, history_df: p
     col_gauge, col_info = st.columns([1, 1], vertical_alignment="center")
     with col_gauge:
         fig_g = gauge_plot(value=value, title=" ", value_range=value_range, bar_color=bar_color, unit=unit)
-        fig_g.update_layout(margin=dict(l=0, r=0, t=50, b=0))
+        fig_g.update_layout(margin=dict(l=0, r=0, t=50, b=10))
         st.plotly_chart(fig_g, use_container_width=True)
     with col_info:
         st.subheader(f"{title} • Insights")
