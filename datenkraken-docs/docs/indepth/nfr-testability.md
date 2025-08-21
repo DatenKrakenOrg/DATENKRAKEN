@@ -23,7 +23,7 @@ To achieve this, a python script is used to read the CSV-File and relatively cal
 The NFR 3.1 is a criterea for accessibility. The Quantification of a accessibility criteria is usually difficult.
 There isn't any existing data or collectable logs for the quantification for this non functional requirement.
 
-What comes closest to this, is to test, if there are any inputfields, which require keyboard inputs are existing in the UI, which can be automattically tested.
+What comes closest to this, is to test, if there are any inputfields, which require keyboard inputs are existing in the UI, which can be automatically tested.
 Since the existence of an input field does not rule out operability using only the mouse a usertest, which is usual best practice for UI-Testing and validation, is additionally required.
 
 Thats the reason why this project is also relying on usertests to quantify the NFR 3.1.
