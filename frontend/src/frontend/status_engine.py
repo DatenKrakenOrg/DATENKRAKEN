@@ -1,22 +1,7 @@
-from dotenv import load_dotenv
 import json
 import os
 import requests
 import streamlit as st
-
-
-
-base_dir = os.path.dirname(__file__)
-env_path = os.path.join(base_dir, ".env")
-
-load_dotenv(dotenv_path=env_path) 
-API_KEY = os.getenv("WEATHER_API_KEY")
-if not API_KEY:
-    raise ValueError("WEATHER_API_KEY ist nicht gesetzt!")
-
-location = "Heidenheim,DE"
-
-
 
 @st.cache_data(show_spinner=False)
 def load_config(config_file="parameter.json"):
@@ -33,24 +18,43 @@ def load_config(config_file="parameter.json"):
     with open(file_path, "r", encoding="utf-8") as f:
         return json.load(f)
 
-config = load_config()
+def calculate_room_status(sensor_data, config):
+    """Evaluates the overall status of a room based on the most severe status of the parameters.
 
+    Args:
+        sensor_data (dict): Dictionary containing sensor readings with the
+        following keys:
+            - "temperature_inside" (float | int): Room temperature in °C
+            - "humidity_inside" (float | int): Relative humidity in %
+            - "voc_index" (float | int): Indoor air quality index for volatile organic compounds (VOC)
+            - "noise_level" (float | int): Sound level in dB(A)
 
-def fetch_weather_data(api_key, location="Heidenheim,DE"):
+    Returns:
+        str: The aggregated room status, one of:
+            - "critical": if any sensor is in a critical state
+            - "warning": if no sensor is critical, but at least one is warning
+            - "optimal": if all sensors are within optimal range
+    """
+    room_status = "optimal"
+    for param, value in sensor_data.items():
+        status = get_status(value, param, config)
+        if status == "critical":
+            return "critical"   
+        elif status == "warning" and room_status == "optimal":
+            room_status = "warning"
+    return room_status
+
+def fetch_weather_data():
     """Fetch current weather data from the OpenWeatherMap API.
 
     Builds a request to the OpenWeatherMap REST API for the specified
     location, retrieves the weather information and returns it as a JSON dictionary.
 
-    Args:
-        api_key (str): API key for authenticating with the OpenWeatherMap API.
-        location (str, optional): Location query in the form. Defaults to "Heidenheim,DE".
-
     Returns:
         dict | None: Weather data as a parsed JSON dictionary if successful,
         otherwise None if the request fails."""
 
-    url = f"https://api.openweathermap.org/data/2.5/weather?q={location}&appid={api_key}&units=metric&lang=de"
+    url = f"https://api.openweathermap.org/data/2.5/weather?q={os.getenv("LOCATION")}&appid={os.getenv("WEATHER_API_KEY")}&units=metric&lang=de"
     try:
         response = requests.get(url)
         response.raise_for_status()
@@ -61,7 +65,7 @@ def fetch_weather_data(api_key, location="Heidenheim,DE"):
     
 
 
-def get_status(value, param_name):
+def get_status(value, param_name, config):
     """Evaluate the status of a sensor reading against configured thresholds.
 
     The function checks the given value against the parameter configuration
@@ -98,23 +102,19 @@ def get_status(value, param_name):
         return "critical"
 
 
-def get_virtual_recommendations(api_key, location="Heidenheim,DE"):
+def get_virtual_recommendations(config):
     """Generate weather-based virtual recommendations.
 
     This function gets current weather data for a location, extracts temperature and
     conditions, and checks configured rules for "virtual_weather" to generate
     recommendation messages.
 
-    Args:
-        api_key (str): API key for accessing the OpenWeatherMap API.
-        location (str, optional): Location query. Defaults to "Heidenheim,DE".
-
     Returns:
         list[dict]: A list of recommendation entries. Each entry has:
             - "parameter" (str): Always "virtual_weather".
             - "message" (str): Recommendation text or an error message if rule
               evaluation failed."""
-    weather_data = fetch_weather_data(api_key, location)
+    weather_data = fetch_weather_data(os.getenv("WEATHER_API_KEY"), os.getenv("LOCATION"))
     if not weather_data:
         return []
     
@@ -144,7 +144,7 @@ def get_virtual_recommendations(api_key, location="Heidenheim,DE"):
 
 
 
-def get_recommendations(sensor_data):
+def get_recommendations(sensor_data, config):
     """Generate recommendations based on sensor data and configured rules.
 
     The function evaluates two types of recommendations:

@@ -1,5 +1,4 @@
 import os
-import json
 from datetime import datetime, timedelta
 from typing import Dict, List, Tuple, Optional
 
@@ -16,14 +15,6 @@ from status_engine import (
     filter_recommendations,
     fetch_weather_data,
 )
-
-API_KEY = os.getenv("WEATHER_API_KEY")
-LOCATION = "Heidenheim,DE"
-
-
-
-
-
 
 def gauge_plot(value: float, title: str, value_range: List[float], bar_color: str, unit: str) -> go.Figure:
     """Create a Plotly gauge chart for visualizing a single sensor value.
@@ -104,9 +95,9 @@ def build_param_recommendations(sensor_data: Dict[str, float]) -> Dict[str, List
         Dict[str, List[str]]: Mapping from parameter names to a list of
         recommendation messages."""
     recs = get_recommendations(sensor_data)
-    virtual_recs = get_virtual_recommendations(API_KEY, LOCATION)
+    virtual_recs = get_virtual_recommendations(os.getenv("WEATHER_API_KEY"), os.getenv("LOCATION"))
     recs.extend(virtual_recs)
-    weather_data = fetch_weather_data(API_KEY, LOCATION)
+    weather_data = fetch_weather_data(os.getenv("WEATHER_API_KEY"), os.getenv("LOCATION"))
     filtered = filter_recommendations(sensor_data, weather_data, recs)
     param_to_recs: Dict[str, List[str]] = {k: [] for k in sensor_data.keys()}
     for r in filtered:
