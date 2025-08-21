@@ -22,13 +22,28 @@ To achieve this, a python script is used to read the CSV-File and relatively cal
 ## NFR 3.1
 The NFR 3.1 is a criterea for accessibility. The Quantification of a accessibility criteria is usually difficult.
 There isn't any existing data or collectable logs for the quantification for this non functional requirement.
-A usual best practice for UI-Testing and validation are user tests.
-Thats the reason why this project is also relying on user tests to quantify the NFR 3.1.
+
+What comes closest to this, is to test, if there are any inputfields, which require keyboard inputs are existing in the UI, which can be automattically tested.
+Since the existence of an input field does not rule out operability using only the mouse a usertest, which is usual best practice for UI-Testing and validation, is additionally required.
+
+Thats the reason why this project is also relying on usertests to quantify the NFR 3.1.
+
+### Usertest:
+The usertest relies on the following metrics. The measurement needs to be adjusted before the usertest to the current UI.
 
 | Metric                     | How to Measure                                                                                                                     |
 | -------------------------- | ---------------------------------------------------------------------------------------------------------------------------------- |
-| **Task completion rate**   | Percentage of users able to complete key tasks (e.g., navigate dashboard, use filters, submit forms) **without using a keyboard**. |
-| **Time to complete tasks** | Average time users take to finish a task with mouse/trackpad alone. Compare against expected baseline.                             |
-| **Error rate**             | Number of times a user fails or misclicks because a function isn’t accessible without keyboard.                                    |
-| **UI coverage**            | Percentage of interactive elements reachable and usable without a keyboard.                                                        |
-| **Shortcut reliance**      | Number of functions that **cannot** be accessed without keyboard shortcuts. Should be 0 for this NFR.                              |
+| **Task completion rate**   | Percentage of users able to complete key tasks (e.g., navigate to x, ...) **without using a keyboard**.|
+| **Time to complete tasks** | Average time users take to finish a task with mouse/trackpad alone.|
+| **Error rate**             | Number of times a user fails or misclicks because a function isn't/is harder accessible without keyboard.|
+
+#### Navigation:
+- Open the dashboard start page.
+- Switch to a specific room.
+
+#### Filtering / Parameters
+- Display the graph in a specific time range (last 30 days).
+
+#### Content Interaction
+- Expand or collapse a section/card.
+- Open a detail view (e.g., click on a specific data item).
