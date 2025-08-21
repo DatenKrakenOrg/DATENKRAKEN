@@ -5,42 +5,6 @@ from typing import Tuple, Dict, List
 from .utils import sensor_data_language_dict, SensorStatus, fetch_weather_data
 
 
-def gauge_plot(
-    value: float, title: str, value_range: Tuple[float], bar_color: str, unit: str
-) -> go.Figure:
-    """Create a Plotly gauge chart for visualizing a single sensor value.
-
-    The gauge displays the given value within a defined range and uses a
-    colored bar to indicate its position. A numeric label with a unit is also
-    shown inside the gauge.
-
-    Args:
-        value (float): The numeric value to display.
-        title (str): Title of the gauge (e.g., parameter name).
-        value_range (Tuple[float]): Two-element list [min, max] defining the axis range. Defined in parameter.json.
-        bar_color (str): Color of the gauge's bar (e.g., "green", "red").
-        unit (str): Measurement unit displayed next to the value (e.g., "°C"). Defined in parameter.json.
-
-    Returns:
-        go.Figure: A Plotly figure object containing the gauge visualization."""
-    fig = go.Figure(
-        go.Indicator(
-            mode="gauge+number",
-            value=value,
-            number={"suffix": f" {unit}"},
-            title={"text": title},
-            gauge={
-                "axis": {"range": value_range, "tickcolor": "gray"},
-                "bgcolor": "lightgray",
-                "bar": {"color": bar_color, "thickness": 1},
-                "steps": [{"range": value_range, "color": "lightgray"}],
-            },
-        )
-    )
-    fig.update_layout(width=250, height=250, margin=dict(l=20, r=28, t=50, b=20))
-    return fig
-
-
 def render_gauge_column(
     value: float, title: str, value_range: Tuple[float], bar_color: str, unit: str
 ):
@@ -54,7 +18,7 @@ def render_gauge_column(
         unit (str): Unit of the sensors measurement
     """
     st.subheader(f"{title} - Tachometer")
-    st.plotly_chart(gauge_plot(value, title, value_range, bar_color, unit))
+    st.plotly_chart(_gauge_plot(value, title, value_range, bar_color, unit))
 
 
 def render_recommendation_column(
@@ -90,6 +54,41 @@ def render_recommendation_column(
     ):
         st.caption(text)
 
+def _gauge_plot(
+    value: float, title: str, value_range: Tuple[float], bar_color: str, unit: str
+) -> go.Figure:
+    """Create a Plotly gauge chart for visualizing a single sensor value.
+
+    The gauge displays the given value within a defined range and uses a
+    colored bar to indicate its position. A numeric label with a unit is also
+    shown inside the gauge.
+
+    Args:
+        value (float): The numeric value to display.
+        title (str): Title of the gauge (e.g., parameter name).
+        value_range (Tuple[float]): Two-element list [min, max] defining the axis range. Defined in parameter.json.
+        bar_color (str): Color of the gauge's bar (e.g., "green", "red").
+        unit (str): Measurement unit displayed next to the value (e.g., "°C"). Defined in parameter.json.
+
+    Returns:
+        go.Figure: A Plotly figure object containing the gauge visualization."""
+    fig = go.Figure(
+        go.Indicator(
+            mode="gauge+number",
+            value=value,
+            number={"suffix": f" {unit}"},
+            title={"text": title},
+            gauge={
+                "axis": {"range": value_range, "tickcolor": "gray"},
+                "bgcolor": "lightgray",
+                "bar": {"color": bar_color, "thickness": 1},
+                "steps": [{"range": value_range, "color": "lightgray"}],
+            },
+        )
+    )
+    fig.update_layout(width=250, height=250, margin=dict(l=20, r=28, t=50, b=20))
+    return fig
+
 
 def _get_recommendation_texts(
     sensor_specifier: str,
@@ -110,7 +109,6 @@ def _get_recommendation_texts(
     """
     recommendation_texts: List[str] = []
     weather_data = fetch_weather_data()
-    print(weather_data)
     match sensor_specifier:
         case "temperature_inside":
             if value < optimal_range["min"] - recommendation_tolerance:
