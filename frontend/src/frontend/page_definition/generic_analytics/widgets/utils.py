@@ -1,3 +1,7 @@
+import streamlit as st
+import requests
+import os
+from typing import Dict
 from enum import Enum
 
 sensor_data_language_dict = {
@@ -7,9 +11,14 @@ sensor_data_language_dict = {
     "Lautstärke": "noise_level",
 }
 class SensorStatus(Enum):
-    OPTIMAL = 0,
-    WARNING = 1,
-    CRITICAL = 2
+    """Enum representing the status of sensor based on a value
+
+    Args:
+        Enum (Tuple[str]): First index representing a color (f.e. used for a gauge meter), second index representing a string that can be shown in the UI
+    """
+    OPTIMAL = ("green", "Optimal")
+    WARNING = ("orange", "Suboptimal")
+    CRITICAL = ("red", "Kritisch")
 
 def get_status(value, param_name, config) -> SensorStatus:
     """Evaluate the status of a sensor reading against configured thresholds.
@@ -46,3 +55,28 @@ def get_status(value, param_name, config) -> SensorStatus:
         return SensorStatus.WARNING
     else:
         return SensorStatus.CRITICAL
+
+@st.cache_data(ttl="0.25h")
+def fetch_weather_data() -> Dict[str, float]:
+    """Fetch current weather data from the OpenWeatherMap API.
+
+    Builds a request to the OpenWeatherMap REST API for the specified
+    location, retrieves the weather information and returns it as a JSON dictionary.
+
+    Returns:
+        Dict[str, float] | None: Weather data as Dict[str, float], with humidty and temperature as keys,
+        otherwise None if the request fails."""
+
+    url = f"https://api.openweathermap.org/data/2.5/weather?q={os.getenv('LOCATION')}&appid={os.getenv('WEATHER_API_KEY')}&units=metric&lang=de"
+    try:
+        response = requests.get(url)
+        response.raise_for_status()
+        response_json = response.json()
+
+        return {
+            "temperature": response_json["main"]["temp"],
+            "humidity": response_json["main"]["humidity"]
+        }
+    except Exception as e:
+        print(f"Error when fetching openweatherapi: {e}")
+        return None

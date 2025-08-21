@@ -5,7 +5,7 @@ from utility.datafetcher import DataFetcher
 from frontend.status_engine import get_single_room_data
 
 from .widgets.utils import sensor_data_language_dict, get_status, SensorStatus
-from .widgets.current_insights_widget import gauge_plot
+from .widgets.current_insights_widget import render_gauge_column, render_recommendation_column
 
 
 def define_generic_analytics_page(arduino_id: str, fetcher: DataFetcher, config: dict) -> None:
@@ -41,37 +41,48 @@ def define_generic_analytics_page(arduino_id: str, fetcher: DataFetcher, config:
 
 def render_current_insights(
     arduino_id: str, sensor_data: Dict[str, float], config: dict
-) -> SensorType:
+) -> str:
+    """Renders the current insight widget
+
+    First selects all needed placeholder values for each widget by its sensor specifier out of the config json. Then calls the correct widget to display its components.
+
+    Args:
+        arduino_id (str): Current arduino_id (room) that should be displayed
+        sensor_data (Dict[str, float]): Sensor data dictionary consisting of keys: ("temperature_inside", "humidity_inside", "voc_index", "noise_level") which maps a sensor to its latest value (float)
+        config (dict): Config dictionary as described by frontend/src/frontend/parameter.json
+
+    Returns:
+        str: sensor_specifier as described by sensor_data dictionary keys (take a look at Args section)
+    """
     # Mapped on german language!
-    chosen_sensor = st.selectbox("Sensorauswahl", sensor_data_language_dict.keys(), accept_new_options=False)
+    sensor_selection = st.selectbox("Sensorauswahl", sensor_data_language_dict.keys(), accept_new_options=False)
     # Take a look at parameter.json to understand the keys here!
-    config_param_json_name = sensor_data_language_dict[chosen_sensor]
+    config_param_json_name = sensor_data_language_dict[sensor_selection]
 
     # Get all placeholder values for the to be placed widgets
     sensor_display_range = tuple(config["parameters"][config_param_json_name]["display_range"].values())
+    sensor_optimal_range = config["parameters"][config_param_json_name]["optimal_range"]
+    sensor_recommendation_tolerance = config["parameters"][config_param_json_name]["tolerance"]
 
     _current_sensor_status = get_status(
         sensor_data[config_param_json_name], config_param_json_name, config
     )
 
-    gauge_bar_color = (
-        "green"
-        if _current_sensor_status == SensorStatus.OPTIMAL
-        else "orange"
-        if _current_sensor_status == SensorStatus.WARNING
-        else "red"
-    )
+    gauge_bar_color = _current_sensor_status.value[0]
     display_unit_of_sensor = config["parameters"][config_param_json_name]["unit"]
 
     col1, col2 = st.columns(2)
 
     with col1:
-        st.plotly_chart(
-            gauge_plot(sensor_data[config_param_json_name], chosen_sensor, sensor_display_range, gauge_bar_color, display_unit_of_sensor)
-        )
+        render_gauge_column(sensor_data[config_param_json_name], sensor_selection, sensor_display_range, gauge_bar_color, display_unit_of_sensor)
 
     with col2:
-        st.write("TBD")
+        render_recommendation_column(sensor_selection, sensor_data[config_param_json_name], _current_sensor_status, display_unit_of_sensor, sensor_optimal_range, sensor_recommendation_tolerance)
 
-    
+    return config_param_json_name
+
+def render_history_graph(
+    arduino_id: str, sensor_data: Dict[str, float], config: dict
+):
+    pass
 
