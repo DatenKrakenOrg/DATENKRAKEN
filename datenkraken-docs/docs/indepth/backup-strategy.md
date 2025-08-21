@@ -7,7 +7,7 @@ This document will describe how we choose to backup our database in case of unex
 2. Everything is inside the backup
 3. The data backup is written automatically via a cronjob or systemd-unit
 4. The data restoring is performed manually or with a manually exectuable script
-5. A Backup with a timestamp is created every 6H
+5. A Backup with a timestamp is created every 24H
 
 # Implementation
 To meet the expectations and criterias, which are needed in order to have a successful backup strategy, there are two ways to solve this  
