@@ -10,15 +10,19 @@ sensor_data_language_dict = {
     "Luftqualität (Voc-Index)": "voc_index",
     "Lautstärke": "noise_level",
 }
+
+
 class SensorStatus(Enum):
     """Enum representing the status of sensor based on a value
 
     Args:
         Enum (Tuple[str]): First index representing a color (f.e. used for a gauge meter), second index representing a string that can be shown in the UI
     """
+
     OPTIMAL = ("green", "Optimal")
     WARNING = ("orange", "Suboptimal")
     CRITICAL = ("red", "Kritisch")
+
 
 def get_status(value, param_name, config) -> SensorStatus:
     """Evaluate the status of a sensor reading against configured thresholds.
@@ -56,6 +60,7 @@ def get_status(value, param_name, config) -> SensorStatus:
     else:
         return SensorStatus.CRITICAL
 
+
 @st.cache_data(ttl="0.25h")
 def fetch_weather_data() -> Dict[str, float]:
     """Fetch current weather data from the OpenWeatherMap API.
@@ -75,7 +80,7 @@ def fetch_weather_data() -> Dict[str, float]:
 
         return {
             "temperature": response_json["main"]["temp"],
-            "humidity": response_json["main"]["humidity"]
+            "humidity": response_json["main"]["humidity"],
         }
     except Exception as e:
         print(f"Error when fetching openweatherapi: {e}")

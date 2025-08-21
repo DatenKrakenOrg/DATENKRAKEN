@@ -1,10 +1,9 @@
 import streamlit as st
 from typing import Dict
-from database.orm import SensorType
 from utility.datafetcher import DataFetcher
 from frontend.status_engine import get_single_room_data
 
-from .widgets.utils import sensor_data_language_dict, get_status, SensorStatus
+from .widgets.utils import sensor_data_language_dict, get_status
 from .widgets.current_insights_widget import render_gauge_column, render_recommendation_column
 
 
