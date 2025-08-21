@@ -32,7 +32,7 @@ class SensorStatus(Enum):
     CRITICAL = ("red", "Kritisch")
 
 
-def get_status(value, param_name, config) -> SensorStatus:
+def get_status(value, sensor_specifier, config) -> SensorStatus:
     """Evaluate the status of a sensor reading against configured thresholds.
 
     The function checks the given value against the parameter configuration
@@ -47,13 +47,13 @@ def get_status(value, param_name, config) -> SensorStatus:
 
     Args:
         value (int | float): The sensor reading to evaluate.
-        param_name (str): The name of the parameter to look up in config,
+        sensor_specifier (str): The name of the parameter to look up in config,
             e.g. "temperature_inside", "humidity_inside", "voc_index",
             "noise_level".
 
     Returns:
         SensorStatus: One of SensorStatus."""
-    param_cfg = config["parameters"][param_name]
+    param_cfg = config["parameters"][sensor_specifier]
     if not param_cfg:
         return "unknown"
 

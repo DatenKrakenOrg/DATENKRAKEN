@@ -26,6 +26,7 @@ def main():
     ],
     ]
 
+    st.set_page_config(layout="wide")
     pg = st.navigation(pages)
     pg.run()
 

@@ -1,7 +1,7 @@
 import streamlit as st
 from utility.datafetcher import DataFetcher
-from frontend.status_engine import get_rooms_data
-from frontend.status_engine import calculate_room_status
+from frontend.utils import get_rooms_data
+from frontend.page_definition.generic_analytics.widgets.utils import get_status, SensorStatus
 from typing import Dict, List
 
 def render_overview(unique_arduino_ids: List[str], fetcher: DataFetcher, config: dict) -> None:
@@ -12,7 +12,12 @@ def render_overview(unique_arduino_ids: List[str], fetcher: DataFetcher, config:
     rooms = get_rooms_data(unique_arduino_ids, fetcher)
 
     for room in rooms:
-        room["status"] = calculate_room_status(room["data"], config)
+        room["status"] = SensorStatus.OPTIMAL
+        for sensor_specifier in room["data"]:
+            status = get_status(room["data"][sensor_specifier], sensor_specifier, config)
+            room["status"] = status
+            if status != SensorStatus.OPTIMAL:
+                break
 
     cols = st.columns(len(rooms))
 
@@ -29,12 +34,12 @@ def _write_card_content(room: Dict[str, float], config: dict) -> None:
     """
     st.subheader(room["name"])
     match room["status"]:
-        case "optimal":
-            st.write(f"🟢 Status: {room["status"].capitalize()}")
-        case "warning":
-            st.write(f"🟡 Status: {room["status"].capitalize()}")
-        case "critical":
-            st.write(f"🔴 Status: {room["status"].capitalize()}")
+        case SensorStatus.OPTIMAL:
+            st.write(f"🟢 Status: {room["status"].value[1].capitalize()}")
+        case SensorStatus.WARNING:
+            st.write(f"🟡 Status: {room["status"].value[1].capitalize()}")
+        case SensorStatus.CRITICAL:
+            st.write(f"🔴 Status: {room["status"].value[1].capitalize()}")
         case _:
             st.write("Unknown")
 

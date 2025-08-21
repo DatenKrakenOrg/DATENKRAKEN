@@ -5,7 +5,7 @@ if os.getenv("ENVIRONMENT") != "PROD":
     load_dotenv()
 
 from utility.datafetcher import DataFetcher
-from frontend.functions import  load_config
+from frontend.utils import load_config
 
 # Constants
 FETCHER = DataFetcher()
