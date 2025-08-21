@@ -2,6 +2,9 @@ import json
 import os
 import requests
 import streamlit as st
+from utility.datafetcher import DataFetcher
+from typing import List, Dict
+
 
 @st.cache_data(show_spinner=False)
 def load_config(config_file="parameter.json"):
@@ -17,6 +20,45 @@ def load_config(config_file="parameter.json"):
     file_path = os.path.join(base_dir, config_file)
     with open(file_path, "r", encoding="utf-8") as f:
         return json.load(f)
+
+
+def get_rooms_data(unique_arduino_ids: List[str], fetcher: DataFetcher) -> List[dict]:
+    """Gets data of newest datapoint for all rooms within the database gold layer
+
+    Args:
+        unique_arduino_ids (List[str]): List of all arduinos_ids
+        fetcher (DataFetcher): DataFetcher used to fetch database
+
+    Returns:
+        List[dict]: List of dictionaries containing keys: name: str (arduino_id of room), data: Dict[str, float] (newest sensor value of room)
+    """
+    all_rooms_data = []
+    for room in unique_arduino_ids:
+        all_rooms_data.append(get_single_room_data(room, fetcher))
+    return all_rooms_data
+
+
+def get_single_room_data(arduino_id: str, fetcher: DataFetcher) -> Dict[str, float]:
+    """Gets data of newest datapoint for a single room within the database gold layer
+
+    Args:
+        arduino_id (List[str]): Arduino id of room
+        fetcher (DataFetcher): DataFetcher used to fetch database
+
+    Returns:
+        Dict[str, float]: List of dictionaries containing keys: name: str (arduino_id of room), data: Dict[str, float] (newest sensor value of room)
+    """
+    room_data = fetcher.get_newest_bucket(arduino_id)
+    return {
+        "name": arduino_id,
+        "data": {
+            "temperature_inside": round(room_data[0].avg_value_in_bucket, 2),
+            "humidity_inside": round(room_data[1].avg_value_in_bucket, 2),
+            "voc_index": round(room_data[2].avg_value_in_bucket, 2),
+            "noise_level": round(room_data[3].avg_value_in_bucket, 2),
+        }
+    }
+
 
 def calculate_room_status(sensor_data, config):
     """Evaluates the overall status of a room based on the most severe status of the parameters.
@@ -39,10 +81,11 @@ def calculate_room_status(sensor_data, config):
     for param, value in sensor_data.items():
         status = get_status(value, param, config)
         if status == "critical":
-            return "critical"   
+            return "critical"
         elif status == "warning" and room_status == "optimal":
             room_status = "warning"
     return room_status
+
 
 def fetch_weather_data():
     """Fetch current weather data from the OpenWeatherMap API.
@@ -54,7 +97,7 @@ def fetch_weather_data():
         dict | None: Weather data as a parsed JSON dictionary if successful,
         otherwise None if the request fails."""
 
-    url = f"https://api.openweathermap.org/data/2.5/weather?q={os.getenv("LOCATION")}&appid={os.getenv("WEATHER_API_KEY")}&units=metric&lang=de"
+    url = f"https://api.openweathermap.org/data/2.5/weather?q={os.getenv('LOCATION')}&appid={os.getenv('WEATHER_API_KEY')}&units=metric&lang=de"
     try:
         response = requests.get(url)
         response.raise_for_status()
@@ -62,7 +105,6 @@ def fetch_weather_data():
     except Exception as e:
         print(f"Fehler beim Abrufen der Wetterdaten: {e}")
         return None
-    
 
 
 def get_status(value, param_name, config):
@@ -114,13 +156,15 @@ def get_virtual_recommendations(config):
             - "parameter" (str): Always "virtual_weather".
             - "message" (str): Recommendation text or an error message if rule
               evaluation failed."""
-    weather_data = fetch_weather_data(os.getenv("WEATHER_API_KEY"), os.getenv("LOCATION"))
+    weather_data = fetch_weather_data(
+
+    )
     if not weather_data:
         return []
-    
+
     weather = {
-        "temp": weather_data["main"]["temp"],  
-        "condition": weather_data["weather"][0]["description"].lower()
+        "temp": weather_data["main"]["temp"],
+        "condition": weather_data["weather"][0]["description"].lower(),
     }
 
     recs = []
@@ -130,18 +174,15 @@ def get_virtual_recommendations(config):
 
         try:
             if eval(rec["condition"], {}, {"weather": weather}):
-                recs.append({
-                    "parameter": "virtual_weather",
-                    "message": rec["message"]
-                })
+                recs.append({"parameter": "virtual_weather", "message": rec["message"]})
         except Exception as e:
-            recs.append({
-                "parameter": "virtual_weather",
-                "message": f"Fehler bei Wetter-Empfehlung {rec['id']}: {e}"
-            })
+            recs.append(
+                {
+                    "parameter": "virtual_weather",
+                    "message": f"Fehler bei Wetter-Empfehlung {rec['id']}: {e}",
+                }
+            )
     return recs
-
-
 
 
 def get_recommendations(sensor_data, config):
@@ -173,15 +214,15 @@ def get_recommendations(sensor_data, config):
     """
     recommendations = []
     for param, value in sensor_data.items():
-        status = get_status(value, param)
-
+        status = get_status(value, param, config)
 
         if status == "warning":
-            recommendations.append({
-                "parameter": param,
-                "message": "  Wert nähert sich kritischem Bereich an. Überwache den Parameter regelmäßig."
-            })
-
+            recommendations.append(
+                {
+                    "parameter": param,
+                    "message": "  Wert nähert sich kritischem Bereich an. Überwache den Parameter regelmäßig.",
+                }
+            )
 
     for rec in config["recommendations"]:
         param = rec["parameter"]
@@ -195,24 +236,22 @@ def get_recommendations(sensor_data, config):
 
         local_context = {
             "value": value,
-            "optimal_range": {
-                "min": min_opt,
-                "max": max_opt
-            },
-            "tolerance": tolerance
+            "optimal_range": {"min": min_opt, "max": max_opt},
+            "tolerance": tolerance,
         }
 
         try:
             if eval(rec["condition"], {}, local_context):
-                recommendations.append({
-                    "parameter": param,
-                    "message": f"  {rec['message']}"
-                })
+                recommendations.append(
+                    {"parameter": param, "message": f"  {rec['message']}"}
+                )
         except Exception as e:
-            recommendations.append({
-                "parameter": param,
-                "message": f"Fehler bei Empfehlung {rec['id']}: {e}"
-            })
+            recommendations.append(
+                {
+                    "parameter": param,
+                    "message": f"Fehler bei Empfehlung {rec['id']}: {e}",
+                }
+            )
 
     return recommendations
 

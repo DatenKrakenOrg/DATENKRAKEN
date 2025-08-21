@@ -6,9 +6,11 @@ import pandas as pd
 import plotly.express as px
 import plotly.graph_objects as go
 import streamlit as st
+from utility.datafetcher import DataFetcher
 
 from status_engine import (
     load_config,
+    get_single_room_data,
     get_status,
     get_recommendations,
     get_virtual_recommendations,
@@ -50,7 +52,7 @@ def gauge_plot(value: float, title: str, value_range: List[float], bar_color: st
     return fig
 
 
-def get_bar_color(param_name: str, value: float) -> str:
+def get_bar_color(param_name: str, value: float, config: dict) -> str:
     """Return the color for a gauge bar based on parameter status.
 
     Uses `get_status` to evaluate the given sensor value against the
@@ -68,7 +70,7 @@ def get_bar_color(param_name: str, value: float) -> str:
         str: Color name ("green", "orange", or "red") corresponding to
         the parameter status.
     """
-    status = get_status(value, param_name)
+    status = get_status(value, param_name, config)
     if status == "optimal":
         return "green"
     elif status == "warning":
@@ -76,7 +78,7 @@ def get_bar_color(param_name: str, value: float) -> str:
     return "red"
 
 
-def build_param_recommendations(sensor_data: Dict[str, float]) -> Dict[str, List[str]]:
+def build_param_recommendations(sensor_data: Dict[str, float], config: dict) -> Dict[str, List[str]]:
     """Build parameter-to-recommendation mappings from sensor and weather data.
     The resulting recommendations are grouped by parameter name so that
     each parameter has a list of associated messages.
@@ -94,10 +96,10 @@ def build_param_recommendations(sensor_data: Dict[str, float]) -> Dict[str, List
     Returns:
         Dict[str, List[str]]: Mapping from parameter names to a list of
         recommendation messages."""
-    recs = get_recommendations(sensor_data)
-    virtual_recs = get_virtual_recommendations(os.getenv("WEATHER_API_KEY"), os.getenv("LOCATION"))
+    recs = get_recommendations(sensor_data, config)
+    virtual_recs = get_virtual_recommendations(config)
     recs.extend(virtual_recs)
-    weather_data = fetch_weather_data(os.getenv("WEATHER_API_KEY"), os.getenv("LOCATION"))
+    weather_data = fetch_weather_data()
     filtered = filter_recommendations(sensor_data, weather_data, recs)
     param_to_recs: Dict[str, List[str]] = {k: [] for k in sensor_data.keys()}
     for r in filtered:
@@ -185,7 +187,7 @@ def compute_y_range(df: pd.DataFrame) -> Tuple[float, float, float, float]:
     return default_min, default_max, global_min, global_max
 
 
-def render_overview_grid(config: Dict, sensor_data: Dict[str, float], param_to_recs: Dict[str, List[str]]) -> None:
+def render_overview_grid(config: dict, sensor_data: Dict[str, float], param_to_recs: Dict[str, List[str]]) -> None:
     """Render a grid of gauges and recommendations in a Streamlit app.
 
     Displays each parameter from `sensor_data` in a 4-column grid layout.
@@ -193,7 +195,7 @@ def render_overview_grid(config: Dict, sensor_data: Dict[str, float], param_to_r
     and recommendation messages.
 
     Args:
-        config (Dict): Configuration dictionary with parameter definitions,
+        config (dict): Configuration dictionary with parameter definitions,
             must include for each parameter:
                 {
                     "unit": <str>,
@@ -210,16 +212,16 @@ def render_overview_grid(config: Dict, sensor_data: Dict[str, float], param_to_r
         status messages, recommendations)."""
     col1, col2, col3, col4 = st.columns([1, 1, 1, 1])
     cols = [col1, col2, col3, col4]
-    for idx, (param, value) in enumerate(sensor_data.items()):
+    for idx, (param, value) in enumerate(sensor_data["data"].items()):
         col = cols[idx % 4]
         with col:
             with st.container(border=True):
                 title = param.replace("_", " ").capitalize()
                 unit = config["parameters"][param]["unit"]
-                status = get_status(value, param)
+                status = get_status(value, param, config)
                 display_range = config["parameters"][param]["display_range"]
                 value_range = [display_range["min"], display_range["max"]]
-                bar_color = get_bar_color(param, value)
+                bar_color = get_bar_color(param, value, config)
                 fig = gauge_plot(value, title, value_range, bar_color, unit)
                 st.plotly_chart(fig, use_container_width=False)
                 if param_to_recs.get(param):
@@ -304,8 +306,8 @@ def render_detail_insights(config: Dict, param: str, value: float, history_df: p
     o_range = config["parameters"][param]["optimal_range"]
     value_range = [d_range["min"], d_range["max"]]
     optimal_range = [o_range["min"], o_range["max"]]
-    bar_color = get_bar_color(param, value)
-    status = get_status(value, param)
+    bar_color = get_bar_color(param, value, config)
+    status = get_status(value, param, config)
     title = param.replace("_", " ").capitalize()
     col_gauge, col_info = st.columns([1, 1], vertical_alignment="center")
     with col_gauge:
@@ -426,18 +428,18 @@ def detail_view(config: Dict, sensor_data: Dict[str, float], history_df: Optiona
     Returns:
         None
         The function directly renders Streamlit UI components."""
-    selected = render_detail_header(sensor_data)
+    selected = render_detail_header(sensor_data["data"])
     if selected is None:
         st.info("Keine Parameter vorhanden.")
         return
-    value = float(sensor_data[selected])
-    history_df = ensure_history(sensor_data, history_df, selected, value)
+    value = float(sensor_data["data"][selected])
+    history_df = ensure_history(sensor_data["data"], history_df, selected, value)
     render_detail_insights(config, selected, value, history_df, param_to_recs)
     unit = config["parameters"][selected]["unit"]
     render_detail_timeseries(selected, unit, history_df, config)
 
 
-def define_page(roomNumber: int, sensor_data: Dict[str, float], history_df: Optional[pd.DataFrame] = None) -> None:
+def define_page(arduino_id: str, fetcher: DataFetcher, config: dict) -> None:
     """Define and render the Streamlit dashboard page for a specific room.
 
     Sets up the Streamlit page layout, loads configuration, manages
@@ -445,31 +447,26 @@ def define_page(roomNumber: int, sensor_data: Dict[str, float], history_df: Opti
     parameter overview grid or the detailed parameter view.
 
     Args:
-        roomNumber (int): Identifier for the room (used in page title).
-        sensor_data (Dict[str, float]): Dictionary of current sensor readings
-            keyed by parameter name.
-        history_df (Optional[pd.DataFrame]): Optional history of sensor data
-            with columns ["time", "parameter", "value"]. If None, synthetic
-            history will be generated when required.
-
-    Returns:
-        None
-        The function directly renders the Streamlit UI components."""
-    st.set_page_config(page_title=f"Raum {roomNumber} Dashboard", layout="wide")
+        arduino_id (str): Identifier for the room (used in page title).
+        fetcher (DataFetcher): DataFetcher used to fetch database.
+    """
+    st.set_page_config(page_title=f"Raum {arduino_id} Dashboard", layout="wide")
     st.title("Raumüberwachung Dashboard")
     config = load_config()
+    sensor_data = get_single_room_data(arduino_id, fetcher)
+    history_df = None
     
     if "view_mode" not in st.session_state:
         st.session_state.view_mode = "overview"
     if "selected_param" not in st.session_state:
         st.session_state.selected_param = None
     
-    param_to_recs = build_param_recommendations(sensor_data)
+    param_to_recs = build_param_recommendations(sensor_data, config)
     
     if st.session_state.view_mode == "detail":
         detail_view(config=config, sensor_data=sensor_data, history_df=history_df, param_to_recs=param_to_recs)
         return
-    if st.button("Detailed view"):
+    if st.button(f"Detailed view ({arduino_id})"):
         if st.session_state.selected_param is None and len(sensor_data) > 0:
             st.session_state.selected_param = list(sensor_data.keys())[0]
         st.session_state.view_mode = "detail"
