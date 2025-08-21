@@ -27,19 +27,6 @@ def define_generic_analytics_page(arduino_id: str, fetcher: DataFetcher, config:
     sensor_specifier = render_current_insights(arduino_id, sensor_data["data"], config)
     render_history_graph(arduino_id, sensor_specifier, fetcher, config)
 
-    # param_to_recs = build_param_recommendations(sensor_data, config)
-
-    # if st.session_state.view_mode == "detail":
-    #     detail_view(config=config, sensor_data=sensor_data, history_df=history_df, param_to_recs=param_to_recs)
-    #     return
-    # if st.button(f"Detailed view ({arduino_id})"):
-    #     if st.session_state.selected_param is None and len(sensor_data) > 0:
-    #         st.session_state.selected_param = list(sensor_data.keys())[0]
-    #     st.session_state.view_mode = "detail"
-    #     st.rerun()
-    # render_overview_grid(config, sensor_data, param_to_recs)
-    # st.divider()
-
 
 def render_current_insights(
     arduino_id: str, sensor_data: Dict[str, float], config: dict
