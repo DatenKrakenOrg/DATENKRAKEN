@@ -1,10 +1,12 @@
 import streamlit as st
 from typing import Dict
+from datetime import datetime, timedelta
 from utility.datafetcher import DataFetcher
 from frontend.status_engine import get_single_room_data
 
-from .widgets.utils import sensor_data_language_dict, get_status
+from .widgets.utils import sensor_data_language_dict, sensor_specifier_type_dict, get_status
 from .widgets.current_insights_widget import render_gauge_column, render_recommendation_column
+from .widgets.history_widget import show_timeline_widget
 
 
 def define_generic_analytics_page(arduino_id: str, fetcher: DataFetcher, config: dict) -> None:
@@ -22,7 +24,8 @@ def define_generic_analytics_page(arduino_id: str, fetcher: DataFetcher, config:
     st.title(f"Raumüberwachung: {arduino_id}")
     sensor_data = get_single_room_data(arduino_id, fetcher)
 
-    render_current_insights(arduino_id, sensor_data["data"], config)
+    sensor_specifier = render_current_insights(arduino_id, sensor_data["data"], config)
+    render_history_graph(arduino_id, sensor_specifier, fetcher, config)
 
     # param_to_recs = build_param_recommendations(sensor_data, config)
 
@@ -51,37 +54,53 @@ def render_current_insights(
         config (dict): Config dictionary as described by frontend/src/frontend/parameter.json
 
     Returns:
-        str: sensor_specifier as described by sensor_data dictionary keys (take a look at Args section)
+        str: sensor_selection as selected from st.selectbox
     """
     # Mapped on german language!
     sensor_selection = st.selectbox("Sensorauswahl", sensor_data_language_dict.keys(), accept_new_options=False)
     # Take a look at parameter.json to understand the keys here!
-    config_param_json_name = sensor_data_language_dict[sensor_selection]
+    sensor_specifier = sensor_data_language_dict[sensor_selection]
 
     # Get all placeholder values for the to be placed widgets
-    sensor_display_range = tuple(config["parameters"][config_param_json_name]["display_range"].values())
-    sensor_optimal_range = config["parameters"][config_param_json_name]["optimal_range"]
-    sensor_recommendation_tolerance = config["parameters"][config_param_json_name]["tolerance"]
+    sensor_display_range = tuple(config["parameters"][sensor_specifier]["display_range"].values())
+    sensor_optimal_range = config["parameters"][sensor_specifier]["optimal_range"]
+    sensor_recommendation_tolerance = config["parameters"][sensor_specifier]["tolerance"]
 
     _current_sensor_status = get_status(
-        sensor_data[config_param_json_name], config_param_json_name, config
+        sensor_data[sensor_specifier], sensor_specifier, config
     )
 
     gauge_bar_color = _current_sensor_status.value[0]
-    display_unit_of_sensor = config["parameters"][config_param_json_name]["unit"]
+    display_unit_of_sensor = config["parameters"][sensor_specifier]["unit"]
 
     col1, col2 = st.columns(2)
 
     with col1:
-        render_gauge_column(sensor_data[config_param_json_name], sensor_selection, sensor_display_range, gauge_bar_color, display_unit_of_sensor)
+        render_gauge_column(sensor_data[sensor_specifier], sensor_selection, sensor_display_range, gauge_bar_color, display_unit_of_sensor)
 
     with col2:
-        render_recommendation_column(sensor_selection, sensor_data[config_param_json_name], _current_sensor_status, display_unit_of_sensor, sensor_optimal_range, sensor_recommendation_tolerance)
+        render_recommendation_column(sensor_selection, sensor_data[sensor_specifier], _current_sensor_status, display_unit_of_sensor, sensor_optimal_range, sensor_recommendation_tolerance)
 
-    return config_param_json_name
+    return sensor_selection
 
 def render_history_graph(
-    arduino_id: str, sensor_data: Dict[str, float], config: dict
+    arduino_id: str, sensor_selection: str, fetcher: DataFetcher, config: dict
 ):
-    pass
+    sensor_specifier = sensor_data_language_dict[sensor_selection]
+    sensor_type = sensor_specifier_type_dict[sensor_specifier]
+    display_unit_of_sensor = config["parameters"][sensor_specifier]["unit"]
+
+    time_delta = 1
+
+    col1, col2 = st.columns(2)
+    with col1:
+        st.subheader(f"{sensor_selection}: Historie")
+    with col2:
+        time_delta_days = st.selectbox("Vergangene Tage ausgehend von Heute", [1, 7, 14, 30, 60], accept_new_options=False)
+        time_delta = timedelta(days=time_delta_days)
+    
+    show_timeline_widget(sensor_type, arduino_id, time_delta, fetcher, display_unit_of_sensor)
+
+    
+
 

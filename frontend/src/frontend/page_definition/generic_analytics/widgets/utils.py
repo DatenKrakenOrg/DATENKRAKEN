@@ -3,12 +3,20 @@ import requests
 import os
 from typing import Dict
 from enum import Enum
+from database.orm import SensorType
 
 sensor_data_language_dict = {
     "Temperatur": "temperature_inside",
     "Luftfeuchtigkeit": "humidity_inside",
     "Luftqualität (Voc-Index)": "voc_index",
     "Lautstärke": "noise_level",
+}
+
+sensor_specifier_type_dict = {
+    "temperature_inside": SensorType.TEMPERATURE,
+    "humidity_inside": SensorType.HUMIDITY,
+    "voc_index": SensorType.VOC,
+    "noise_level": SensorType.NOISE
 }
 
 
