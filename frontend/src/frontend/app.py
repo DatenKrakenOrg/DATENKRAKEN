@@ -1,6 +1,6 @@
 import streamlit as st
 from frontend.page_definition import render_overview
-from frontend.functions import define_page
+from frontend.page_definition.generic_analytics import define_generic_analytics_page
 from frontend import ROOMS, FETCHER, CONFIG
 
 
@@ -18,7 +18,7 @@ def main():
     ),
     *[
         st.Page(
-            (lambda aid=aid: lambda: define_page(aid, FETCHER, CONFIG))(),
+            (lambda aid=aid: lambda: define_generic_analytics_page(aid, FETCHER, CONFIG))(),
             title=f"Raum {aid}",
             url_path=f"room_{aid}",
         )
