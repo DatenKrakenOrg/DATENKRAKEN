@@ -5,6 +5,15 @@ from utility.datafetcher import DataFetcher
 from database.orm import SensorType
 
 def show_timeline_widget(sensor_type: SensorType, arduino_id: str, time_delta: timedelta, fetcher: DataFetcher, unit: str):
+    """Shows all history related widget based on a sensor_type and a arduino_id (room)
+
+    Args:
+        sensor_type (SensorType): Sensor that should be fetched
+        arduino_id (str): Arduino ID (Room) to fetch from
+        time_delta (timedelta): Timedelta which is used for start and end data (Intervall: [NOW - timedelta, NOW])
+        fetcher (DataFetcher): DataFetcher used to fetch data from database
+        unit (str): Unit used for y axis
+    """
     current_datetime = datetime.now()
     history_df = fetcher.get_bucket_by_t_interval(sensor_type, arduino_id, current_datetime - time_delta, current_datetime)
     min_value = history_df["avg_value_in_bucket"].min()
