@@ -1,0 +1,25 @@
+
+services:
+  datenkraken_web_ui:
+    build:
+      context: .
+      dockerfile: Dockerfile
+
+    environment:
+      - PYTHONUNBUFFERED=1
+      - DEPLOYMENT=PROD
+      - DB_USERNAME=dev
+      - DB_PASSWORD=${DB_PASSWORD}
+      # Must include port
+      - DB_HOST=${DB_HOST}
+      - WEATHER_API_KEY=${WEATHER_API_KEY}
+      - LOCATION=Heidenheim,DE
+    ports:
+      - "6501:8501"   
+    restart: unless-stopped
+    networks:
+      - datenkraken-db-net
+
+networks:
+  datenkraken-db-net:
+    external: true

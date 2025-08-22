@@ -19,13 +19,13 @@
   "voc_index": {
       "optimal_range": { "min": 0, "max": 100 },
       "tolerance": 100,
-      "unit": " ",
-      "display_range": { "min": 0, "max": 500 }
+      "unit": "",
+      "display_range": { "min": 0, "max": 400 }
   },
   "noise_level": {
     "optimal_range": { "min": 0, "max": 50 },
     "tolerance": 10,
-    "unit": "dB(A)",
+    "unit": "dB",
     "display_range": { "min": 0, "max": 100 }
   },
   "virtual_weather": {

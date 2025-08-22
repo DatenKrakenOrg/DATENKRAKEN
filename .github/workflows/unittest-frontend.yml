@@ -1,11 +1,11 @@
-name: Run unittests sub script
+name: Run unittests frontend
 
 on:
   pull_request:
     branches:
       - main
     paths:
-      - 'subscription_script/**'
+      - 'frontend/**'
 
 jobs:
   unit-test:
@@ -13,7 +13,7 @@ jobs:
     runs-on: ubuntu-latest
     defaults:
           run:
-            working-directory: ./subscription_script
+            working-directory: ./frontend
 
     steps:
       - uses: actions/checkout@v4
