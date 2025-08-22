@@ -1,0 +1,1 @@
+from . generic_analytics import define_generic_analytics_page

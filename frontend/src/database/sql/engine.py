@@ -29,6 +29,7 @@ def set_engine_session_factory() -> None:
     if _session_factory is None:
         _session_factory = sessionmaker(autocommit=False, autoflush=False, bind=_engine)
 
+
 def commit_select(stmt: Select) -> List[Row]:
     """Commits a select on the database and return a list of valurowses.
 
@@ -48,14 +49,15 @@ def commit_select(stmt: Select) -> List[Row]:
         raise RuntimeError(
             "Database session factory not initialized. Call set_engine_session_factory() first."
         )
-    
+
     try:
         with _session_factory() as session:
-            rows: List[Row] =  session.execute(stmt).all()
+            rows: List[Row] = session.execute(stmt).all()
             logging.info(f"Selection committed for {stmt}")
             return rows
     except Exception as e:
         logging.error(f"Error on selection {stmt} into database due to error: {e}")
+
 
 def commit_select_scalar(stmt: Select):
     """Commits a select on the database and return a list of values.
@@ -76,13 +78,11 @@ def commit_select_scalar(stmt: Select):
         raise RuntimeError(
             "Database session factory not initialized. Call set_engine_session_factory() first."
         )
-    
+
     try:
         with _session_factory() as session:
-            rows: List[Union[str, float, int]] =  session.execute(stmt).scalars().all()
+            rows: List[Union[str, float, int]] = session.execute(stmt).scalars().all()
             logging.info(f"Selection committed for {stmt}")
             return rows
     except Exception as e:
         logging.error(f"Error on selection {stmt} into database due to error: {e}")
-
-    

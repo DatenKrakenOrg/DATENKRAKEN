@@ -24,7 +24,9 @@ class IDataFetcher(ABC):
         raise NotImplementedError()
 
     @abstractmethod
-    def get_newest_bucket(self, arduino_id: str) -> Tuple[Temperature, Humidity, Voc, Noise]:
+    def get_newest_bucket(
+        self, arduino_id: str
+    ) -> Tuple[Temperature, Humidity, Voc, Noise]:
         """Gets the newest data point (timebucket) for each sensor type. It maps to a custom orm class since sqlalchemy needs a primary key which the gold layer currently doesn't have (bcs. view).
 
         Args:
@@ -73,12 +75,12 @@ class DataFetcher(IDataFetcher):
             SensorType.TEMPERATURE: commit_select_scalar(stmt_temp),
             SensorType.HUMIDITY: commit_select_scalar(stmt_hum),
             SensorType.VOC: commit_select_scalar(stmt_voc),
-            SensorType.NOISE: commit_select_scalar(stmt_noise)
+            SensorType.NOISE: commit_select_scalar(stmt_noise),
         }
 
-
-
-    def get_newest_bucket(self, arduino_id: str) -> Tuple[Temperature, Humidity, Voc, Noise]:
+    def get_newest_bucket(
+        self, arduino_id: str
+    ) -> Tuple[Temperature, Humidity, Voc, Noise]:
         """Gets the newest data point (timebucket) for each sensor type. It maps to a custom orm class since sqlalchemy needs a primary key which the gold layer currently doesn't have (bcs. view).
 
         Args:
@@ -87,46 +89,79 @@ class DataFetcher(IDataFetcher):
         Returns:
             Tuple[Temperature, Humidity, Voc, Noise]: Tuple containing a orm object for each sensor type representing the newest (continously, see documentation under database) aggregated data point
         """
-        stmt_temp = select(TemperatureORM).where(TemperatureORM.arduino_id == arduino_id).order_by(TemperatureORM.bucket_time.desc()).limit(1)
-        stmt_hum = select(HumidityORM).where(HumidityORM.arduino_id == arduino_id).order_by(HumidityORM.bucket_time.desc()).limit(1)
-        stmt_voc = select(VocORM).where(VocORM.arduino_id == arduino_id).order_by(VocORM.bucket_time.desc()).limit(1)
-        stmt_noise = select(NoiseORM).where(NoiseORM.arduino_id == arduino_id).order_by(NoiseORM.bucket_time.desc()).limit(1)
+        stmt_temp = (
+            select(TemperatureORM)
+            .where(TemperatureORM.arduino_id == arduino_id)
+            .order_by(TemperatureORM.bucket_time.desc())
+            .limit(1)
+        )
+        stmt_hum = (
+            select(HumidityORM)
+            .where(HumidityORM.arduino_id == arduino_id)
+            .order_by(HumidityORM.bucket_time.desc())
+            .limit(1)
+        )
+        stmt_voc = (
+            select(VocORM)
+            .where(VocORM.arduino_id == arduino_id)
+            .order_by(VocORM.bucket_time.desc())
+            .limit(1)
+        )
+        stmt_noise = (
+            select(NoiseORM)
+            .where(NoiseORM.arduino_id == arduino_id)
+            .order_by(NoiseORM.bucket_time.desc())
+            .limit(1)
+        )
 
         result_temp_list = commit_select_scalar(stmt_temp)
         result_hum_list = commit_select_scalar(stmt_hum)
         result_voc_list = commit_select_scalar(stmt_voc)
         result_noise_list = commit_select_scalar(stmt_noise)
 
-        result_temp = Temperature(bucket_time=None, arduino_id=None, avg_value_in_bucket=None) if len(result_temp_list) == 0 else result_temp_list[0]
-        result_hum = Humidity(bucket_time=None, arduino_id=None, avg_value_in_bucket=None) if len(result_hum_list) == 0 else result_hum_list[0]
-        result_voc = Voc(bucket_time=None, arduino_id=None, avg_value_in_bucket=None) if len(result_voc_list) == 0 else result_voc_list[0]
-        result_noise = Noise(bucket_time=None, arduino_id=None, avg_value_in_bucket=None) if len(result_noise_list) == 0 else result_noise_list[0]
-
+        result_temp = (
+            Temperature(bucket_time=None, arduino_id=None, avg_value_in_bucket=None)
+            if len(result_temp_list) == 0
+            else result_temp_list[0]
+        )
+        result_hum = (
+            Humidity(bucket_time=None, arduino_id=None, avg_value_in_bucket=None)
+            if len(result_hum_list) == 0
+            else result_hum_list[0]
+        )
+        result_voc = (
+            Voc(bucket_time=None, arduino_id=None, avg_value_in_bucket=None)
+            if len(result_voc_list) == 0
+            else result_voc_list[0]
+        )
+        result_noise = (
+            Noise(bucket_time=None, arduino_id=None, avg_value_in_bucket=None)
+            if len(result_noise_list) == 0
+            else result_noise_list[0]
+        )
 
         return (
             Temperature(
-                bucket_time = result_temp.bucket_time,
-                arduino_id = result_temp.arduino_id,
-                avg_value_in_bucket = result_temp.avg_value_in_bucket
+                bucket_time=result_temp.bucket_time,
+                arduino_id=result_temp.arduino_id,
+                avg_value_in_bucket=result_temp.avg_value_in_bucket,
             ),
-                Humidity(
-                bucket_time = result_hum.bucket_time,
-                arduino_id = result_hum.arduino_id,
-                avg_value_in_bucket = result_hum.avg_value_in_bucket
+            Humidity(
+                bucket_time=result_hum.bucket_time,
+                arduino_id=result_hum.arduino_id,
+                avg_value_in_bucket=result_hum.avg_value_in_bucket,
             ),
-                Voc(
-                bucket_time = result_voc.bucket_time,
-                arduino_id = result_voc.arduino_id,
-                avg_value_in_bucket = result_voc.avg_value_in_bucket
+            Voc(
+                bucket_time=result_voc.bucket_time,
+                arduino_id=result_voc.arduino_id,
+                avg_value_in_bucket=result_voc.avg_value_in_bucket,
             ),
-                Noise(
-                bucket_time = result_noise.bucket_time,
-                arduino_id = result_noise.arduino_id,
-                avg_value_in_bucket = result_noise.avg_value_in_bucket
-            )
+            Noise(
+                bucket_time=result_noise.bucket_time,
+                arduino_id=result_noise.arduino_id,
+                avg_value_in_bucket=result_noise.avg_value_in_bucket,
+            ),
         )
-
-
 
     def get_bucket_by_t_interval(
         self,
@@ -148,9 +183,9 @@ class DataFetcher(IDataFetcher):
         """
         model_by_type = {
             SensorType.TEMPERATURE: TemperatureORM,
-            SensorType.HUMIDITY:    HumidityORM,
-            SensorType.VOC:         VocORM,
-            SensorType.NOISE:       NoiseORM,
+            SensorType.HUMIDITY: HumidityORM,
+            SensorType.VOC: VocORM,
+            SensorType.NOISE: NoiseORM,
         }
         model = model_by_type[sensor_type]
 
@@ -170,7 +205,7 @@ class DataFetcher(IDataFetcher):
             .order_by(model.bucket_time.desc())
         )
 
-        rows = commit_select(stmt) 
+        rows = commit_select(stmt)
         if not rows:
             return pd.DataFrame(columns=["bucket_time", "avg_value_in_bucket"])
 
@@ -179,6 +214,8 @@ class DataFetcher(IDataFetcher):
 
         # Convert to datetime IF pandas recognizes bucket_time as object (f.e. string)
         if df["bucket_time"].dtype == "object":
-            df["bucket_time"] = pd.to_datetime(df["bucket_time"], utc=False, errors="coerce")
+            df["bucket_time"] = pd.to_datetime(
+                df["bucket_time"], utc=False, errors="coerce"
+            )
 
         return df
