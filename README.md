@@ -36,11 +36,17 @@ uv sync
 
 * To run the website locally:
 
+Go into the frontend folder and run
 ```bash
-uv run streamlit run app.py
+uv run streamlit run src/app.py
 ```
 
-You will also need an **OpenWeather API key** in the `.env` file.
+You will also need an **OpenWeather API key** in the `.env` file in the src folder.
+
+.env file:
+```
+WEATHER_API_KEY=xxxx
+```
 
 #### Installing uv
 
@@ -54,3 +60,7 @@ The `platformio.ini` file defines the **library dependencies** and the **Arduino
 #### Install pio
 
 <a href="https://docs.platformio.org/en/latest/integration/ide/pioide.html">See the official guide here</a>
+
+#### Use pio
+
+To use pio you just have to go into the arduino folder and then execute `pio run` to install all dependencies and compile the code.
