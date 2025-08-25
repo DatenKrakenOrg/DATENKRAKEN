@@ -23,7 +23,7 @@ def reset_globals():
     current_insights_widget.st.cache_data.clear()
 
 def test_temp_below_min_adds_heat_and_open_when_outside_warmer(mocker):
-    mocker.patch("frontend.page_definition.generic_analytics.widgets.utils.fetch_weather_data", return_value={"temperature": 19.0, "humidity": 50})
+    mocker.patch("frontend.page_definition.generic_analytics.widgets.current_insights_widget.fetch_weather_data", return_value={"temperature": 19.0, "humidity": 50})
     res = current_insights_widget._get_recommendation_texts(
         sensor_specifier="temperature_inside",
         value=18.0,
@@ -34,7 +34,7 @@ def test_temp_below_min_adds_heat_and_open_when_outside_warmer(mocker):
 
 
 def test_temp_above_max_adds_ac_and_open_when_outside_cooler(mocker):
-    mocker.patch("frontend.page_definition.generic_analytics.widgets.utils.fetch_weather_data", return_value={"temperature": 20.0, "humidity": 50})
+    mocker.patch("frontend.page_definition.generic_analytics.widgets.current_insights_widget.fetch_weather_data", return_value={"temperature": 20.0, "humidity": 50})
     res = current_insights_widget._get_recommendation_texts(
         sensor_specifier="temperature_inside",
         value=26.0,
@@ -45,7 +45,7 @@ def test_temp_above_max_adds_ac_and_open_when_outside_cooler(mocker):
 
 
 def test_temp_within_tolerance_no_recommendation(mocker):
-    mocker.patch("frontend.page_definition.generic_analytics.widgets.utils.fetch_weather_data", return_value={"temperature": 100.0, "humidity": 0})
+    mocker.patch("frontend.page_definition.generic_analytics.widgets.current_insights_widget.fetch_weather_data", return_value={"temperature": 100.0, "humidity": 0})
     res = current_insights_widget._get_recommendation_texts(
         sensor_specifier="temperature_inside",
         value=20.3,
@@ -56,7 +56,7 @@ def test_temp_within_tolerance_no_recommendation(mocker):
 
 
 def test_humidity_below_min_adds_humidify_and_open_when_outside_more_humid(mocker):
-    mocker.patch("frontend.page_definition.generic_analytics.widgets.utils.fetch_weather_data", return_value={"temperature": 10.0, "humidity": 55})
+    mocker.patch("frontend.page_definition.generic_analytics.widgets.current_insights_widget.fetch_weather_data", return_value={"temperature": 10.0, "humidity": 55})
     res = current_insights_widget._get_recommendation_texts(
         sensor_specifier="humidity_inside",
         value=30.0,
@@ -67,7 +67,7 @@ def test_humidity_below_min_adds_humidify_and_open_when_outside_more_humid(mocke
 
 
 def test_humidity_above_max_adds_dehumidify_and_open_when_outside_drier(mocker):
-    mocker.patch("frontend.page_definition.generic_analytics.widgets.utils.fetch_weather_data", return_value={"temperature": 10.0, "humidity": 40})
+    mocker.patch("frontend.page_definition.generic_analytics.widgets.current_insights_widget.fetch_weather_data", return_value={"temperature": 10.0, "humidity": 40})
     res = current_insights_widget._get_recommendation_texts(
         sensor_specifier="humidity_inside",
         value=70.0,
@@ -78,7 +78,7 @@ def test_humidity_above_max_adds_dehumidify_and_open_when_outside_drier(mocker):
 
 
 def test_voc_above_max_triggers_alert(mocker):
-    mocker.patch("frontend.page_definition.generic_analytics.widgets.utils.fetch_weather_data", return_value={"temperature": 0.0, "humidity": 0.0})
+    mocker.patch("frontend.page_definition.generic_analytics.widgets.current_insights_widget.fetch_weather_data", return_value={"temperature": 0.0, "humidity": 0.0})
     res = current_insights_widget._get_recommendation_texts(
         sensor_specifier="voc_index",
         value=110.0,
@@ -89,7 +89,7 @@ def test_voc_above_max_triggers_alert(mocker):
 
 
 def test_noise_above_max_triggers_minimization(mocker):
-    mocker.patch("frontend.page_definition.generic_analytics.widgets.utils.fetch_weather_data", return_value={"temperature": 0.0, "humidity": 0.0})
+    mocker.patch("frontend.page_definition.generic_analytics.widgets.current_insights_widget.fetch_weather_data", return_value={"temperature": 0.0, "humidity": 0.0})
     res = current_insights_widget._get_recommendation_texts(
         sensor_specifier="noise_level",
         value=75.0,
@@ -103,7 +103,7 @@ def test_all_sensors_no_action_when_exactly_on_edges_with_tolerance(mocker):
     """Kein Vorschlag, wenn value im inklusiven Toleranzbereich liegt:
        min - tol <= value <= max + tol
     """
-    mocker.patch("frontend.page_definition.generic_analytics.widgets.utils.fetch_weather_data", return_value={"temperature": 5.0, "humidity": 50.0})
+    mocker.patch("frontend.page_definition.generic_analytics.widgets.current_insights_widget.fetch_weather_data", return_value={"temperature": 5.0, "humidity": 50.0})
 
     # Temperature lower violation
     assert current_insights_widget._get_recommendation_texts("temperature_inside", 19.5, {"min": 20, "max": 24}, 0.5) == []

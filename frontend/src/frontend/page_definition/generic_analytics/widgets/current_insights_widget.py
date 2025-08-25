@@ -2,7 +2,7 @@ import streamlit as st
 import plotly.graph_objects as go
 from typing import Tuple, Dict, List
 
-from .utils import sensor_data_language_dict, SensorStatus, fetch_weather_data
+from frontend.page_definition.generic_analytics.widgets.utils import sensor_data_language_dict, SensorStatus, fetch_weather_data
 
 
 def render_gauge_column(
