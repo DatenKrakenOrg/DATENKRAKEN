@@ -1,6 +1,5 @@
 import pytest
 from unittest import mock
-from unittest.mock import call
 from frontend.utils import load_config, get_rooms_data, get_single_room_data
 from database.orm import Temperature, Humidity, Voc, Noise
 from datetime import datetime
