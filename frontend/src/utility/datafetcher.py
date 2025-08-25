@@ -119,24 +119,25 @@ class DataFetcher(IDataFetcher):
         result_voc_list = commit_select_scalar(stmt_voc)
         result_noise_list = commit_select_scalar(stmt_noise)
 
+        # Short circuit check in case no bucket is available (e.g. db is empty)
         result_temp = (
             Temperature(bucket_time=None, arduino_id=None, avg_value_in_bucket=None)
-            if len(result_temp_list) == 0
+            if not result_temp_list
             else result_temp_list[0]
         )
         result_hum = (
             Humidity(bucket_time=None, arduino_id=None, avg_value_in_bucket=None)
-            if len(result_hum_list) == 0
+            if not result_hum_list
             else result_hum_list[0]
         )
         result_voc = (
             Voc(bucket_time=None, arduino_id=None, avg_value_in_bucket=None)
-            if len(result_voc_list) == 0
+            if not result_voc_list
             else result_voc_list[0]
         )
         result_noise = (
             Noise(bucket_time=None, arduino_id=None, avg_value_in_bucket=None)
-            if len(result_noise_list) == 0
+            if not result_noise_list
             else result_noise_list[0]
         )
 
