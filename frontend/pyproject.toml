@@ -24,6 +24,11 @@ frontend = "frontend.app:main"
 requires = ["uv_build>=0.8.2,<0.9.0"]
 build-backend = "uv_build"
 
+[tool.pytest.ini_options]
+addopts = "--import-mode=importlib"
+testpaths = ["tests"]
+python_files = ["test_*.py"]
+
 [dependency-groups]
 dev = [
     "pytest>=8.4.1",
