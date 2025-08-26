@@ -1,8 +1,6 @@
-from dotenv import load_dotenv
-load_dotenv()
 from database.sql.engine import commit_select_scalar, set_engine_session_factory
 from sqlalchemy.sql import select
-from bronze_sql.orm import Humidity, Noise, Temperature, Voc
+from database.sql.orm import HumidityBronze, NoiseBronze, TemperatureBronze, VocBronze
 from datetime import datetime, timezone
 
 set_engine_session_factory()
@@ -39,6 +37,8 @@ def __actuality_below_five_minutes(orm_table):
 
 def all_sensor_below_five_minutes():
     flag = True
-    for orm in [Temperature, Noise, Humidity, Voc]:
-        flag &=  __actuality_below_five_minutes(orm)
+    for orm in [TemperatureBronze, NoiseBronze, HumidityBronze, VocBronze]:
+        flag =  flag and __actuality_below_five_minutes(orm)
+        if not flag:
+            break
     return flag
