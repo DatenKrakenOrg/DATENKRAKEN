@@ -35,10 +35,26 @@ def __actuality_below_five_minutes(orm_table):
 
     return diff_minutes <= 5
 
-def all_sensor_below_five_minutes():
-    flag = True
-    for orm in [TemperatureBronze, NoiseBronze, HumidityBronze, VocBronze]:
-        flag =  flag and __actuality_below_five_minutes(orm)
-        if not flag:
-            break
-    return flag
+def temperature_below_five_minutes() -> bool:
+    return __actuality_below_five_minutes(TemperatureBronze)
+
+
+def noise_below_five_minutes() -> bool:
+    return __actuality_below_five_minutes(NoiseBronze)
+
+
+def humidity_below_five_minutes() -> bool:
+    return __actuality_below_five_minutes(HumidityBronze)
+
+
+def voc_below_five_minutes() -> bool:
+    return __actuality_below_five_minutes(VocBronze)
+
+
+def all_sensor_below_five_minutes() -> bool:
+    return (
+        temperature_below_five_minutes()
+        and noise_below_five_minutes()
+        and humidity_below_five_minutes()
+        and voc_below_five_minutes()
+    )
