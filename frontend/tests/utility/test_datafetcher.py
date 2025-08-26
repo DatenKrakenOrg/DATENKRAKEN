@@ -80,7 +80,7 @@ def test_get_newest_bucket_empty_lists_return_none_objects(mocker):
     # Arrange: DB returns no rows for all sensor types
     mocker.patch(
         "utility.datafetcher.commit_select_scalar",
-        side_effect=[[], [], [], []],
+        side_effect=[None, None, None, None],
     )
 
     # Act

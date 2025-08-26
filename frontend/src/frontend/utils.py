@@ -49,9 +49,10 @@ def get_single_room_data(arduino_id: str, fetcher: DataFetcher) -> Dict[str, flo
     return {
         "name": arduino_id,
         "data": {
-            "temperature_inside": round(room_data[0].avg_value_in_bucket, 2),
-            "humidity_inside": round(room_data[1].avg_value_in_bucket, 2),
-            "voc_index": round(room_data[2].avg_value_in_bucket, 2),
-            "noise_level": round(room_data[3].avg_value_in_bucket, 2),
+            "temperature_inside": round(room_data[0].avg_value_in_bucket, 2) if room_data[0].avg_value_in_bucket else None,
+            "humidity_inside": round(room_data[1].avg_value_in_bucket, 2) if room_data[1].avg_value_in_bucket else None,
+            "voc_index": round(room_data[2].avg_value_in_bucket, 2) if room_data[2].avg_value_in_bucket else None,
+            "noise_level": round(room_data[3].avg_value_in_bucket, 2) if room_data[3].avg_value_in_bucket else None,
         }
     }
+
