@@ -2,6 +2,7 @@ import streamlit as st
 from utility.datafetcher import DataFetcher
 from frontend.utils import get_rooms_data
 from frontend.page_definition.generic_analytics.widgets.utils import get_status, SensorStatus
+from utility.currentness import temperature_below_five_minutes, noise_below_five_minutes, voc_below_five_minutes, humidity_below_five_minutes, all_sensor_below_five_minutes
 from typing import Dict, List
 
 def render_overview(unique_arduino_ids: List[str], fetcher: DataFetcher, config: dict) -> None:
@@ -26,26 +27,39 @@ def render_overview(unique_arduino_ids: List[str], fetcher: DataFetcher, config:
             with st.container(border=True):
                 _write_card_content(room, config)
 
+    if temperature_below_five_minutes:
+        st.error("The temperature data is older than 5 minutes")
+    elif humidity_below_five_minutes:
+        st.error("The humidity data is older than 5 minutes")
+    elif voc_below_five_minutes:
+        st.error("The voc data is older than 5 minutes")
+    elif noise_below_five_minutes:
+        st.error("The noise data is older than 5 minutes")
+
+
 def _write_card_content(room: Dict[str, float], config: dict) -> None:
     """Takes the room data dictionary and renders the streamlit widgets within a streamlit container
 
     Args:
         room (Dict[str, float]): Room data as described in frontend.status_engine.get_rooms_data
+        config (dict): Configuration with parameter metadata (units, etc.)
     """
-    st.subheader(room["name"])
-    match room["status"]:
-        case SensorStatus.OPTIMAL:
-            st.write(f"🟢 Status: {room["status"].value[1].capitalize()}")
-        case SensorStatus.WARNING:
-            st.write(f"🟡 Status: {room["status"].value[1].capitalize()}")
-        case SensorStatus.CRITICAL:
-            st.write(f"🔴 Status: {room["status"].value[1].capitalize()}")
-        case _:
-            st.write("Unknown")
+    # Status → icon mapping
+    status_map = {
+        SensorStatus.OPTIMAL: "🟢",
+        SensorStatus.WARNING: "🟡",
+        SensorStatus.CRITICAL: "🔴",
+    }
+    icon = status_map.get(room["status"], "❔")
 
-    st.write(" ")
-    for param, value in room["data"].items():
-        unit = config["parameters"][param]["unit"]
-        st.write(
-            f"**{param.replace('_', ' ').capitalize()}**: {value} {unit}"
-        )
+    # Three columns, content goes in the middle
+    _, col, _ = st.columns([1, 3, 1])
+
+    with col:
+        st.subheader(room["name"])
+        st.write(f"{icon} Status: {room['status'].value[1].capitalize()}")
+        st.write(" ")
+
+        for param, value in room["data"].items():
+            unit = config["parameters"][param]["unit"]
+            st.write(f"**{param.replace('_', ' ').capitalize()}**: {value} {unit}")

@@ -2,7 +2,6 @@ import streamlit as st
 from typing import Dict
 from datetime import timedelta
 from utility.datafetcher import DataFetcher
-from utility.currentness import temperature_below_five_minutes, noise_below_five_minutes, voc_below_five_minutes, humidity_below_five_minutes, all_sensor_below_five_minutes
 from frontend.utils import get_single_room_data
 
 from .widgets.utils import sensor_data_language_dict, sensor_specifier_type_dict, get_status
@@ -27,16 +26,6 @@ def define_generic_analytics_page(arduino_id: str, fetcher: DataFetcher, config:
 
     sensor_specifier = render_current_insights(arduino_id, sensor_data["data"], config)
     render_history_graph(arduino_id, sensor_specifier, fetcher, config)
-
-    if temperature_below_five_minutes:
-        st.error("The temperature data is older than 5 minutes")
-    elif humidity_below_five_minutes:
-        st.error("The humidity data is older than 5 minutes")
-    elif voc_below_five_minutes:
-        st.error("The voc data is older than 5 minutes")
-    elif noise_below_five_minutes:
-        st.error("The noise data is older than 5 minutes")
-
 
 def render_current_insights(
     arduino_id: str, sensor_data: Dict[str, float], config: dict
