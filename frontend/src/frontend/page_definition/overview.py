@@ -26,15 +26,15 @@ def render_overview(unique_arduino_ids: List[str], fetcher: DataFetcher, config:
         with cols[idx]:
             with st.container(border=True):
                 _write_card_content(room, config)
-
-    if temperature_below_five_minutes:
-        st.error("The temperature data is older than 5 minutes")
-    elif humidity_below_five_minutes:
-        st.error("The humidity data is older than 5 minutes")
-    elif voc_below_five_minutes:
-        st.error("The voc data is older than 5 minutes")
-    elif noise_below_five_minutes:
-        st.error("The noise data is older than 5 minutes")
+                arduino_id = int(unique_arduino_ids[idx])
+                if not temperature_below_five_minutes(arduino_id):
+                    st.error(f"{room['name']}: Temperature data is older than 5 minutes")
+                if not humidity_below_five_minutes(arduino_id):
+                    st.error(f"{room['name']}: Humidity data is older than 5 minutes")
+                if not voc_below_five_minutes(arduino_id):
+                    st.error(f"{room['name']}: VOC data is older than 5 minutes")
+                if not noise_below_five_minutes(arduino_id):
+                    st.error(f"{room['name']}: Noise data is older than 5 minutes")
 
 
 def _write_card_content(room: Dict[str, float], config: dict) -> None:
