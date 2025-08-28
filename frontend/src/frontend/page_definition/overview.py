@@ -26,7 +26,7 @@ def render_overview(unique_arduino_ids: List[str], fetcher: DataFetcher, config:
         with cols[idx]:
             with st.container(border=True):
                 _write_card_content(room, config)
-                arduino_id = int(unique_arduino_ids[idx])
+                arduino_id = int(list(unique_arduino_ids)[idx])
                 if not temperature_below_five_minutes(arduino_id):
                     st.error(f"{room['name']}: Temperature data is older than 5 minutes")
                 if not humidity_below_five_minutes(arduino_id):
