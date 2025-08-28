@@ -18,7 +18,10 @@ def show_timeline_widget(sensor_type: SensorType, arduino_id: str, time_delta: t
     history_df = fetcher.get_bucket_by_t_interval(sensor_type, arduino_id, current_datetime - time_delta, current_datetime)
     min_value = history_df["avg_value_in_bucket"].min()
     max_value = history_df["avg_value_in_bucket"].max()
+    
     if len(history_df) != 0:
+        # Quickfix for correct time in plotly. Since its aware of summer / winter times but offsetted by 2 hours..
+        history_df["bucket_time"] = history_df["bucket_time"] + timedelta(hours=2)
         y_min_sel, y_max_sel = st.slider(
             "Anzeigebereich (min/max)",
             min_value=float(round(min_value, 2)),
