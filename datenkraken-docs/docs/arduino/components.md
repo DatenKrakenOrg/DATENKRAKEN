@@ -6,7 +6,7 @@
 - Noise level sensor (GY-MAX4466)
 
 # Circuit Plan
-![Circuit-diagram](../images/circuit-diagram.png)
+![Circuit-diagram](images/circuit-diagram.png)
 
 ## Temperature & CO2 Sensor:
 |Arduino|Temperature|

@@ -414,7 +414,7 @@ The purpose of this layer is to create a layer with data that is solely used by 
 
 Since our recommendation algorithm is based on checking intervals of values per timebucket we only need the following columns of each sensor.
 
-1. **bucket_time** - Starting time of each time interval ([time intervals of each sensor](Interpretation))
+1. **bucket_time** - Starting time of each time interval
 2. **arduino_id** - Arduino from which the data point comes from
 3. **avg_value_in_bucket** - Average of data points within the sensors time bucket
 

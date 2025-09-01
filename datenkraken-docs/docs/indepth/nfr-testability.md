@@ -1,5 +1,5 @@
 # NFR testability
-There are three [Quality Goals](/arc42/01. Introduction and Goals) which need to be tested.
+There are three [Quality Goals](../arc42/01. Introduction and Goals.md) which need to be tested.
 
 ## NFR 1.1 
 The criteria from the NFR 1.1 states that the measured sensor data must reach the bronze layer of the database within 5 minutes.
@@ -15,7 +15,7 @@ The frontend should also display the result of the comparisons.
 
 ## NFR 1.2
 To measure the quality goal for the NFR 1.2, a script is used to determine the uptime of the database.
-In order to calculate the uptime a log of the uptime is needed. The [Uptime Monitoring](/indepth/uptime-monitoring) is already covered.
+In order to calculate the uptime a log of the uptime is needed. The [Uptime Monitoring](uptime-monitoring.md) is already covered.
 Therefore the already exsitent CSV-File needs to be evaluated, such that an uptime for the last week can be calculated.
 To achieve this, a python script is used to read the CSV-File and relatively calculate a weekly uptime based on this file.
 
