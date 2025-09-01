@@ -182,9 +182,9 @@ Risk priority number (RPN) = S * O * D, The higher the RPN, the more critical th
       <td>Power loss, NTP Server not reachable</td>
       <td>End effect: Database, UI, Subscriber script</td>
       <td>6</td>
-      <td>4</td>
+      <td>2</td>
       <td>6</td>
-      <td>144</td>
+      <td>72</td>
     </tr>
     <tr>
       <td>FA4</td>
@@ -194,9 +194,9 @@ Risk priority number (RPN) = S * O * D, The higher the RPN, the more critical th
       <td>Power loss, Unexpected Environmental influences</td>
       <td>End effect: Database, UI, Subscriber script</td>
       <td>7</td>
-      <td>5</td>
-      <td>5</td>
-      <td>175</td>
+      <td>4</td>
+      <td>1</td>
+      <td>28</td>
     </tr>
     <tr>
       <td>FA5</td>
@@ -449,10 +449,10 @@ This only shows the changes since last time since the project is discontinued af
     </tr>
     <tr>
       <td>FA4</td>
-      <td><strong>Medium</strong></td>
+      <td><strong>Medium => Low</strong></td>
       <td>Arduino</td>
       <td>Erroneous/Inconsistent Datapoints</td>
-      <td>175</td>
+      <td>175 => 28</td>
       <td>Include timestamp validation, sequence number and anomaly detection logic</td>
     </tr>
     <!-- Monitor -->
