@@ -26,7 +26,7 @@ def test___currentness_below_five_minutes_recent_timestamp(mocker):
     )
 
     # Act
-    result = currentness.__actuality_below_five_minutes(TemperatureBronze)
+    result = currentness.__actuality_below_five_minutes(TemperatureBronze, arduino_id="401")
 
     # Assert
     assert result is True
@@ -43,7 +43,7 @@ def test___currentness_below_five_minutes_old_timestamp(mocker):
     )
 
     # Act
-    result = currentness.__actuality_below_five_minutes(HumidityBronze)
+    result = currentness.__actuality_below_five_minutes(HumidityBronze, arduino_id="401")
 
     # Assert
     assert result is False
@@ -57,7 +57,7 @@ def test___currentness_below_five_minutes_none_returns_false(mocker):
     )
 
     # Act
-    result = currentness.__actuality_below_five_minutes(NoiseBronze)
+    result = currentness.__actuality_below_five_minutes(NoiseBronze, arduino_id="401")
 
     # Assert
     assert result is False
@@ -73,7 +73,7 @@ def test_all_sensor_below_five_minutes_all_ok(mocker):
     )
 
     # Act
-    result = currentness.all_sensor_below_five_minutes()
+    result = currentness.all_sensor_below_five_minutes(arduino_id="401")
 
     # Assert
     assert result is True
@@ -91,7 +91,7 @@ def test_all_sensor_below_five_minutes_one_old_fails(mocker):
     )
 
     # Act
-    result = currentness.all_sensor_below_five_minutes()
+    result = currentness.all_sensor_below_five_minutes(arduino_id="401")
 
     # Assert
     assert result is False
