@@ -27,7 +27,6 @@ def define_generic_analytics_page(arduino_id: str, fetcher: DataFetcher, config:
     sensor_specifier = render_current_insights(arduino_id, sensor_data["data"], config)
     render_history_graph(arduino_id, sensor_specifier, fetcher, config)
 
-
 def render_current_insights(
     arduino_id: str, sensor_data: Dict[str, float], config: dict
 ) -> str:
