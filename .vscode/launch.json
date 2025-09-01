@@ -1,0 +1,13 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Streamlit Debugger",
+            "type": "debugpy",
+            "request": "launch",
+            "python": "${workspaceFolder}/frontend/.venv/bin/python",
+            "module": "streamlit",
+            "args": ["run", "${workspaceFolder}/frontend/src/frontend/app.py", "--server.address", "localhost", "--server.port", "8501"]
+        }
+    ]
+}
