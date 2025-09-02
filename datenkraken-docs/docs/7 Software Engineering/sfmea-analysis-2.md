@@ -1,6 +1,6 @@
-# SFMEA-01-09
+# SFMEA Project End
 
-# Components - Functinalities of the System
+## Components - Functinalities of the System
 - Arduino
 - Subscription script
 - Database
@@ -8,7 +8,7 @@
 
 ---
 
-# Classification
+## Classification
 1. Deployment 
 2. Runtime Failures
 3. Design/Conceptional Mistakes
@@ -128,7 +128,7 @@
   </tbody>
 </table>
 
-# Risk and Criticality
+## Risk and Criticality
 1. (S)everity can be rated in a scope of 1 (No effect) - 10 (Severe System Failure)
 2. (O)ccurrence can be rated in a likelyhood of 1 (Failure unlikely) - 10 (Failure is almost inevitable)
 3. (D)etectability can be rated in a scope of detectable from 1 (certain to be detected) - 10 (Not likely to be detected)  
@@ -139,10 +139,6 @@ Risk priority number (RPN) = S * O * D, The higher the RPN, the more critical th
   <thead>
     <tr>
       <th>ID</th>
-      <th>Component</th>
-      <th>Failure Mode</th>
-      <th>Failure mode</th>
-      <th>Cause of Failure</th>
       <th>Effect of Failure</th>
       <th>Severity</th>
       <th>Occurrence</th>
@@ -154,10 +150,6 @@ Risk priority number (RPN) = S * O * D, The higher the RPN, the more critical th
     <!-- Arduino -->
     <tr>
       <td>FA1</td>
-      <td>Arduino</td>
-      <td>Data Missing</td>
-      <td>Loss of function</td>
-      <td>Power loss, sensor hardware error</td>
       <td>End effect: Database, UI, Subscriber script</td>
       <td>8</td>
       <td>5</td>
@@ -166,10 +158,6 @@ Risk priority number (RPN) = S * O * D, The higher the RPN, the more critical th
     </tr>
     <tr>
       <td>FA2</td>
-      <td>Arduino</td>
-      <td>Data Inaccurate</td>
-      <td>Incorrect function</td>
-      <td>Power loss, Sensor inaccuracy</td>
       <td>End effect: Database, UI, Subscriber script</td>
       <td>7</td>
       <td>6</td>
@@ -178,10 +166,6 @@ Risk priority number (RPN) = S * O * D, The higher the RPN, the more critical th
     </tr>
     <tr>
       <td>FA3</td>
-      <td>Arduino</td>
-      <td>Data Timeless</td>
-      <td>Erroneous function</td>
-      <td>Power loss, NTP Server not reachable</td>
       <td>End effect: Database, UI, Subscriber script</td>
       <td>6</td>
       <td>2</td>
@@ -190,10 +174,6 @@ Risk priority number (RPN) = S * O * D, The higher the RPN, the more critical th
     </tr>
     <tr>
       <td>FA4</td>
-      <td>Arduino</td>
-      <td>Erroneous/Inconsistent Datapoints</td>
-      <td>Loss of function</td>
-      <td>Power loss, Unexpected Environmental influences</td>
       <td>End effect: Database, UI, Subscriber script</td>
       <td>7</td>
       <td>4</td>
@@ -202,10 +182,6 @@ Risk priority number (RPN) = S * O * D, The higher the RPN, the more critical th
     </tr>
     <tr>
       <td>FA5</td>
-      <td>Arduino</td>
-      <td>Data cannot be transferred</td>
-      <td>Erroneous function</td>
-      <td>Power loss, Server not reachable</td>
       <td>End effect: Database, UI, Subscriber script</td>
       <td>8</td>
       <td>4</td>
@@ -215,10 +191,6 @@ Risk priority number (RPN) = S * O * D, The higher the RPN, the more critical th
     <!-- Subscription Script -->
     <tr>
       <td>FA6</td>
-      <td>Subscription Script</td>
-      <td>Data cannot be received (from MQTT-Server)</td>
-      <td>Loss of function</td>
-      <td>Arduino down, Invalid Network Configuration (Bridge)</td>
       <td>End effect: Database, UI</td>
       <td>9</td>
       <td>3</td>
@@ -227,23 +199,15 @@ Risk priority number (RPN) = S * O * D, The higher the RPN, the more critical th
     </tr>
     <tr>
       <td>FA7</td>
-      <td>Subscription Script</td>
-      <td>Data cannot be transferred (to the database)</td>
-      <td>Erroneous function</td>
-      <td>Database connection error, Invalid network configuration, Database down</td>
       <td>End effect: Database, UI</td>
-      <td>6</td> <!-- Severity heavily depends on the sensor and the duration due to the aggragtion cycle, data loss doesnt even necessarily mean any loss in information -->
-      <td>4</td> <!-- This would most likely indicate permission issues within the user. Therefore I conclude it to be more severe -->
-      <td>4</td> <!-- Slightly less detectable since if the database is the reason we would have to analyze it around 2 corners -->
+      <td>6</td>
+      <td>4</td>
+      <td>4</td>
       <td>96</td>
     </tr>
     <!-- Database -->
     <tr>
       <td>FA8</td>
-      <td>Database</td>
-      <td>Not available (permanent)</td>
-      <td>Loss of function</td>
-      <td>DHBW-Server down/crashed</td>
       <td>End effect: Database, UI, Subscriber script</td>
       <td>10</td>
       <td>2</td>
@@ -252,10 +216,6 @@ Risk priority number (RPN) = S * O * D, The higher the RPN, the more critical th
     </tr>
     <tr>
       <td>FA9</td>
-      <td>Database</td>
-      <td>Not available (temporary)</td>
-      <td>Loss of function</td>
-      <td>Restart / Maintenance / Overload / DHBW-Server out of memory </td>
       <td>End effect: Database, UI, Subscriber script</td>
       <td>7</td>
       <td>5</td>
@@ -264,22 +224,14 @@ Risk priority number (RPN) = S * O * D, The higher the RPN, the more critical th
     </tr>
     <tr>
       <td>FA10</td>
-      <td>Database</td>
-      <td>Faulty data cleaning</td>
-      <td>Incorrect function</td>
-      <td>Incorrect (materialized) View definition, Data manipulation outside of job time window (60d)</td>
       <td>End effect: Database, UI, Subscriber script</td>
-      <td>3</td> <!-- Since cleaning step is just a view definition this doesn't result in data loss, but in simply more work for us therefore not that sever -->
+      <td>3</td>
       <td>4</td>
       <td>5</td>
       <td>60</td>
     </tr>
     <tr>
       <td>FA11</td>
-      <td>Database</td>
-      <td>Reading not possible</td>
-      <td>Incorrect function</td>
-      <td>Query issue / Permission issue / DHBW-Server out of memory</td>
       <td>End effect: Database, UI, Subscriber script</td>
       <td>9</td>
       <td>3</td>
@@ -288,10 +240,6 @@ Risk priority number (RPN) = S * O * D, The higher the RPN, the more critical th
     </tr>
     <tr>
       <td>FA12</td>
-      <td>Database</td>
-      <td>Writing not possible</td>
-      <td>Incorrect function</td>
-      <td>Disk full / Permission issue / DHBW-Server out of memory</td>
       <td>End effect: Database, UI, Subscriber script</td>
       <td>9</td>
       <td>4</td>
@@ -301,7 +249,8 @@ Risk priority number (RPN) = S * O * D, The higher the RPN, the more critical th
   </tbody>
 </table>
 
-# Detection means
+
+## Detection means
 - EVIDENT: The failure is readily detected during operation.
 - DORMANT: The failure can be detected when maintenance is performed.
 - HIDDEN: The failure is not detected unless intentionally sought, for instance, by testing the system.
@@ -393,7 +342,7 @@ Risk priority number (RPN) = S * O * D, The higher the RPN, the more critical th
   </tbody>
 </table>
 
-# Corrective Actions
+## Corrective Actions
 This only shows the changes since last time since the project is discontinued after this sprint!
 <table>
   <thead>
@@ -477,7 +426,7 @@ This only shows the changes since last time since the project is discontinued af
   </tbody>
 </table>
 
-# Summary
+## Summary
 This FMEA analyzes the failure modes in a sensor-to-database pipeline involving Arduino hardware, MQTT-based data transmission, and a backend database.
 
 Components analyzed include the Arduino sensor board, subscription script (MQTT), and the central database. The analysis focuses on data integrity, availability, and flow consistency.

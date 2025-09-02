@@ -1,5 +1,5 @@
 # NFR testability
-There are three [Quality Goals](../arc42/01. Introduction and Goals.md) which need to be tested.
+There are three [Quality Goals](../2 arc42/01. Introduction and Goals.md) which need to be tested.
 
 ## NFR 1.1 
 The criteria from the NFR 1.1 states that the measured sensor data must reach the bronze layer of the database within 5 minutes.

@@ -218,3 +218,4 @@ arduino/compile_commands.json
 
 # allow example file
 !arduino/src/arduino_secrets.example.h
+datenkraken-docs/site/
