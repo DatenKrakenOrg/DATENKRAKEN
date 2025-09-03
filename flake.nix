@@ -26,6 +26,12 @@
           python3
           python3Packages.numpy
           python3Packages.pandas
+          pkgs.python313Packages.weasyprint
+          pkgs.gobject-introspection
+          pkgs.cairo
+          pkgs.pango
+          pkgs.gtk3
+          pkgs.glib
         ];
 
         shellHook = ''

@@ -41,12 +41,19 @@ Go into the frontend folder and run
 uv run streamlit run src/app.py
 ```
 
-You will also need an **OpenWeather API key** in the `.env` file in the src folder.
+You will also need an **OpenWeather API key** in the `.env` file in frontend/:
 
-.env file:
 ```
 WEATHER_API_KEY=xxxx
 ```
+
+Also you need to fill in the .env variables in the following directories:
+- frontend/
+- subscription_script/
+- database/
+
+An example for each .env is provided in the associated directory.
+
 
 #### Installing uv
 
