@@ -1,7 +1,7 @@
 # UI Usability Test Report (Mouse Only)
 
 **Tester profile:** External user, not familiar with the UI beforehand.  
-**Date:** YYYY-MM-DD  
+**Date:** 03.09.2025  
 **Scope:** Verify that all functions can be executed with mouse only.  
 
 ---
