@@ -403,7 +403,7 @@ This only shows the changes since last time since the project is discontinued af
       <td><strong>Medium => Low</strong></td>
       <td>Arduino</td>
       <td>Erroneous/Inconsistent Datapoints</td>
-      <td>175 => 28</td>
+      <td>28</td>
       <td>Include timestamp validation, sequence number and anomaly detection logic</td>
     </tr>
     <!-- Monitor -->

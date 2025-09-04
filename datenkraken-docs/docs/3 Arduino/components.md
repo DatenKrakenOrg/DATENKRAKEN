@@ -44,7 +44,7 @@ Unit: relative Humidity in %
 **3. CO2 Sensor**  
 The CO2 sensor is dependant on temperature and humidity. These values are needed to calculate the VOC-Index. 
 The VOC-Index is ranging value from 0 to 500, any other value is invalid.  
-Unit: VOC-Index (ppm?)
+Unit: VOC-Index
 
 **4. Noise Level**  
 The Noise sensor returns a analog value ranging from 0 to 1023. This value needs to be used to calculate a db value.  
