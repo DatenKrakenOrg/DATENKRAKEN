@@ -7,12 +7,12 @@ services:
     environment:
       - PYTHONUNBUFFERED=1
       - DEPLOYMENT=TIM
-      - DB_USERNAME=dev
-      - DB_PASSWORD=!42#%JNQK#48d
+      - DB_USERNAME=${DB_USERNAME}
+      - DB_PASSWORD=${DB_PASSWORD}
       # Must include port
       - DB_HOST=timescaledb:5432
-      - WEATHER_API_KEY=976936fbbed2ca6c26183c3830f8f6e6
-      - LOCATION=Heidenheim,DE
+      - WEATHER_API_KEY=${WEATHER_API_KEY}
+      - LOCATION=${LOCATION}
     ports:
       - "6501:8501"
     restart: unless-stopped
