@@ -1,5 +1,5 @@
 #!/bin/bash
-# \set -e
+set -e
 psql -v ON_ERROR_STOP=1 --username "$POSTGRES_USER" --dbname "$POSTGRES_DB" <<-EOSQL
 -- 1. Create schema for medaillon architectur
 CREATE SCHEMA IF NOT EXISTS bronze;

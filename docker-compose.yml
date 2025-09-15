@@ -1,0 +1,63 @@
+
+services:
+  datenkraken_web_ui:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    environment:
+      - PYTHONUNBUFFERED=1
+      - DEPLOYMENT=TIM
+      - DB_USERNAME=${DB_USERNAME}
+      - DB_PASSWORD=${DB_PASSWORD}
+      # Must include port
+      - DB_HOST=timescaledb:5432
+      - WEATHER_API_KEY=${WEATHER_API_KEY}
+      - LOCATION=${LOCATION}
+    ports:
+      - "6501:8501"
+    restart: unless-stopped
+    networks:
+      - datenkraken-db-net
+
+  timescaledb:
+    build:
+      dockerfile: Dockerfile
+      context: ./database
+    container_name: datenkraken_db
+    restart: unless-stopped
+    ports:
+      - "5432:5432"   
+    volumes:
+      - datenkraken_db_data:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_DB=datenkraken
+      - UI_PASSWORD=${UI_PASSWORD}
+      - DEV_PASSWORD=${DEV_PASSWORD}
+    networks:
+      - datenkraken-db-net
+
+  subscription_script:
+    build:
+      dockerfile: Dockerfile
+      context: ./subscription_script
+    container_name: datenkraken_subscription_script
+    restart: unless-stopped
+    environment:
+      - USERNAME=${USERNAME}
+      - PASSWORD=${PASSWORD}
+      - CLIENT_ID=${CLIENT_ID}
+      - BROKER_IP=${BROKER_IP}
+      - DB_USERNAME=${DB_USERNAME}
+      - DB_PASSWORD=${DB_PASSWORD}
+      # Must include port
+      - DB_HOST=${DB_HOST}
+    networks:
+      - datenkraken-db-net
+
+networks:
+  datenkraken-db-net:
+
+volumes:
+  datenkraken_db_data:
