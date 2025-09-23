@@ -2,13 +2,17 @@
 
 import logging
 import json
-from datetime import datetime
+from datetime import datetime, timezone
 from zoneinfo import ZoneInfo
 
 from typing import List, Union
 from subscription_script.sql.orm import Temperature, Humidity, Voc, Noise
 from subscription_script.sql.engine import insert_into_db
 from paho.mqtt import client as mqtt_client
+from .alerting import send_sequence_alert
+
+# Track last message arrival (epoch seconds UTC)
+_last_message_ts: float | None = None
 
 _temp_seq = 0
 _hum_seq = 0
@@ -66,7 +70,10 @@ def on_message(client, userdata, msg) -> None:
     Raises:
         RuntimeError: Raised whenever the message value field doesn't hold the topic specification, since this would show a severe design misunderstand that cannot be determistically fixed => Therefore persistence is possible!
     """
-    global _temp_seq, _hum_seq, _voc_seq, _noise_seq
+    global _temp_seq, _hum_seq, _voc_seq, _noise_seq, _last_message_ts
+
+    # Update last message timestamp early (even if JSON invalid we still observed broker traffic)
+    _last_message_ts = datetime.now(tz=timezone.utc).timestamp()
 
     payload = None
     try:
@@ -91,12 +98,26 @@ def on_message(client, userdata, msg) -> None:
         orm_objs: List[Union[Temperature, Humidity, Voc, Noise]] = []
 
         if "temp" in msg.topic:
-            if _temp_seq + 1 != payload["sequence"]:
-                logging.warn(
-                    f"Payload sequence number interrupted at: {payload['sequence']}. Expected: {_temp_seq}"
+            if _temp_seq == 0:
+                # Baseline setzen – erste Sequenz ohne Prüfung akzeptieren
+                _temp_seq = payload["sequence"]
+                logging.info(
+                    "Initial temperature sequence baseline set to %s", _temp_seq
                 )
-
-            _temp_seq = payload["sequence"]
+            else:
+                expected = _temp_seq + 1
+                if expected != payload["sequence"]:
+                    logging.warning(
+                        "Payload sequence number interrupted at: %s. Expected: %s (last good: %s)",
+                        payload["sequence"], expected, _temp_seq,
+                    )
+                    send_sequence_alert(
+                        msg.topic,
+                        expected=expected,
+                        received=payload["sequence"],
+                        last_good=_temp_seq,
+                    )
+                _temp_seq = payload["sequence"]
 
             for value in values:
                 orm_objs.append(
@@ -110,12 +131,25 @@ def on_message(client, userdata, msg) -> None:
                     )
                 )
         elif "hum" in msg.topic:
-            if _hum_seq + 1 != payload["sequence"]:
-                logging.warn(
-                    f"Payload sequence number interrupted at: {payload['sequence']}. Expected: {_hum_seq}"
+            if _hum_seq == 0:
+                _hum_seq = payload["sequence"]
+                logging.info(
+                    "Initial humidity sequence baseline set to %s", _hum_seq
                 )
-
-            _hum_seq = payload["sequence"]
+            else:
+                expected = _hum_seq + 1
+                if expected != payload["sequence"]:
+                    logging.warning(
+                        "Payload sequence number interrupted at: %s. Expected: %s (last good: %s)",
+                        payload["sequence"], expected, _hum_seq,
+                    )
+                    send_sequence_alert(
+                        msg.topic,
+                        expected=expected,
+                        received=payload["sequence"],
+                        last_good=_hum_seq,
+                    )
+                _hum_seq = payload["sequence"]
 
             for value in values:
                 orm_objs.append(
@@ -129,12 +163,25 @@ def on_message(client, userdata, msg) -> None:
                     )
                 )
         elif "co2" in msg.topic:
-            if _voc_seq + 1 != payload["sequence"]:
-                logging.warn(
-                    f"Payload sequence number interrupted at: {payload['sequence']}. Expected: {_voc_seq}"
+            if _voc_seq == 0:
+                _voc_seq = payload["sequence"]
+                logging.info(
+                    "Initial co2/voc sequence baseline set to %s", _voc_seq
                 )
-
-            _voc_seq = payload["sequence"]
+            else:
+                expected = _voc_seq + 1
+                if expected != payload["sequence"]:
+                    logging.warning(
+                        "Payload sequence number interrupted at: %s. Expected: %s (last good: %s)",
+                        payload["sequence"], expected, _voc_seq,
+                    )
+                    send_sequence_alert(
+                        msg.topic,
+                        expected=expected,
+                        received=payload["sequence"],
+                        last_good=_voc_seq,
+                    )
+                _voc_seq = payload["sequence"]
 
             for value in values:
                 orm_objs.append(
@@ -148,12 +195,25 @@ def on_message(client, userdata, msg) -> None:
                     )
                 )
         elif "mic" in msg.topic:
-            if _noise_seq + 1 != payload["sequence"]:
-                logging.warn(
-                    f"Payload sequence number interrupted at: {payload['sequence']}. Expected: {_noise_seq}"
+            if _noise_seq == 0:
+                _noise_seq = payload["sequence"]
+                logging.info(
+                    "Initial noise sequence baseline set to %s", _noise_seq
                 )
-
-            _noise_seq = payload["sequence"]
+            else:
+                expected = _noise_seq + 1
+                if expected != payload["sequence"]:
+                    logging.warning(
+                        "Payload sequence number interrupted at: %s. Expected: %s (last good: %s)",
+                        payload["sequence"], expected, _noise_seq,
+                    )
+                    send_sequence_alert(
+                        msg.topic,
+                        expected=expected,
+                        received=payload["sequence"],
+                        last_good=_noise_seq,
+                    )
+                _noise_seq = payload["sequence"]
 
             for value in values:
                 orm_objs.append(
@@ -173,3 +233,8 @@ def on_message(client, userdata, msg) -> None:
         logging.critical(
             f"Error during insertion of datapoint from {msg.topic} topic. Exception: {e}"
         )
+
+
+def get_last_message_timestamp() -> float | None:
+    """Returns the UNIX timestamp (UTC) of the last received MQTT message or None if none yet."""
+    return _last_message_ts
