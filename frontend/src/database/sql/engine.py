@@ -5,7 +5,7 @@ from sqlalchemy import text  # new changes
 from sqlalchemy.sql.selectable import Select
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.exc import OperationalError
-from typing import Union, List
+from typing import Union, List, Optional
 
 _engine: Union[Engine, None] = None
 _session_factory: Union[sessionmaker, None] = None
@@ -31,17 +31,17 @@ def set_engine_session_factory() -> None:
         _session_factory = sessionmaker(autocommit=False, autoflush=False, bind=_engine)
 
 
-def commit_select(stmt: Select) -> List[Row]:
-    """Commits a select on the database and return a list of valurowses.
+def commit_select(stmt: Select) -> Optional[List[Row]]:
+    """Execute a SELECT statement and return all rows.
 
     Args:
-        stmt (Select): The select statement to execute
+        stmt: The SQLAlchemy ``Select`` statement to execute.
 
     Raises:
-        RuntimeError: Whenever sessionmaker wasn't initialized
+        RuntimeError: If the session factory has not been initialized.
 
     Returns:
-        List[Union[Row]]: Return a list of rows.
+        A list of rows on success, or ``None`` if an exception occurred (already logged).
     """
     if _session_factory is None:
         logging.critical(
@@ -62,17 +62,17 @@ def commit_select(stmt: Select) -> List[Row]:
         return []
 
 
-def commit_select_scalar(stmt: Select):
-    """Commits a select on the database and return a list of values.
+def commit_select_scalar(stmt: Select) -> Optional[List[Union[str, float, int]]]:
+    """Execute a scalar SELECT statement and return all scalar values.
 
     Args:
-        stmt (Select): The scalar select statement to execute
+        stmt: The SQLAlchemy ``Select`` statement expected to yield scalar values.
 
     Raises:
-        RuntimeError: Whenever sessionmaker wasn't initialized
+        RuntimeError: If the session factory has not been initialized.
 
     Returns:
-        _: Return a list of values.
+        A list of scalar values on success, or ``None`` if an exception occurred (already logged).
     """
     if _session_factory is None:
         logging.critical(
