@@ -14,7 +14,7 @@ This chapter augments and reflects the original SFMEA versions (project start vs
 - FA2 (sensor inaccuracy) remains high → no documented calibration or drift detection.
 - FA6/FA7 detection shift (Hidden→Evident) not fully justified (missing monitoring/log artefacts).
 - FA7 RPN drop (216→96) seems aggressive without evidence of persistent buffering.
-- Missing explicit “Arduino offline detection” mode (now added as FA13) – previously implicit across FA1/FA5.
+- Missing explicit "Arduino offline detection" mode (now added as FA13) – previously implicit across FA1/FA5.
 
 ## Added / refined failure modes
 | New ID | Component | Failure Mode | Cause | Effect | Remark |
@@ -35,7 +35,7 @@ This shifts the critical hotspot clearly to FA13 (alerting gap) – justifying t
 ## Mitigation matrix (old vs. new)
 | Failure Mode | Existing Control | Gap | Proposed Addition |
 |--------------|------------------|-----|------------------|
-| FA2 | Generic “calibration” | No interval / drift metric | Quarterly calibration + median profile plausibility |
+| FA2 | Generic "calibration" | No interval / drift metric | Quarterly calibration + median profile plausibility |
 | FA5 | ACK / retry | No sequence supervision | Sequence number + backoff + offline counter |
 | FA7 | Claimed queue/buffer | No artefact evidence | Persistent replay buffer (local SQLite) |
 | FA9 | Caching & reconnect | No timeout metrics | Health endpoint + Prometheus counter |

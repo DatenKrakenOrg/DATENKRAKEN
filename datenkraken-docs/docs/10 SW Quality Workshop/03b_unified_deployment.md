@@ -1,4 +1,4 @@
-# 3b. Optimization: Unified Deployment (Docker Compose)
+# Optimization: Unified Deployment (Docker Compose)
 
 ## Initial situation
 Deployment required multiple separate compose files / invocations (DB, frontend, subscription script, MQTT). Consequences:

@@ -1,81 +1,81 @@
-# 3c. Optimierung: Frontend Error Handling
+# 3c. Optimization: Frontend Error Handling
 
-Wichtig: Diese Optimierung betrifft ausschließlich das Frontend. Backend-/Ingestion-Pfade wurden nicht mit eigenem generischem Error Handling erweitert.
+Important: This optimization targets the frontend only. Backend / ingestion paths did not receive a generalized error handling layer.
 
-## Ausgangslage
-Vor der Einführung des Error Handling Layers führte eine Reihe von Fehlern (z.B. DB-Verbindungsprobleme, leere Resultsets, externe API-Ausfälle) zu ungefangenen Exceptions und damit teils zu weißen oder unvollständigen Seiten. Fehlertypen waren nicht visuell unterscheidbar.
+## Initial situation
+Prior to the layer: database connection issues, empty result sets, external API failures could raise uncaught exceptions → blank or partial pages. Error types were not visually distinguished.
 
-## Ziele
-| Ziel | Beschreibung | KPI |
-|------|--------------|-----|
-| Benutzerfreundliche Degradation | Fehlerzustände ohne Bruch der UI | Keine White-Screens |
-| Differenzierte Severity Stufen | Klare visuelle Eskalation | Farb-/Komponenten-Mapping |
-| Minimierte Alarmmüdigkeit | Informative vs. kritische Fehler trennbar | Reduktion unnötiger `error` Panels |
-| Testbare Resilienz | Fehlerpfade automatisiert abgedeckt | Tests für: leer, stale, exception |
+## Goals
+| Goal | Description | KPI |
+|------|-------------|-----|
+| User-friendly degradation | Error states without UI collapse | Zero white screens |
+| Differentiated severity | Clear visual escalation | Color / component mapping |
+| Minimized alert fatigue | Separate informative vs. critical | Fewer unnecessary `error` panels |
+| Testable resilience | Automated coverage for error paths | Tests for empty / stale / exception |
 
-## Implementierungsstatus der Bausteine
-| Baustein | Status | Beschreibung (Ist) | Referenz |
-|----------|--------|--------------------|----------|
-| Safe DB Wrapper | Implementiert | Rückgabe `[]` bei Fehler (Rows / Scalars) | `commit_select`, `commit_select_scalar` |
-| DB Health Check | Implementiert | Einfaches `SELECT 1` | `is_db_healthy()` |
-| Fehlerpanel | Implementiert (Basis) | Einheitliche Fehleranzeige (nur `error`, optional caption) | `render_error_panel` |
-| Staleness Check | Implementiert | Prüft letzte Messzeit pro Sensor (<=5 Min) | `currentness.py` |
-| Warning Panel bei Staleness | Teilweise | Staleness Bool verfügbar, UI-Integration nur auf bestimmten Seiten | `overview.py` Nutzung |
-| Differenzierung Info/Warning/Error | Teilweise | Basis vorhanden (error panel + ggf. st.info/st.warning in Pages) | Frontend Pages |
-| Externe API Handling | Nicht im Scope | Kein spezieller Fallback implementiert | — |
-| Toast Gating (Success Notification) | Nicht implementiert | Kein kontrolliertes einmaliges Success Toast | — |
-| Circuit Breaker / Backoff | Nicht implementiert | Nur einfache Fehlerrückgabe | — |
-| Wiederverwendbare Severity Mapping Tabelle | Dokumentiert (Ziel) | Noch keine zentrale Mapping-Funktion | — |
+## Component implementation status
+| Component | Status | Current description | Reference |
+|-----------|--------|---------------------|-----------|
+| Safe DB wrapper | Implemented | Returns `[]` on failure (rows / scalars) | `commit_select`, `commit_select_scalar` |
+| DB health check | Implemented | Simple `SELECT 1` | `is_db_healthy()` |
+| Error panel | Implemented (basic) | Unified error display (only `error`, optional caption) | `render_error_panel` |
+| Staleness check | Implemented | Evaluates last measurement age (≤5 min) | `currentness.py` |
+| Staleness warning panel | Partial | Boolean available, limited UI integration | `overview.py` usage |
+| Info/Warning/Error differentiation | Partial | Basic (error panel + selective st.info/st.warning) | Frontend pages |
+| External API handling | Not in scope | No special fallback | — |
+| Success toast gating | Not implemented | No one‑time success toast | — |
+| Circuit breaker / backoff | Not implemented | Simple failure return only | — |
+| Reusable severity mapping table | Target only | No central mapping yet | — |
 
-## Visual Severity Mapping (Zielbild vs. Ist)
-| Status | Ziel UI Komponente | IST Umsetzung | Bemerkung |
-|--------|-------------------|---------------|-----------|
-| Hard Failure | `st.error` Panel | Vorhanden | DB Down Fälle |
-| Degradation | `st.warning` | Teilweise | Staleness Fälle kontextabhängig |
-| Informativ | `st.info` | Sporadisch | Noch kein konsistentes Pattern |
-| Erfolg | `st.toast` | Nicht vorhanden | Könnte für Erst-Laden ergänzt werden |
+## Visual severity mapping (target vs. current)
+| Status | Target UI component | Current implementation | Note |
+|--------|---------------------|------------------------|------|
+| Hard failure | `st.error` panel | Present | DB down cases |
+| Degradation | `st.warning` | Partial | Staleness context dependent |
+| Informational | `st.info` | Sporadic | No consistent pattern |
+| Success | `st.toast` | Missing | Could be added for initial load |
 
-## Tests (Aktueller Stand vs. Ziel)
-| Szenario | IST | Ziel |
-|----------|-----|-----|
-| DB offline | Abfang durch `is_db_healthy()` + Panel | Beibehalten |
-| Leere Tabelle / keine Werte | Teilweise: leere Listen führen zu neutralem Zustand | Explizites Info Panel |
-| Stale Daten | Bool vorhanden, UI teils Warnung | Konsistente Warnanzeige |
-| Externe API Timeout | Nicht spezifisch | Info Panel mit Fallback |
-| Erstladen Erfolgreich | Kein Toast | Einmaliges Toast |
+## Tests (current vs. target)
+| Scenario | Current | Target |
+|----------|---------|--------|
+| DB offline | Caught by `is_db_healthy()` + panel | Keep |
+| Empty table / no values | Sometimes silent (empty list) | Explicit info panel |
+| Stale data | Boolean exists, partial UI warning | Consistent warning |
+| External API timeout | Not specific | Info panel w/ fallback |
+| First successful load | No toast | One-time toast |
 
-## Metrik-Ideen
-| Kennzahl | Ziel | Messung |
-|----------|------|---------|
-| Ungefangene Exceptions / 100 Sessions | <1 | Log Parser |
-| Anteil White-Screen Sessions | 0% | Manuelles & automatisiertes UI Testing |
-| Fehlertyp-Differenzierung implementiert | Ja | Code Review |
-| Falsche Negative (echter Ausfall als Info) | 0 | Testfälle |
+## Metric ideas
+| Metric | Target | Measurement |
+|--------|--------|-------------|
+| Uncaught exceptions / 100 sessions | <1 | Log parser |
+| White screen session share | 0% | Manual + automated UI tests |
+| Error type differentiation implemented | Yes | Code review |
+| False negatives (hard failure shown as info) | 0 | Targeted tests |
 
-## Nicht Bestandteil
-- Kein globales Observability Backend (z.B. Sentry) implementiert
-- Keine Circuit Breaker Logik Beyond Basic Fallbacks
-- Keine automatisierte Eskalation (Mail/Alert)
+## Out of scope
+- No global observability backend (e.g. Sentry)
+- No circuit breaker logic beyond basic fallbacks
+- No automated escalation (mail/alert)
 
-## Risiken & Mitigation
-| Risiko | Beschreibung | Mitigation |
-|--------|--------------|-----------|
-| Fehler "verschluckt" | Rückgabe leere Liste maskiert Ursache | Logging weiterhin voll, Panel klar formuliert |
-| Staleness Schwelle falsch | Zu sensible Warnungen | Feinjustierung via Konstante / Config |
-| UX Überladen | Zu viele Panels gleichzeitig | Priorisierungslogik (hard failure > warn > info) |
+## Risks & mitigation
+| Risk | Description | Mitigation |
+|------|------------|-----------|
+| Hidden failure | Empty list masks root cause | Keep logging + explicit panel wording |
+| Staleness threshold mis-tuned | Over-sensitive warnings | Adjust constant / config |
+| UX overload | Too many panels concurrently | Prioritization (hard > warn > info) |
 
-## Erweiterungen (Future)
-- Integration Sentry / OpenTelemetry
-- Circuit Breaker bei wiederholtem DB Fail
-- Unterscheidung "Keine Daten je" vs. "Gefilterter Bereich leer"
+## Extensions (future)
+- Sentry / OpenTelemetry integration
+- Circuit breaker after repeated DB failures
+- Distinguish “no data ever” vs. “filtered slice empty”
 
-## Nachweis Verbesserung (Qualitativ – fokussiert auf implementierte Teile)
-Vorher: Ungefangene DB-Ausfälle führten zu unklaren UI-Zuständen / potentiellen Abstürzen.
-Nachher: DB-Ausfälle resultieren in sauberem Fehlerpanel statt Crash; fehlerhafte Selektionsabfragen liefern leere Listen (UI bleibt renderbar). Staleness-Erkennung verfügbar, aber Präsentation noch nicht einheitlich.
+## Evidence of improvement (qualitative – implemented subset)
+Before: Uncaught DB failures → unclear UI states / potential crashes.
+After: DB failures produce clean error panel; failing selection yields empty lists (UI remains stable). Staleness detection exists, presentation not yet uniform.
 
-## Offene Lücken / Next Steps
-- Konsistente Nutzung von `st.info` für "noch keine Daten" statt stillem Leerlauf
-- Einführung optionaler Erfolgstoasts nach erstem validen Datensatz
-- Externe API Fallback (Standardisierte Info Meldung)
-- Zentralisiertes Severity-Mapping Utility
-- Optionale Telemetrie (Sentry / OTel) zur Messung ungefangener Ausnahmen
+## Gaps / next steps
+- Consistent `st.info` for “no data yet” instead of silent emptiness
+- Optional success toast after first valid dataset
+- External API fallback (standard info panel)
+- Central severity mapping utility
+- Optional telemetry (Sentry / OTel) for uncaught exception measurement

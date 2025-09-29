@@ -70,6 +70,3 @@ Color & fallback hierarchy reduces alarm fatigue: treat true outages distinctly,
 | History safety | try/except + DataFrame guards | `generic_analytics/widgets/history_widget.py` |
 | Weather resilience | info message on failure | `generic_analytics/widgets/utils.py` |
 | Toast gating | session state flags | `overview.py`, `generic_analytics.py` |
-
----
-_Last updated: add PR reference once merged._

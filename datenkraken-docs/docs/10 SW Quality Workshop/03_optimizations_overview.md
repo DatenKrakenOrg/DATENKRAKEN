@@ -96,4 +96,3 @@ Prevents white-screen situations; increases trust & resilience without overwhelm
 | Mock data | Maintainability (minor), Functional suitability | Script updated, still manual & random | 0 schema diffs / sprint, parameterizable |
 | Docker compose | Portability, Reliability | Unified startup (if adopted) | <10 min setup time |
 | Error handling | Reliability, Usability | DB failures & staleness partially cushioned | <1 uncaught exception / 100 sessions |
-
