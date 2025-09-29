@@ -70,7 +70,7 @@ def test_commit_select_success_returns_rows_and_logs_info(mocker):
     mock_info.assert_called()          # info log on success
 
 
-def test_commit_select_logs_error_on_exception_and_returns_none(mocker):
+def test_commit_select_logs_error_on_exception_and_returns_empty_list(mocker):
     # Arrange
     stmt = select()
     mock_error = mocker.patch("logging.error")
@@ -82,8 +82,8 @@ def test_commit_select_logs_error_on_exception_and_returns_none(mocker):
     # Act
     rows = engine_module.commit_select(stmt)
 
-    # Assert: function should swallow exception and return None
-    assert rows is None
+    # Assert: function should swallow exception and return empty list (UI-safe empty state)
+    assert rows == []
     session.execute.assert_called_once_with(stmt)
     mock_error.assert_called()  # error log expected
 
@@ -117,7 +117,7 @@ def test_commit_select_scalar_success_returns_values_and_logs_info(mocker):
     mock_info.assert_called()
 
 
-def test_commit_select_scalar_logs_error_on_exception_and_returns_none(mocker):
+def test_commit_select_scalar_logs_error_on_exception_and_returns_empty_list(mocker):
     # Arrange
     stmt = select()
     mock_error = mocker.patch("logging.error")
@@ -129,8 +129,8 @@ def test_commit_select_scalar_logs_error_on_exception_and_returns_none(mocker):
     # Act
     values = engine_module.commit_select_scalar(stmt)
 
-    # Assert
-    assert values is None
+    # Assert: empty list on error
+    assert values == []
     session.execute.assert_called_once_with(stmt)
     mock_error.assert_called()
 
