@@ -12,7 +12,6 @@ def __actuality_below_five_minutes(orm_table, arduino_id: int) -> bool:
     stmt = (
         select(orm_table.time)
         .where(orm_table.arduino_id == arduino_id)
-        .where(orm_table.time <= now)  # ignore future timestamps
         .order_by(orm_table.time.desc())
         .limit(1)
     )
@@ -31,7 +30,8 @@ def __actuality_below_five_minutes(orm_table, arduino_id: int) -> bool:
     else:
         last_time_stamp = last_time_stamp.astimezone(timezone.utc)
 
-    diff_minutes = (now - last_time_stamp).total_seconds() / 60
+    #new changes Consider clock skew: treat small future offsets as fresh
+    diff_minutes = abs((now - last_time_stamp).total_seconds()) / 60
     return diff_minutes <= 5
 
 

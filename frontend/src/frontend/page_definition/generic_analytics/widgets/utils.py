@@ -91,5 +91,6 @@ def fetch_weather_data() -> Dict[str, float]:
             "humidity": response_json["main"]["humidity"],
         }
     except Exception as e:
-        print(f"Error when fetching openweatherapi: {e}")
+        #new changes Soft-fail on weather API errors; UI will skip weather hints
+        st.info("Weather data temporarily unavailable.")
         return None

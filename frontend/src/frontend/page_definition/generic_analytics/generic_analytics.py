@@ -22,10 +22,37 @@ def define_generic_analytics_page(arduino_id: str, fetcher: DataFetcher, config:
     """
     st.set_page_config(page_title=f"Raum {arduino_id} Dashboard", layout="wide")
     st.title(f"Raumüberwachung: {arduino_id}")
-    sensor_data = get_single_room_data(arduino_id, fetcher)
+    from frontend.utils import render_error_panel
+    from database.sql.engine import is_db_healthy  # new changes
+    #new changes Guard data load and downstream rendering
+    try:
+        with st.spinner("Loading latest sensor data..."):
+            sensor_data = get_single_room_data(arduino_id, fetcher)
+    except Exception:
+        render_error_panel("Could not load data for this room.", "Please ensure the database is reachable and contains recent measurements.")
+        return
 
-    sensor_specifier = render_current_insights(arduino_id, sensor_data["data"], config)
-    render_history_graph(arduino_id, sensor_specifier, fetcher, config)
+    #new changes If DB is down, show error and stop (no success toast)
+    if not is_db_healthy():
+        render_error_panel("Database unavailable.", "Please check connectivity and credentials.")
+        return
+
+    if not sensor_data or not sensor_data.get("data"):
+        render_error_panel("No data available for this room.", "As soon as measurements exist, the dashboard will display them.")
+        return
+
+    #new changes Toast only once per room and only if any value exists
+    has_value = any(v is not None for v in sensor_data["data"].values())
+    key = f"room_toast_shown_{arduino_id}"
+    if has_value and not st.session_state.get(key):
+        st.toast("Room data loaded.", icon="✅")
+        st.session_state[key] = True
+
+    try:
+        sensor_specifier = render_current_insights(arduino_id, sensor_data["data"], config)
+        render_history_graph(arduino_id, sensor_specifier, fetcher, config)
+    except Exception:
+        st.error("An error occurred while rendering the charts.")
 
 def render_current_insights(
     arduino_id: str, sensor_data: Dict[str, float], config: dict

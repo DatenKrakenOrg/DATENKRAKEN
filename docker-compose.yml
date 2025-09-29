@@ -53,6 +53,14 @@ services:
       - DB_PASSWORD=${DB_PASSWORD}
       # Must include port
       - DB_HOST=${DB_HOST}
+      - SMTP_HOST=${SMTP_HOST}
+      - SMTP_USER=${SMTP_USER}
+      - SMTP_PASS=${SMTP_PASS}
+      - ALERT_EMAIL_FROM=${ALERT_EMAIL_FROM}
+      - ALERT_EMAIL_TO=${ALERT_EMAIL_TO}
+      - SMTP_PORT=${SMTP_PORT}
+
+      - WATCHDOG_INACTIVITY_THRESHOLD_SECONDS=${WATCHDOG_INACTIVITY_THRESHOLD_SECONDS}
     networks:
       - datenkraken-db-net
 
