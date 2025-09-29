@@ -1,6 +1,7 @@
 import os
 import logging
 from sqlalchemy import create_engine, Engine, Row
+from sqlalchemy import text  # new changes
 from sqlalchemy.sql.selectable import Select
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.exc import OperationalError
@@ -57,6 +58,8 @@ def commit_select(stmt: Select) -> List[Row]:
             return rows
     except Exception as e:
         logging.error(f"Error on selection {stmt} into database due to error: {e}")
+        #new changes Return empty list so UI can render an empty state instead of crashing
+        return []
 
 
 def commit_select_scalar(stmt: Select):
@@ -86,3 +89,17 @@ def commit_select_scalar(stmt: Select):
             return rows
     except Exception as e:
         logging.error(f"Error on selection {stmt} into database due to error: {e}")
+        #new changes Return empty list so UI can render an empty state instead of crashing
+        return []
+
+
+def is_db_healthy() -> bool:
+    #new changes Simple DB healthcheck used by the UI
+    try:
+        if _engine is None:
+            set_engine_session_factory()
+        with _engine.connect() as conn:
+            conn.execute(text("SELECT 1"))
+        return True
+    except Exception:
+        return False

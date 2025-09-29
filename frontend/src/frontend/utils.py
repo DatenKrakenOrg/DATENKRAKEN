@@ -56,3 +56,11 @@ def get_single_room_data(arduino_id: str, fetcher: DataFetcher) -> Dict[str, flo
         }
     }
 
+#new changes Simple, reusable error panel for visible feedback
+def render_error_panel(title: str, details: str = "") -> None:
+    """Render a concise error panel with optional details."""
+    with st.container(border=True):
+        st.error(title)
+        if details:
+            st.caption(details)
+

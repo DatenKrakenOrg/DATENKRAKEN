@@ -1,6 +1,6 @@
 import streamlit as st
 import plotly.express as px
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone  # new changes
 from utility.datafetcher import DataFetcher
 from database.orm import SensorType
 
@@ -14,8 +14,14 @@ def show_timeline_widget(sensor_type: SensorType, arduino_id: str, time_delta: t
         fetcher (DataFetcher): DataFetcher used to fetch data from database
         unit (str): Unit used for y axis
     """
-    current_datetime = datetime.now()
-    history_df = fetcher.get_bucket_by_t_interval(sensor_type, arduino_id, current_datetime - time_delta, current_datetime)
+    #new changes Use timezone-aware UTC to match DB timestamps
+    current_datetime = datetime.now(timezone.utc)
+    #new changes Guard DB fetching to provide clear feedback instead of breaking the page
+    try:
+        history_df = fetcher.get_bucket_by_t_interval(sensor_type, arduino_id, current_datetime - time_delta, current_datetime)
+    except Exception:
+        st.error("Could not load time series from the database.")
+        return
     min_value = history_df["avg_value_in_bucket"].min()
     max_value = history_df["avg_value_in_bucket"].max()
     
