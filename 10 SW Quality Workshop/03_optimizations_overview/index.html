@@ -1,0 +1,2017 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      
+        <link rel="prev" href="../02_extended_sfmea/">
+      
+      
+        <link rel="next" href="../03a_mock_data/">
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.6.20">
+    
+    
+      
+        <title>Optimizations Overview - DATENKRAKEN Dokumentation</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.e53b48f4.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    <body dir="ltr">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#documentation-of-implemented-optimizations" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="DATENKRAKEN Dokumentation" class="md-header__button md-logo" aria-label="DATENKRAKEN Dokumentation" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            DATENKRAKEN Dokumentation
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Optimizations Overview
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="DATENKRAKEN Dokumentation" class="md-nav__button md-logo" aria-label="DATENKRAKEN Dokumentation" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    DATENKRAKEN Dokumentation
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Home
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    2. arc42
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            2. arc42
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../2%20arc42/01.%20Introduction%20and%20Goals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Introduction & Goals
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../2%20arc42/02.%20Architecture%20Constraints/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Architecture Constraints
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../2%20arc42/03.%20Solution%20Strategy/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Solution Strategy
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../2%20arc42/04.%20Building%20Block%20View/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Building Block View
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../2%20arc42/05.%20Architecture%20Decisions/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Architecture Decisions
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    3. Arduino
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            3. Arduino
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../3%20Arduino/components/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Components
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../3%20Arduino/deployment/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Deployment
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../3%20Arduino/mqtt/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    MQTT
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../3%20Arduino/optimal_room_conditions/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Optimal Room Conditions
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    4. Components
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            4. Components
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../4%20Components/frontend/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Frontend Overview
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../4%20Components/frontend_error_handling_details/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Frontend Error Handling (Details)
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../4%20Components/database/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Database
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    5. Data Collection
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            5. Data Collection
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../5%20Data%20Collection/sampling_rate/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Sampling Rate
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6" >
+        
+          
+          <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    6. Non Functional Requirements Methodology
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6">
+            <span class="md-nav__icon md-icon"></span>
+            6. Non Functional Requirements Methodology
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../6%20Non%20Functional%20Requirements%20Methodology/backup-strategy/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Backup Strategy
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../6%20Non%20Functional%20Requirements%20Methodology/cronjob/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Cronjob
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../6%20Non%20Functional%20Requirements%20Methodology/nfr-testability/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Testability (NFR)
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../6%20Non%20Functional%20Requirements%20Methodology/uptime-monitoring/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Uptime Monitoring
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_7" >
+        
+          
+          <label class="md-nav__link" for="__nav_7" id="__nav_7_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    7. Software Engineering
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_7_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_7">
+            <span class="md-nav__icon md-icon"></span>
+            7. Software Engineering
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../7%20Software%20Engineering/requirements_engineering/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Requirements Engineering
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../7%20Software%20Engineering/sfmea-analysis/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    SFMEA (Initial)
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../7%20Software%20Engineering/sfmea-analysis-2/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    SFMEA (Extended)
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_8" >
+        
+          
+          <label class="md-nav__link" for="__nav_8" id="__nav_8_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    8. Tests
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_8_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_8">
+            <span class="md-nav__icon md-icon"></span>
+            8. Tests
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../8%20Tests/ui_mouseonly/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    UI Mouse Only
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_9" >
+        
+          
+          <label class="md-nav__link" for="__nav_9" id="__nav_9_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    9. Alerting
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_9_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_9">
+            <span class="md-nav__icon md-icon"></span>
+            9. Alerting
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../9%20Alerting/alerting/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Alerting Overview
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_10" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_10" id="__nav_10_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    10. Software Quality Workshop
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_10_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_10">
+            <span class="md-nav__icon md-icon"></span>
+            10. Software Quality Workshop
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../01_current_state_weaknesses/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Current State & Weaknesses
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../02_extended_sfmea/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Extended SFMEA
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    Optimizations Overview
+    
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    Optimizations Overview
+    
+  </span>
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#mock-data-update" class="md-nav__link">
+    <span class="md-ellipsis">
+      Mock Data Update
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Mock Data Update">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#implemented-action-actually-done" class="md-nav__link">
+    <span class="md-ellipsis">
+      Implemented action (actually done)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#recommended-follow-ups" class="md-nav__link">
+    <span class="md-ellipsis">
+      Recommended follow-ups
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#metric-ideas-not-implemented" class="md-nav__link">
+    <span class="md-ellipsis">
+      Metric ideas (not implemented)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#rationale" class="md-nav__link">
+    <span class="md-ellipsis">
+      Rationale
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#deployment-via-docker-compose" class="md-nav__link">
+    <span class="md-ellipsis">
+      Deployment via Docker Compose
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Deployment via Docker Compose">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#action" class="md-nav__link">
+    <span class="md-ellipsis">
+      Action
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#before-after-indicators" class="md-nav__link">
+    <span class="md-ellipsis">
+      Before / After indicators
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#rationale_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      Rationale
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#frontend-error-handling-resilience" class="md-nav__link">
+    <span class="md-ellipsis">
+      Frontend Error Handling &amp; Resilience
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Frontend Error Handling &amp; Resilience">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#implemented-principles" class="md-nav__link">
+    <span class="md-ellipsis">
+      Implemented principles
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#not-yet-implemented-target-principles" class="md-nav__link">
+    <span class="md-ellipsis">
+      Not yet implemented (target principles)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#metric-ideas-target-not-currently-measured" class="md-nav__link">
+    <span class="md-ellipsis">
+      Metric ideas (target – not currently measured)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#rationale_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      Rationale
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#impact-summary" class="md-nav__link">
+    <span class="md-ellipsis">
+      Impact summary
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../03a_mock_data/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Mock Data
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../03b_unified_deployment/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Unified Deployment
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../03c_frontend_resilience/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Frontend Resilience
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../04_alerting_feature/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Alerting Feature
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../05_slim_checklist/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Slim Checklist
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#mock-data-update" class="md-nav__link">
+    <span class="md-ellipsis">
+      Mock Data Update
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Mock Data Update">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#implemented-action-actually-done" class="md-nav__link">
+    <span class="md-ellipsis">
+      Implemented action (actually done)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#recommended-follow-ups" class="md-nav__link">
+    <span class="md-ellipsis">
+      Recommended follow-ups
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#metric-ideas-not-implemented" class="md-nav__link">
+    <span class="md-ellipsis">
+      Metric ideas (not implemented)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#rationale" class="md-nav__link">
+    <span class="md-ellipsis">
+      Rationale
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#deployment-via-docker-compose" class="md-nav__link">
+    <span class="md-ellipsis">
+      Deployment via Docker Compose
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Deployment via Docker Compose">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#action" class="md-nav__link">
+    <span class="md-ellipsis">
+      Action
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#before-after-indicators" class="md-nav__link">
+    <span class="md-ellipsis">
+      Before / After indicators
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#rationale_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      Rationale
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#frontend-error-handling-resilience" class="md-nav__link">
+    <span class="md-ellipsis">
+      Frontend Error Handling &amp; Resilience
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Frontend Error Handling &amp; Resilience">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#implemented-principles" class="md-nav__link">
+    <span class="md-ellipsis">
+      Implemented principles
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#not-yet-implemented-target-principles" class="md-nav__link">
+    <span class="md-ellipsis">
+      Not yet implemented (target principles)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#metric-ideas-target-not-currently-measured" class="md-nav__link">
+    <span class="md-ellipsis">
+      Metric ideas (target – not currently measured)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#rationale_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      Rationale
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#impact-summary" class="md-nav__link">
+    <span class="md-ellipsis">
+      Impact summary
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="documentation-of-implemented-optimizations">Documentation of Implemented Optimizations</h1>
+<p>This chapter evidences three implemented optimizations: objectives, actions, current state, and (where feasible) qualitative / potential quantitative impact vs. the previous state.</p>
+<p>Optimizations in scope:
+1. Update &amp; process clarification for mock data
+2. Unified deployment via single <code>docker-compose.yml</code>
+3. Frontend error handling &amp; resilience layer</p>
+<h2 id="mock-data-update">Mock Data Update</h2>
+<p>The existing SQL script <code>database/utils/fill_dummy.sql</code> was updated (fields / periods) but still: no automated generator, no schema diff check, no parameterization.</p>
+<table>
+<thead>
+<tr>
+<th>Aspect</th>
+<th>Before (outdated)</th>
+<th>Now (current)</th>
+<th>Target (planned / recommended)</th>
+<th>Value if achieved</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Script freshness</td>
+<td>Outdated</td>
+<td>Updated</td>
+<td>Continuous drift check</td>
+<td>Reliable test basis</td>
+</tr>
+<tr>
+<td>Generation process</td>
+<td>Manual</td>
+<td>Manual</td>
+<td>Parameterized generator</td>
+<td>Reproducibility</td>
+</tr>
+<tr>
+<td>Quality assurance</td>
+<td>None</td>
+<td>None</td>
+<td>Automated schema diff</td>
+<td>Early drift detection</td>
+</tr>
+<tr>
+<td>Data realism</td>
+<td>Random</td>
+<td>Random</td>
+<td>Patterns (day/night, peaks)</td>
+<td>More valid UI/perf tests</td>
+</tr>
+<tr>
+<td>Reproducibility</td>
+<td>No</td>
+<td>No</td>
+<td>Seed control</td>
+<td>Comparability</td>
+</tr>
+<tr>
+<td>Data volume</td>
+<td>Fixed 60 days</td>
+<td>Fixed 60 days</td>
+<td>Configurable (days)</td>
+<td>Faster local runs</td>
+</tr>
+</tbody>
+</table>
+<h3 id="implemented-action-actually-done">Implemented action (actually done)</h3>
+<ul>
+<li>Update of existing SQL script (generates 60 days random historical data for multiple sensors/devices).</li>
+</ul>
+<h3 id="recommended-follow-ups">Recommended follow-ups</h3>
+<ul>
+<li>Separate Python generator + schema diff.</li>
+<li>Parameterization (duration, device count, pattern profiles).</li>
+<li>CI drift check.</li>
+</ul>
+<h3 id="metric-ideas-not-implemented">Metric ideas (not implemented)</h3>
+<table>
+<thead>
+<tr>
+<th>Metric</th>
+<th>Target</th>
+<th>Planned capture</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Schema diff count</td>
+<td>0</td>
+<td><code>schema_compare.py</code></td>
+</tr>
+<tr>
+<td>Dummy rows per sensor</td>
+<td>≥24h coverage</td>
+<td>Generator log</td>
+</tr>
+</tbody>
+</table>
+<h3 id="rationale">Rationale</h3>
+<p>More realistic data lowers false positives in UI tests &amp; improves performance assessments.</p>
+<h2 id="deployment-via-docker-compose">Deployment via Docker Compose</h2>
+<table>
+<thead>
+<tr>
+<th>Aspect</th>
+<th>Before</th>
+<th>After</th>
+<th>Benefit</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Startup complexity</td>
+<td>Multiple manual steps (DB, MQTT, services)</td>
+<td>Single <code>docker compose up</code></td>
+<td>Faster onboarding</td>
+</tr>
+<tr>
+<td>Environment consistency</td>
+<td>Divergent local setups</td>
+<td>Unified defined services</td>
+<td>Fewer “works on my machine” cases</td>
+</tr>
+<tr>
+<td>Documentation</td>
+<td>Scattered</td>
+<td>Central in compose + README</td>
+<td>Transparency</td>
+</tr>
+<tr>
+<td>Scaling tests</td>
+<td>Cumbersome</td>
+<td>Profiles / overrides feasible</td>
+<td>Faster experiments</td>
+</tr>
+</tbody>
+</table>
+<h3 id="action">Action</h3>
+<ul>
+<li>Created unified <code>docker-compose.yml</code> (TimescaleDB, MQTT broker, subscription script, frontend, monitoring (optional)).</li>
+<li>Standardized <code>.env</code> variables + <code>example.env</code>.</li>
+</ul>
+<h3 id="before-after-indicators">Before / After indicators</h3>
+<table>
+<thead>
+<tr>
+<th>Indicator</th>
+<th>Before (estimate)</th>
+<th>After (target)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Onboarding time to first dashboard</td>
+<td>60 min</td>
+<td>&lt;10 min</td>
+</tr>
+<tr>
+<td>Manual steps</td>
+<td>&gt;6</td>
+<td>1</td>
+</tr>
+</tbody>
+</table>
+<h3 id="rationale_1">Rationale</h3>
+<p>Reduces process variability; baseline for QA &amp; production likeness.</p>
+<h2 id="frontend-error-handling-resilience">Frontend Error Handling &amp; Resilience</h2>
+<p>Implemented: DB health check, safe selection (empty list fallback), basic error panel, staleness checking functions. Not (or only partially) implemented: consistent info/warning differentiation across all paths, success toasts, external API specific fallbacks, circuit breaker.</p>
+<table>
+<thead>
+<tr>
+<th>Aspect</th>
+<th>Before</th>
+<th>Current</th>
+<th>Target</th>
+<th>Value if achieved</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>DB error handling</td>
+<td>Crash / trace</td>
+<td>Error panel + empty list</td>
+<td>Add retry / circuit</td>
+<td>Higher robustness</td>
+</tr>
+<tr>
+<td>Error panel consistency</td>
+<td>Ad-hoc / inconsistent</td>
+<td>Basic panel <code>render_error_panel</code></td>
+<td>Unified severity mapping</td>
+<td>User clarity</td>
+</tr>
+<tr>
+<td>Staleness transparency</td>
+<td>None</td>
+<td>Functions exist (partially used)</td>
+<td>Unified warning display</td>
+<td>Freshness awareness</td>
+</tr>
+<tr>
+<td>External API errors</td>
+<td>Raw exception</td>
+<td>No specific handling</td>
+<td>Info panel + degradation status</td>
+<td>Reduced frustration</td>
+</tr>
+<tr>
+<td>Success signal (toast)</td>
+<td>None</td>
+<td>Not present</td>
+<td>One-time toast on first data</td>
+<td>Positive feedback</td>
+</tr>
+<tr>
+<td>Telemetry / observability</td>
+<td>None</td>
+<td>None</td>
+<td>Sentry / OTel integration</td>
+<td>Faster root cause analysis</td>
+</tr>
+<tr>
+<td>Test coverage error paths</td>
+<td>Low</td>
+<td>Partial (selection tests)</td>
+<td>Full (stale, empty, offline, API)</td>
+<td>Resilience evidence</td>
+</tr>
+</tbody>
+</table>
+<h3 id="implemented-principles">Implemented principles</h3>
+<ul>
+<li>“Fail soft” for DB access (empty list fallback)</li>
+<li>Early health check before deep UI rendering</li>
+<li>Staleness check helpers present</li>
+</ul>
+<h3 id="not-yet-implemented-target-principles">Not yet implemented (target principles)</h3>
+<ul>
+<li>Unified color / severity matrix across all flows</li>
+<li>Success toasts / differentiated soft‑fail panels</li>
+<li>API specific resilience layer</li>
+</ul>
+<h3 id="metric-ideas-target-not-currently-measured">Metric ideas (target – not currently measured)</h3>
+<table>
+<thead>
+<tr>
+<th>Metric</th>
+<th>Before</th>
+<th>Target</th>
+<th>Measurement (planned)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Uncaught UI exceptions / 100 sessions</td>
+<td>n/a</td>
+<td>&lt;1</td>
+<td>Log parser / telemetry</td>
+</tr>
+<tr>
+<td>First-data success feedback</td>
+<td>n/a</td>
+<td>&gt;90% sessions once</td>
+<td>Session state</td>
+</tr>
+<tr>
+<td>Error type differentiation (hard/soft/info)</td>
+<td>None</td>
+<td>Fully covered</td>
+<td>Code review / UI snapshot</td>
+</tr>
+</tbody>
+</table>
+<h3 id="rationale_2">Rationale</h3>
+<p>Prevents white-screen situations; increases trust &amp; resilience without overwhelming users.</p>
+<h2 id="impact-summary">Impact summary</h2>
+<table>
+<thead>
+<tr>
+<th>Optimization</th>
+<th>Primary ISO 25010 attributes</th>
+<th>Current (qualitative)</th>
+<th>Target (quantifiable)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Mock data</td>
+<td>Maintainability (minor), Functional suitability</td>
+<td>Script updated, still manual &amp; random</td>
+<td>0 schema diffs / sprint, parameterizable</td>
+</tr>
+<tr>
+<td>Docker compose</td>
+<td>Portability, Reliability</td>
+<td>Unified startup (if adopted)</td>
+<td>&lt;10 min setup time</td>
+</tr>
+<tr>
+<td>Error handling</td>
+<td>Reliability, Usability</td>
+<td>DB failures &amp; staleness partially cushioned</td>
+<td>&lt;1 uncaught exception / 100 sessions</td>
+</tr>
+</tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      <script id="__config" type="application/json">{"base": "../..", "features": [], "search": "../../assets/javascripts/workers/search.973d3a69.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.f55a23d4.min.js"></script>
+      
+    
+  </body>
+</html>

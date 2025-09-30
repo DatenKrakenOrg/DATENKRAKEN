@@ -1,0 +1,1831 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      
+        <link rel="prev" href="../01_current_state_weaknesses/">
+      
+      
+        <link rel="next" href="../03_optimizations_overview/">
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.6.20">
+    
+    
+      
+        <title>Extended SFMEA - DATENKRAKEN Dokumentation</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.e53b48f4.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    <body dir="ltr">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#extended-sfmea-comparison" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="DATENKRAKEN Dokumentation" class="md-header__button md-logo" aria-label="DATENKRAKEN Dokumentation" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            DATENKRAKEN Dokumentation
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Extended SFMEA
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="DATENKRAKEN Dokumentation" class="md-nav__button md-logo" aria-label="DATENKRAKEN Dokumentation" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    DATENKRAKEN Dokumentation
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Home
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    2. arc42
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            2. arc42
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../2%20arc42/01.%20Introduction%20and%20Goals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Introduction & Goals
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../2%20arc42/02.%20Architecture%20Constraints/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Architecture Constraints
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../2%20arc42/03.%20Solution%20Strategy/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Solution Strategy
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../2%20arc42/04.%20Building%20Block%20View/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Building Block View
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../2%20arc42/05.%20Architecture%20Decisions/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Architecture Decisions
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    3. Arduino
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            3. Arduino
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../3%20Arduino/components/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Components
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../3%20Arduino/deployment/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Deployment
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../3%20Arduino/mqtt/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    MQTT
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../3%20Arduino/optimal_room_conditions/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Optimal Room Conditions
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    4. Components
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            4. Components
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../4%20Components/frontend/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Frontend Overview
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../4%20Components/frontend_error_handling_details/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Frontend Error Handling (Details)
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../4%20Components/database/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Database
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    5. Data Collection
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            5. Data Collection
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../5%20Data%20Collection/sampling_rate/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Sampling Rate
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6" >
+        
+          
+          <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    6. Non Functional Requirements Methodology
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6">
+            <span class="md-nav__icon md-icon"></span>
+            6. Non Functional Requirements Methodology
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../6%20Non%20Functional%20Requirements%20Methodology/backup-strategy/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Backup Strategy
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../6%20Non%20Functional%20Requirements%20Methodology/cronjob/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Cronjob
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../6%20Non%20Functional%20Requirements%20Methodology/nfr-testability/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Testability (NFR)
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../6%20Non%20Functional%20Requirements%20Methodology/uptime-monitoring/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Uptime Monitoring
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_7" >
+        
+          
+          <label class="md-nav__link" for="__nav_7" id="__nav_7_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    7. Software Engineering
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_7_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_7">
+            <span class="md-nav__icon md-icon"></span>
+            7. Software Engineering
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../7%20Software%20Engineering/requirements_engineering/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Requirements Engineering
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../7%20Software%20Engineering/sfmea-analysis/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    SFMEA (Initial)
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../7%20Software%20Engineering/sfmea-analysis-2/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    SFMEA (Extended)
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_8" >
+        
+          
+          <label class="md-nav__link" for="__nav_8" id="__nav_8_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    8. Tests
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_8_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_8">
+            <span class="md-nav__icon md-icon"></span>
+            8. Tests
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../8%20Tests/ui_mouseonly/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    UI Mouse Only
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_9" >
+        
+          
+          <label class="md-nav__link" for="__nav_9" id="__nav_9_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    9. Alerting
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_9_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_9">
+            <span class="md-nav__icon md-icon"></span>
+            9. Alerting
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../9%20Alerting/alerting/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Alerting Overview
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_10" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_10" id="__nav_10_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    10. Software Quality Workshop
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_10_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_10">
+            <span class="md-nav__icon md-icon"></span>
+            10. Software Quality Workshop
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../01_current_state_weaknesses/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Current State & Weaknesses
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    Extended SFMEA
+    
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    Extended SFMEA
+    
+  </span>
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#overview-comparison" class="md-nav__link">
+    <span class="md-ellipsis">
+      Overview comparison
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#notable-issues-plausibility" class="md-nav__link">
+    <span class="md-ellipsis">
+      Notable issues &amp; plausibility
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#added-refined-failure-modes" class="md-nav__link">
+    <span class="md-ellipsis">
+      Added / refined failure modes
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#new-extended-scoring-excerpt" class="md-nav__link">
+    <span class="md-ellipsis">
+      New / extended scoring (excerpt)
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#mitigation-matrix-old-vs-new" class="md-nav__link">
+    <span class="md-ellipsis">
+      Mitigation matrix (old vs. new)
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#rpn-reduction-prognosis-after-alerting" class="md-nav__link">
+    <span class="md-ellipsis">
+      RPN reduction prognosis after alerting
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#alerting-feature-priority-rationale" class="md-nav__link">
+    <span class="md-ellipsis">
+      Alerting feature priority rationale
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#recommended-quality-assurance-hooks" class="md-nav__link">
+    <span class="md-ellipsis">
+      Recommended quality assurance hooks
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#summary" class="md-nav__link">
+    <span class="md-ellipsis">
+      Summary
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../03_optimizations_overview/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Optimizations Overview
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../03a_mock_data/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Mock Data
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../03b_unified_deployment/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Unified Deployment
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../03c_frontend_resilience/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Frontend Resilience
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../04_alerting_feature/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Alerting Feature
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../05_slim_checklist/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Slim Checklist
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#overview-comparison" class="md-nav__link">
+    <span class="md-ellipsis">
+      Overview comparison
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#notable-issues-plausibility" class="md-nav__link">
+    <span class="md-ellipsis">
+      Notable issues &amp; plausibility
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#added-refined-failure-modes" class="md-nav__link">
+    <span class="md-ellipsis">
+      Added / refined failure modes
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#new-extended-scoring-excerpt" class="md-nav__link">
+    <span class="md-ellipsis">
+      New / extended scoring (excerpt)
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#mitigation-matrix-old-vs-new" class="md-nav__link">
+    <span class="md-ellipsis">
+      Mitigation matrix (old vs. new)
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#rpn-reduction-prognosis-after-alerting" class="md-nav__link">
+    <span class="md-ellipsis">
+      RPN reduction prognosis after alerting
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#alerting-feature-priority-rationale" class="md-nav__link">
+    <span class="md-ellipsis">
+      Alerting feature priority rationale
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#recommended-quality-assurance-hooks" class="md-nav__link">
+    <span class="md-ellipsis">
+      Recommended quality assurance hooks
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#summary" class="md-nav__link">
+    <span class="md-ellipsis">
+      Summary
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="extended-sfmea-comparison">Extended SFMEA &amp; Comparison</h1>
+<p>This chapter augments and reflects the original SFMEA versions (project start vs. extended state). Focus: consistency, RPN evolution, remaining gaps (especially detection) and derived additional mitigations (notably alerting &amp; data validation).</p>
+<h2 id="overview-comparison">Overview comparison</h2>
+<table>
+<thead>
+<tr>
+<th>Aspect</th>
+<th>Initial SFMEA</th>
+<th>Extended SFMEA</th>
+<th>Observation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Component scope</td>
+<td>Arduino, subscription, DB (UI WIP)</td>
+<td>UI added</td>
+<td>Full system view achieved</td>
+</tr>
+<tr>
+<td>Peak RPN</td>
+<td>216 (FA7)</td>
+<td>210 (FA2 still high, FA7 reduced)</td>
+<td>Some mitigation effect (FA7)</td>
+</tr>
+<tr>
+<td>Detection classification</td>
+<td>Many dormant/hidden (transfer chain)</td>
+<td>Partially evident (subscription)</td>
+<td>No active outage notification</td>
+</tr>
+<tr>
+<td>Mitigation focus</td>
+<td>Retry, calibration, caching</td>
+<td>Priority reductions listed</td>
+<td>Effect only partly evidenced</td>
+</tr>
+</tbody>
+</table>
+<h2 id="notable-issues-plausibility">Notable issues &amp; plausibility</h2>
+<ul>
+<li>FA2 (sensor inaccuracy) remains high → no documented calibration or drift detection.</li>
+<li>FA6/FA7 detection shift (Hidden→Evident) not fully justified (missing monitoring/log artefacts).</li>
+<li>FA7 RPN drop (216→96) seems aggressive without evidence of persistent buffering.</li>
+<li>Missing explicit "Arduino offline detection" mode (now added as FA13) – previously implicit across FA1/FA5.</li>
+</ul>
+<h2 id="added-refined-failure-modes">Added / refined failure modes</h2>
+<table>
+<thead>
+<tr>
+<th>New ID</th>
+<th>Component</th>
+<th>Failure Mode</th>
+<th>Cause</th>
+<th>Effect</th>
+<th>Remark</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>FA13</td>
+<td>Monitoring / alerting</td>
+<td>Data stream outage unnoticed</td>
+<td>No heartbeat / timeout</td>
+<td>Delayed response, data gap</td>
+<td>Separates detection aspect of FA1/FA5</td>
+</tr>
+<tr>
+<td>FA14</td>
+<td>Data quality pipeline</td>
+<td>Drift undetected</td>
+<td>Sensor aging</td>
+<td>Gradual incorrect insights</td>
+<td>Adds temporal dimension to FA2</td>
+</tr>
+<tr>
+<td>FA15</td>
+<td>Process</td>
+<td>Incomplete merge (missing tests/docs)</td>
+<td>Fuzzy DoD</td>
+<td>Introduces defects</td>
+<td>Process risk spanning multiple modes</td>
+</tr>
+</tbody>
+</table>
+<h2 id="new-extended-scoring-excerpt">New / extended scoring (excerpt)</h2>
+<table>
+<thead>
+<tr>
+<th>ID</th>
+<th>S</th>
+<th>O</th>
+<th>D</th>
+<th>RPN</th>
+<th>Rationale (detection focus)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>FA13</td>
+<td>8</td>
+<td>4</td>
+<td>8</td>
+<td>256</td>
+<td>Highest RPN – no active detection (purely reactive)</td>
+</tr>
+<tr>
+<td>FA14</td>
+<td>6</td>
+<td>5</td>
+<td>7</td>
+<td>210</td>
+<td>Drift is hard to detect without routine</td>
+</tr>
+<tr>
+<td>FA15</td>
+<td>5</td>
+<td>5</td>
+<td>6</td>
+<td>150</td>
+<td>Process gap drives quality fluctuation</td>
+</tr>
+</tbody>
+</table>
+<p>This shifts the critical hotspot clearly to FA13 (alerting gap) – justifying the new feature.</p>
+<h2 id="mitigation-matrix-old-vs-new">Mitigation matrix (old vs. new)</h2>
+<table>
+<thead>
+<tr>
+<th>Failure Mode</th>
+<th>Existing Control</th>
+<th>Gap</th>
+<th>Proposed Addition</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>FA2</td>
+<td>Generic "calibration"</td>
+<td>No interval / drift metric</td>
+<td>Quarterly calibration + median profile plausibility</td>
+</tr>
+<tr>
+<td>FA5</td>
+<td>ACK / retry</td>
+<td>No sequence supervision</td>
+<td>Sequence number + backoff + offline counter</td>
+</tr>
+<tr>
+<td>FA7</td>
+<td>Claimed queue/buffer</td>
+<td>No artefact evidence</td>
+<td>Persistent replay buffer (local SQLite)</td>
+</tr>
+<tr>
+<td>FA9</td>
+<td>Caching &amp; reconnect</td>
+<td>No timeout metrics</td>
+<td>Health endpoint + Prometheus counter</td>
+</tr>
+<tr>
+<td>FA13</td>
+<td>(—)</td>
+<td>No timeout defined</td>
+<td>Heartbeat interval + offline mail alert</td>
+</tr>
+<tr>
+<td>FA14</td>
+<td>(—)</td>
+<td>No drift metric</td>
+<td>Rolling z‑score / IQR outlier stats</td>
+</tr>
+<tr>
+<td>FA15</td>
+<td>(—)</td>
+<td>DoD not enforced</td>
+<td>Checklist gate in PR template</td>
+</tr>
+</tbody>
+</table>
+<h2 id="rpn-reduction-prognosis-after-alerting">RPN reduction prognosis after alerting</h2>
+<table>
+<thead>
+<tr>
+<th>Mode</th>
+<th>Base RPN</th>
+<th>Measure</th>
+<th>Expected change (D or O)</th>
+<th>Target RPN</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>FA13</td>
+<td>256</td>
+<td>Heartbeat topic + 5‑min timeout + mail alert</td>
+<td>D: 8→3</td>
+<td>96</td>
+</tr>
+<tr>
+<td>FA5</td>
+<td>192</td>
+<td>Sequence + retransmit</td>
+<td>D: 6→4</td>
+<td>128</td>
+</tr>
+<tr>
+<td>FA2</td>
+<td>210</td>
+<td>Quarterly calibration + drift stats</td>
+<td>O:6→4, D:5→4</td>
+<td>112</td>
+</tr>
+</tbody>
+</table>
+<h2 id="alerting-feature-priority-rationale">Alerting feature priority rationale</h2>
+<ul>
+<li>Highest newly identified RPN (FA13)</li>
+<li>Low implementation complexity (timeout + email)</li>
+<li>Improves detection across multiple modes (FA1, FA5, FA6)</li>
+<li>Enables measurable MTTD metric</li>
+</ul>
+<h2 id="recommended-quality-assurance-hooks">Recommended quality assurance hooks</h2>
+<table>
+<thead>
+<tr>
+<th>Layer</th>
+<th>Mechanism</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>MQTT ingestion</td>
+<td>Last timestamp cache</td>
+<td>Offline detection</td>
+</tr>
+<tr>
+<td>Subscription script</td>
+<td>Sequence validator</td>
+<td>Loss / reordering visibility</td>
+</tr>
+<tr>
+<td>DB layer</td>
+<td>Write result counter</td>
+<td>Early persistence failure signal</td>
+</tr>
+<tr>
+<td>Frontend</td>
+<td>Staleness badge</td>
+<td>Transparency of data freshness</td>
+</tr>
+<tr>
+<td>Process</td>
+<td>PR checklist</td>
+<td>DoD enforcement</td>
+</tr>
+</tbody>
+</table>
+<h2 id="summary">Summary</h2>
+<p>Original SFMEA covers key data flow risks but systematically underestimates detection and process risks. Extension with FA13–FA15 sharpens prioritization. The alerting feature addresses structural blindness and shifts the risk apex. Follow‑up: drift detection (FA14) and process hardening (FA15).</p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      <script id="__config" type="application/json">{"base": "../..", "features": [], "search": "../../assets/javascripts/workers/search.973d3a69.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.f55a23d4.min.js"></script>
+      
+    
+  </body>
+</html>
