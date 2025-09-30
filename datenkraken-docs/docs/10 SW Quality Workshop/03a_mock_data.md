@@ -1,7 +1,7 @@
 # Optimization: Mock Data Update
 
 ## Current state (real)
-A manually executed SQL script `database/utils/fill_dummy.sql` uses `generate_series` to insert random / synthetic measurements (noise, temperature, humidity, voc) for ~60 days into bronze tables.
+A manually executed SQL script `database/utils/fill_dummy.sql` uses `generate_series` to insert random / synthetic measurements (noise, temperature, humidity, voc) for ~10 days into bronze tables.
 
 History:
 - Script was outdated (structure / quantity misaligned) and got updated (fields & distributions aligned).
@@ -10,10 +10,10 @@ History:
 Current script scope:
 | Table | Generation logic | Frequency | IDs distributed |
 |-------|------------------|-----------|-----------------|
-| bronze.noise | Random 0–1028 | 1 min (2 offsets) over 60 days | 401/402/403 |
-| bronze.temperature | Random 5–30 | Every 30s | Round-robin 401–403 |
-| bronze.humidity | Random 5–30 | Every 30s | Round-robin 401–403 |
-| bronze.voc | Random 5–30 | Every 30s | Round-robin 401–403 |
+| bronze.noise | Random 0–1028 | Every 1 min (2 offsets) over 10 days | 401/402/403 |
+| bronze.temperature | Random 5–30 | Every 30s over 10 days | Round-robin 401–403 |
+| bronze.humidity | Random 5–30 | Every 30s over 10 days | Round-robin 401–403 |
+| bronze.voc | Random 5–30 | Every 30s over 10 days | Round-robin 401–403 |
 
 Limitations (current):
 - No semantic patterns (day/night, peaks, ventilation events)
@@ -42,7 +42,7 @@ Limitations (current):
 | Schema drift | Manual noticing at insert | Automated diff check |
 | Unrealistic distribution | Pure random | Patterned generators |
 | Non-reproducibility | Every run differs | Seed control |
-| Data explosion | Fixed high volume (60 days) | Parametrize duration |
+| Data explosion | Fixed high volume (10 days) | Parametrize duration |
 
 ## Extensions (future)
 - Sample anonymized production data + hybrid mock
