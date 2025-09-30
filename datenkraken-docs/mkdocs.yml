@@ -40,3 +40,45 @@ plugins:
         #debug_html: true
         #show_anchors: true
         #verbose: true
+
+nav:
+  - Home: index.md
+  - 2. arc42:
+    - Introduction & Goals: '2 arc42/01. Introduction and Goals.md'
+    - Architecture Constraints: '2 arc42/02. Architecture Constraints.md'
+    - Solution Strategy: '2 arc42/03. Solution Strategy.md'
+    - Building Block View: '2 arc42/04. Building Block View.md'
+    - Architecture Decisions: '2 arc42/05. Architecture Decisions.md'
+  - 3. Arduino:
+    - Components: '3 Arduino/components.md'
+    - Deployment: '3 Arduino/deployment.md'
+    - MQTT: '3 Arduino/mqtt.md'
+    - Optimal Room Conditions: '3 Arduino/optimal_room_conditions.md'
+  - 4. Components:
+    - Frontend Overview: '4 Components/frontend.md'
+    - Frontend Error Handling (Details): '4 Components/frontend_error_handling_details.md'
+    - Database: '4 Components/database.md'
+  - 5. Data Collection:
+    - Sampling Rate: '5 Data Collection/sampling_rate.md'
+  - 6. Non Functional Requirements Methodology:
+    - Backup Strategy: '6 Non Functional Requirements Methodology/backup-strategy.md'
+    - Cronjob: '6 Non Functional Requirements Methodology/cronjob.md'
+    - Testability (NFR): '6 Non Functional Requirements Methodology/nfr-testability.md'
+    - Uptime Monitoring: '6 Non Functional Requirements Methodology/uptime-monitoring.md'
+  - 7. Software Engineering:
+    - Requirements Engineering: '7 Software Engineering/requirements_engineering.md'
+    - SFMEA (Initial): '7 Software Engineering/sfmea-analysis.md'
+    - SFMEA (Extended): '7 Software Engineering/sfmea-analysis-2.md'
+  - 8. Tests:
+    - UI Mouse Only: '8 Tests/ui_mouseonly.md'
+  - 9. Alerting:
+    - Alerting Overview: '9 Alerting/alerting.md'
+  - 10. Software Quality Workshop:
+    - Current State & Weaknesses: '10 SW Quality Workshop/01_current_state_weaknesses.md'
+    - Extended SFMEA: '10 SW Quality Workshop/02_extended_sfmea.md'
+    - Optimizations Overview: '10 SW Quality Workshop/03_optimizations_overview.md'
+    - Mock Data: '10 SW Quality Workshop/03a_mock_data.md'
+    - Unified Deployment: '10 SW Quality Workshop/03b_unified_deployment.md'
+    - Frontend Resilience: '10 SW Quality Workshop/03c_frontend_resilience.md'
+    - Alerting Feature: '10 SW Quality Workshop/04_alerting_feature.md'
+    - Slim Checklist: '10 SW Quality Workshop/05_slim_checklist.md'
